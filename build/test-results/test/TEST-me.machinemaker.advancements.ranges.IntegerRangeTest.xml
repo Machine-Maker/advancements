@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="me.machinemaker.advancements.ranges.IntegerRangeTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2022-02-03T03:19:31" hostname="jake-pc-manjaro" time="0.012">
+  <properties/>
+  <testcase name="[1] 32" classname="me.machinemaker.advancements.ranges.IntegerRangeTest" time="0.001"/>
+  <testcase name="[2] -6503" classname="me.machinemaker.advancements.ranges.IntegerRangeTest" time="0.001"/>
+  <testcase name="[1] 32" classname="me.machinemaker.advancements.ranges.IntegerRangeTest" time="0.001"/>
+  <testcase name="[2] -6503" classname="me.machinemaker.advancements.ranges.IntegerRangeTest" time="0.001"/>
+  <testcase name="[1] 32" classname="me.machinemaker.advancements.ranges.IntegerRangeTest" time="0.0"/>
+  <testcase name="[2] -6503" classname="me.machinemaker.advancements.ranges.IntegerRangeTest" time="0.0"/>
+  <testcase name="[1] 32" classname="me.machinemaker.advancements.ranges.IntegerRangeTest" time="0.001"/>
+  <testcase name="[2] -6503" classname="me.machinemaker.advancements.ranges.IntegerRangeTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="me.machinemaker.advancements.conditions.entity.PlayerConditionTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2022-02-03T03:19:31" hostname="jake-pc-manjaro" time="0.011">
+  <properties/>
+  <testcase name="testAnyPlayerCondition()" classname="me.machinemaker.advancements.conditions.entity.PlayerConditionTest" time="0.008"/>
+  <testcase name="testPlayerCondition()" classname="me.machinemaker.advancements.conditions.entity.PlayerConditionTest" time="0.003"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="me.machinemaker.advancements.conditions.entity.FishingHookConditionTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2022-02-03T03:19:31" hostname="jake-pc-manjaro" time="0.001">
+  <properties/>
+  <testcase name="testFishingHookCondition()" classname="me.machinemaker.advancements.conditions.entity.FishingHookConditionTest" time="0.001"/>
+  <testcase name="testAnyFishingHookCondition()" classname="me.machinemaker.advancements.conditions.entity.FishingHookConditionTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

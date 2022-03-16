@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="me.machinemaker.advancements.adapters.BaseTagAdapterTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2022-02-03T03:19:31" hostname="jake-pc-manjaro" time="0.07">
+  <properties/>
+  <testcase name="[1] class me.machinemaker.advancements.tags.BlockTag, [BlockTag[tag=Mock for Tag, hashCode: 1517105378], BlockTag[tag=Mock for Tag, hashCode: 189970261]]" classname="me.machinemaker.advancements.adapters.BaseTagAdapterTest" time="0.036"/>
+  <testcase name="[2] class me.machinemaker.advancements.tags.FluidTag, [FluidTag[tag=Mock for Tag, hashCode: 999427036], FluidTag[tag=Mock for Tag, hashCode: 2136291489]]" classname="me.machinemaker.advancements.adapters.BaseTagAdapterTest" time="0.002"/>
+  <testcase name="[3] class me.machinemaker.advancements.tags.ItemTag, [ItemTag[tag=Mock for Tag, hashCode: 530528285], ItemTag[tag=Mock for Tag, hashCode: 880282841]]" classname="me.machinemaker.advancements.adapters.BaseTagAdapterTest" time="0.002"/>
+  <testcase name="[4] class me.machinemaker.advancements.tags.EntityTag, [EntityTag[tag=Mock for Tag, hashCode: 2089578710], EntityTag[tag=Mock for Tag, hashCode: 448131210]]" classname="me.machinemaker.advancements.adapters.BaseTagAdapterTest" time="0.002"/>
+  <testcase name="[1] class me.machinemaker.advancements.tags.BlockTag, [BlockTag[tag=Mock for Tag, hashCode: 1517105378], BlockTag[tag=Mock for Tag, hashCode: 189970261]]" classname="me.machinemaker.advancements.adapters.BaseTagAdapterTest" time="0.007"/>
+  <testcase name="[2] class me.machinemaker.advancements.tags.FluidTag, [FluidTag[tag=Mock for Tag, hashCode: 999427036], FluidTag[tag=Mock for Tag, hashCode: 2136291489]]" classname="me.machinemaker.advancements.adapters.BaseTagAdapterTest" time="0.003"/>
+  <testcase name="[3] class me.machinemaker.advancements.tags.ItemTag, [ItemTag[tag=Mock for Tag, hashCode: 530528285], ItemTag[tag=Mock for Tag, hashCode: 880282841]]" classname="me.machinemaker.advancements.adapters.BaseTagAdapterTest" time="0.003"/>
+  <testcase name="[4] class me.machinemaker.advancements.tags.EntityTag, [EntityTag[tag=Mock for Tag, hashCode: 2089578710], EntityTag[tag=Mock for Tag, hashCode: 448131210]]" classname="me.machinemaker.advancements.adapters.BaseTagAdapterTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[Feb 02, 2022 7:19:30 PM org.bukkit.Bukkit setServer
+INFO: This server is running DummyServer version DummyServer (Implementing API version DummyServer) (Git: null on null)
+]]></system-err>
+</testsuite>
