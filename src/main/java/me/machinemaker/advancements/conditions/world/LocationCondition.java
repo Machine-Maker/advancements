@@ -5,8 +5,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import io.papermc.paper.registry.Reference;
+import io.papermc.paper.world.structure.ConfiguredStructure;
 import me.machinemaker.advancements.GsonHelper;
 import me.machinemaker.advancements.adapters.Adapters;
 import me.machinemaker.advancements.adapters.GsonBuilderApplicable;
@@ -23,6 +26,7 @@ import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.util.Vector;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.Contract;
 
 import java.io.IOException;
 
@@ -33,7 +37,7 @@ public record LocationCondition(
         DoubleRange y,
         DoubleRange z,
         @Nullable Biome biome,
-        @Nullable StructureType feature,
+        @Nullable Reference<ConfiguredStructure> feature,
         @Nullable NamespacedKey dimension,
         @Nullable Boolean smokey,
         LightCondition light,
@@ -41,24 +45,28 @@ public record LocationCondition(
         FluidCondition fluid
 ) implements Condition<LocationCondition> {
 
-    public static final GsonBuilderApplicable BUILDER_APPLICABLE = Adapters.of(Adapters.BIOME_ADAPTER, Adapters.STRUCTURE_TYPE_ADAPTER, Adapters.NAMESPACED_KEY_ADAPTER, BlockCondition.BUILDER_APPLICABLE, FluidCondition.BUILDER_APPLICABLE);
+    public static final GsonBuilderApplicable BUILDER_APPLICABLE = Adapters.of(Adapters.BIOME_ADAPTER, Adapters.CONFIGURED_STRUCTURE_ADAPTER, Adapters.NAMESPACED_KEY_ADAPTER, BlockCondition.BUILDER_APPLICABLE, FluidCondition.BUILDER_APPLICABLE);
     public static final LocationCondition ANY = new LocationCondition(DoubleRange.ANY, DoubleRange.ANY, DoubleRange.ANY, null, null, null, null, LightCondition.ANY, BlockCondition.ANY, FluidCondition.ANY);
 
+    @Contract(value = "_ -> new", pure = true)
     public static LocationCondition atLocation(Location location) {
         Preconditions.checkArgument(location.getWorld() != null, "Must be a location with a loaded world");
         Vector vector = location.toVector();
         return new LocationCondition(DoubleRange.isExactly(vector.getX()), DoubleRange.isExactly(vector.getY()), DoubleRange.isExactly(vector.getZ()), null, null, location.getWorld().getKey(), null, LightCondition.ANY, BlockCondition.ANY, FluidCondition.ANY);
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public static LocationCondition inWorld(World world) {
         return new LocationCondition(DoubleRange.ANY, DoubleRange.ANY, DoubleRange.ANY, null, null, world.getKey(), null, LightCondition.ANY, BlockCondition.ANY, FluidCondition.ANY);
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public static LocationCondition inBiome(Biome biome) {
         return new LocationCondition(DoubleRange.ANY, DoubleRange.ANY, DoubleRange.ANY, biome, null, null, null, LightCondition.ANY, BlockCondition.ANY, FluidCondition.ANY);
     }
 
-    public static LocationCondition atStructure(StructureType type) {
+    @Contract(value = "_ -> new", pure = true)
+    public static LocationCondition atStructure(Reference<ConfiguredStructure> type) {
         return new LocationCondition(DoubleRange.ANY, DoubleRange.ANY, DoubleRange.ANY, null, type, null, null, LightCondition.ANY, BlockCondition.ANY, FluidCondition.ANY);
     }
 
@@ -90,6 +98,7 @@ public record LocationCondition(
     static class Adapter extends TypeAdapter<LocationCondition> {
 
         private static final GsonHelper HELPER = new GsonHelper(BUILDER_APPLICABLE);
+        private static final TypeToken<Reference<ConfiguredStructure>> REFERENCE_TYPE_TOKEN = new TypeToken<Reference<ConfiguredStructure>>() {};
 
         @Override
         public void write(JsonWriter out, LocationCondition value) throws IOException {
@@ -106,7 +115,7 @@ public record LocationCondition(
             }
 
             HELPER.toWriter(out, "biome", value.biome(), Biome.class);
-            HELPER.toWriter(out, "feature", value.feature(), StructureType.class);
+            HELPER.toWriter(out, "feature", value.feature(), REFERENCE_TYPE_TOKEN);
             HELPER.toWriter(out, "dimension", value.dimension(), NamespacedKey.class);
             out.name("smokey").value(value.smokey());
 
@@ -134,7 +143,7 @@ public record LocationCondition(
             }
 
             final @Nullable Biome biome = HELPER.getAs(object, "biome", Biome.class, null);
-            final @Nullable StructureType feature = HELPER.getAs(object, "feature", StructureType.class, null);
+            final @Nullable Reference<ConfiguredStructure> structure = HELPER.getAs(object, "feature", REFERENCE_TYPE_TOKEN, null);
             final @Nullable NamespacedKey key = HELPER.getAs(object, "dimension", NamespacedKey.class, null);
             final @Nullable Boolean smokey = HELPER.getAs(object, "smokey", Boolean.class, null);
 
@@ -142,7 +151,7 @@ public record LocationCondition(
             BlockCondition block = HELPER.getDefaulted(object, "block", BlockCondition.class);
             FluidCondition fluid = HELPER.getDefaulted(object, "fluid", FluidCondition.class);
 
-            return new LocationCondition(xRange, yRange, zRange, biome, feature, key, smokey, light, block, fluid);
+            return new LocationCondition(xRange, yRange, zRange, biome, structure, key, smokey, light, block, fluid);
         }
     }
 

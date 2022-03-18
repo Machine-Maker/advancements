@@ -7,6 +7,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.TypeAdapterFactory;
+import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import me.machinemaker.advancements.adapters.Adapters;
@@ -178,6 +179,10 @@ public class GsonHelper {
         return this.getAs(object, property, (Type) classOfT);
     }
 
+    public <T> @NotNull T getAs(@NotNull JsonObject object, @NotNull String property, @NotNull TypeToken<T> typeOfT) {
+        return this.getAs(object, property, typeOfT.getType());
+    }
+
     public <T> @NotNull T getAs(@NotNull JsonObject object, @NotNull String property, @NotNull Type typeOfT) {
         if (isNull(object, property)) {
             nullException(object, property);
@@ -188,6 +193,11 @@ public class GsonHelper {
     @Contract("_, _, _, !null -> !null")
     public <T> @Nullable T getAs(@NotNull JsonObject object, @NotNull String property, @NotNull Class<T> classOfT, @Nullable T def) {
         return this.getAs(object, property, (Type) classOfT, def);
+    }
+
+    @Contract("_, _, _, !null -> !null")
+    public <T> @Nullable T getAs(@NotNull JsonObject object, @NotNull String property, @NotNull TypeToken<T> typeOfT, @Nullable T def) {
+        return this.getAs(object, property, typeOfT.getType(), def);
     }
 
     @Contract("_, _, _, !null -> !null")
@@ -244,13 +254,29 @@ public class GsonHelper {
         return this.gson().fromJson(element, typeOfT);
     }
 
+    public <T> void toWriter(@NotNull JsonWriter writer, @NotNull String property, @Nullable T object, @NotNull TypeToken<T> typeOfT) throws IOException {
+        this.toWriter(writer, property, object, typeOfT.getType());
+    }
+
     public <T> void toWriter(@NotNull JsonWriter writer, @NotNull String property, @Nullable T object, @NotNull Class<T> classOfT) throws IOException {
+        this.toWriter(writer, property, object, (Type) classOfT);
+    }
+
+    public <T> void toWriter(@NotNull JsonWriter writer, @NotNull String property, @Nullable T object, @NotNull Type typeOfT) throws IOException {
         writer.name(property);
-        this.toWriter(writer, object, classOfT);
+        this.toWriter(writer, object, typeOfT);
+    }
+
+    public <T> void toWriter(@NotNull JsonWriter writer, @Nullable T object, @NotNull TypeToken<T> typeOfT) {
+        this.toWriter(writer, object, typeOfT.getType());
     }
 
     public <T> void toWriter(@NotNull JsonWriter writer, @Nullable T object, @NotNull Class<T> classOfT) {
-        this.gson().toJson(object, classOfT, writer);
+        this.toWriter(writer, object, (Type) classOfT);
+    }
+
+    public <T> void toWriter(@NotNull JsonWriter writer, @Nullable T object, @NotNull Type typeOfT) {
+        this.gson().toJson(object, typeOfT, writer);
     }
 
     public void toWriter(@NotNull JsonWriter writer, @NotNull JsonElement element) {

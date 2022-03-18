@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="me.machinemaker.advancements.conditions.entity.AdvancementConditionTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2022-02-03T03:19:31" hostname="jake-pc-manjaro" time="0.007">
+<testsuite name="me.machinemaker.advancements.conditions.entity.AdvancementConditionTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2022-03-18T20:38:38" hostname="Jakes-MBP.attlocal.net" time="0.004">
   <properties/>
-  <testcase name="testAdvancementCriteriaCondition()" classname="me.machinemaker.advancements.conditions.entity.AdvancementConditionTest" time="0.005"/>
+  <testcase name="testAdvancementCriteriaCondition()" classname="me.machinemaker.advancements.conditions.entity.AdvancementConditionTest" time="0.003"/>
   <testcase name="testAdvancementDoneCondition()" classname="me.machinemaker.advancements.conditions.entity.AdvancementConditionTest" time="0.001"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>

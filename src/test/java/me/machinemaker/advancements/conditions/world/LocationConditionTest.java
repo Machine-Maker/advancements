@@ -2,6 +2,7 @@ package me.machinemaker.advancements.conditions.world;
 
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
+import io.papermc.paper.world.structure.ConfiguredStructure;
 import me.machinemaker.advancements.GsonTestBase;
 import me.machinemaker.advancements.conditions.blocks.BlockCondition;
 import me.machinemaker.advancements.conditions.blocks.FluidCondition;
@@ -42,7 +43,7 @@ class LocationConditionTest extends GsonTestBase {
         DoubleRange.isBetween(0, 20),
         DoubleRange.isExactly(3),
         null,
-        StructureType.BURIED_TREASURE,
+        ConfiguredStructure.BURIED_TREASURE,
         NamespacedKey.minecraft("overworld"),
         null,
         LightCondition.ANY,

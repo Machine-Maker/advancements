@@ -1,10 +1,11 @@
-package me.machinemaker.advancements.adapters.types;
+package me.machinemaker.advancements.adapters.types.keyed;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
+import io.papermc.paper.registry.Reference;
 import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
@@ -12,7 +13,6 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.Contract;
 
 import java.io.IOException;
-import java.lang.reflect.ParameterizedType;
 import java.util.Objects;
 
 /**
@@ -82,6 +82,12 @@ public abstract class KeyedTypeAdapter<T extends Keyed> extends TypeAdapter<T> {
 
     @Contract(value = "_, _ -> new", pure = true)
     public static <T extends Keyed> KeyedTypeAdapter<T> forRegistry(Registry<T> registry, TypeToken<T> type) {
-        return new RegistryTypeAdapter<T>(type, registry);
+        return new RegistryTypeAdapter<>(type, registry);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Contract(value = "_, _ -> new", pure = true)
+    public static <T extends Keyed> KeyedTypeAdapter<Reference<T>> forReference(Registry<T> registry, TypeToken<T> type) {
+        return new ReferenceTypeAdapter<>((TypeToken<Reference<T>>) TypeToken.getParameterized(Reference.class, type.getType()), registry);
     }
 }

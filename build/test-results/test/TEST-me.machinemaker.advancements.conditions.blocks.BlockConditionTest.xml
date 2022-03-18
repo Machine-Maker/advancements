@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="me.machinemaker.advancements.conditions.blocks.BlockConditionTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2022-02-03T03:19:31" hostname="jake-pc-manjaro" time="0.011">
+<testsuite name="me.machinemaker.advancements.conditions.blocks.BlockConditionTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2022-03-18T20:38:38" hostname="Jakes-MBP.attlocal.net" time="0.006">
   <properties/>
-  <testcase name="testAnyBlockCondition()" classname="me.machinemaker.advancements.conditions.blocks.BlockConditionTest" time="0.006"/>
+  <testcase name="testAnyBlockCondition()" classname="me.machinemaker.advancements.conditions.blocks.BlockConditionTest" time="0.004"/>
   <testcase name="testBlockConditionWithBlocks()" classname="me.machinemaker.advancements.conditions.blocks.BlockConditionTest" time="0.001"/>
   <testcase name="testBlockConditionWithBlockTag()" classname="me.machinemaker.advancements.conditions.blocks.BlockConditionTest" time="0.001"/>
-  <testcase name="testBlockConditionWithBlocksFail()" classname="me.machinemaker.advancements.conditions.blocks.BlockConditionTest" time="0.001"/>
+  <testcase name="testBlockConditionWithBlocksFail()" classname="me.machinemaker.advancements.conditions.blocks.BlockConditionTest" time="0.0"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

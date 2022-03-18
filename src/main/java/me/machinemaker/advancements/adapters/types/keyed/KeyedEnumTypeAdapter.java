@@ -1,4 +1,4 @@
-package me.machinemaker.advancements.adapters.types;
+package me.machinemaker.advancements.adapters.types.keyed;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.reflect.TypeToken;

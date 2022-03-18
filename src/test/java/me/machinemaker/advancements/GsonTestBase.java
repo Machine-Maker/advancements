@@ -18,7 +18,7 @@ public abstract class GsonTestBase {
 
     protected Gson GSON = Adapters.configure(new GsonBuilder()).setPrettyPrinting().create();
 
-    protected void registerTypeAdapter(Type type, Object adapter) {
+    protected final void registerTypeAdapter(Type type, Object adapter) {
         GSON = GSON.newBuilder().registerTypeAdapter(type, adapter).create();
     }
 

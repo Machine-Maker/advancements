@@ -15,18 +15,23 @@ repositories {
     maven("https://papermc.io/repo/repository/maven-public/")
 }
 
-dependencies {
-    compileOnly("org.jetbrains:annotations:22.0.0")
-    compileOnly("me.machinemaker.machined-paper:machinedpaper-api:1.18.1-R0.1-SNAPSHOT") {
-        exclude(group = "junit", module = "junit")
-    }
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+}
 
-    testImplementation("net.kyori:adventure-nbt:4.9.3")
-    testImplementation("me.machinemaker.machined-paper:machinedpaper-api:1.18.1-R0.1-SNAPSHOT") {
+dependencies {
+    compileOnly("org.jetbrains:annotations:23.0.0")
+    compileOnly("me.machinemaker.machined-paper:machinedpaper-api:1.18.2-R0.1-SNAPSHOT") {
         exclude(group = "junit", module = "junit")
     }
-    testImplementation("net.kyori:adventure-text-serializer-gson:4.9.3")
-    testImplementation("org.mockito:mockito-core:4.2.0")
+    // implementation("io.leangen.geantyref:geantyref:1.3.13")
+
+    testImplementation("net.kyori:adventure-nbt:4.10.1")
+    testImplementation("me.machinemaker.machined-paper:machinedpaper-api:1.18.2-R0.1-SNAPSHOT") {
+        exclude(group = "junit", module = "junit")
+    }
+    testImplementation("net.kyori:adventure-text-serializer-gson:4.10.1")
+    testImplementation("org.mockito:mockito-core:4.3.1")
     testImplementation("org.hamcrest:hamcrest:2.2")
     testImplementation(platform("org.junit:junit-bom:5.8.1"))
     testImplementation("org.junit.jupiter:junit-jupiter-params")
