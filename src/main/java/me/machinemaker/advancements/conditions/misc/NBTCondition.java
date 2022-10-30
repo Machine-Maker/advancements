@@ -1,6 +1,6 @@
 package me.machinemaker.advancements.conditions.misc;
 
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.JsonParseException;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.stream.JsonReader;
@@ -52,7 +52,7 @@ public record NBTCondition(@Nullable BinaryTagHolder tag) implements Condition<N
             } else if (in.peek() == JsonToken.STRING) {
                 return new NBTCondition(BinaryTagHolder.of(in.nextString()));
             } else {
-                throw new JsonSyntaxException("Expected a string or null, got " + in.peek());
+                throw new JsonParseException("Expected a string or null, got " + in.peek());
             }
         }
     }

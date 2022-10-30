@@ -2,14 +2,14 @@ package me.machinemaker.advancements.conditions.blocks;
 
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
-import me.machinemaker.advancements.MinecraftGsonTestBase;
+import me.machinemaker.advancements.GsonTestBase;
 import org.bukkit.Fluid;
 import org.bukkit.Tag;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class FluidConditionTest extends MinecraftGsonTestBase {
+class FluidConditionTest extends GsonTestBase {
 
     @Test
     void testFluidConditionWithFluid() {

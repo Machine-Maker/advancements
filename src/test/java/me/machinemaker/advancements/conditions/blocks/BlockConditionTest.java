@@ -3,7 +3,7 @@ package me.machinemaker.advancements.conditions.blocks;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
-import me.machinemaker.advancements.MinecraftGsonTestBase;
+import me.machinemaker.advancements.GsonTestBase;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class BlockConditionTest extends MinecraftGsonTestBase {
+class BlockConditionTest extends GsonTestBase {
 
     @Test
     void testBlockConditionWithBlocksFail() {

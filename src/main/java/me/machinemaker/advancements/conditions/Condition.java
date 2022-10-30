@@ -34,7 +34,7 @@ public interface Condition<C extends Condition<C>> {
         return true;
     }
 
-    interface Builder<C extends Condition<C>> extends Buildable.Builder<C> {
+    interface Builder<C extends Condition<? super C>> extends Buildable.Builder<C> {
 
         /**
          * Constructs a new condition.

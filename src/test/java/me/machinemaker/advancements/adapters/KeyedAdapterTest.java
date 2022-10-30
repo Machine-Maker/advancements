@@ -10,7 +10,6 @@ import com.google.gson.stream.JsonWriter;
 import io.papermc.paper.registry.Reference;
 import io.papermc.paper.world.structure.ConfiguredStructure;
 import me.machinemaker.advancements.GsonTestBase;
-import me.machinemaker.advancements.MinecraftGsonTestBase;
 import me.machinemaker.advancements.mocks.DummyEffects;
 import me.machinemaker.advancements.mocks.DummyEnchantments;
 import me.machinemaker.advancements.mocks.DummyServer;
@@ -42,11 +41,6 @@ class KeyedAdapterTest extends GsonTestBase {
         DummyEnchantments.setup();
         DummyEffects.setup();
     }
-
-    // @BeforeAll
-    // void beforeAll() {
-    //     GSON = GSON.newBuilder().registerTypeAdapter(Adapters.CONFIGURED_STRUCTURE_ADAPTER.type(), Adapters.CONFIGURED_STRUCTURE_ADAPTER.adapter()).create();
-    // }
 
     @SafeVarargs
     @ParameterizedTest

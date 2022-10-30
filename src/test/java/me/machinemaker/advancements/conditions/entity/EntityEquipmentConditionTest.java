@@ -2,7 +2,7 @@ package me.machinemaker.advancements.conditions.entity;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import me.machinemaker.advancements.MinecraftGsonTestBase;
+import me.machinemaker.advancements.GsonTestBase;
 import me.machinemaker.advancements.conditions.item.ItemCondition;
 import org.bukkit.Material;
 import org.bukkit.Tag;
@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class EntityEquipmentConditionTest extends MinecraftGsonTestBase {
+class EntityEquipmentConditionTest extends GsonTestBase {
 
     @Test
     void testEntityEquipmentConditionTestSingle() {

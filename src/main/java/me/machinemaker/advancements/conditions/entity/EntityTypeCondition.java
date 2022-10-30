@@ -18,6 +18,7 @@ import me.machinemaker.advancements.tags.EntityTag;
 import org.bukkit.Tag;
 import org.bukkit.entity.EntityType;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 
 import java.io.IOException;
@@ -52,6 +53,7 @@ public abstract class EntityTypeCondition implements Condition<EntityTypeConditi
         return new TagCondition(tag instanceof EntityTag entityTag ? entityTag : new EntityTag(tag));
     }
 
+    @ApiStatus.Internal
     public static Collection<Class<? extends EntityTypeCondition>> types() {
         return Set.of(EntityTypeCondition.class, TypeCondition.class, TagCondition.class);
     }

@@ -3,14 +3,14 @@ package me.machinemaker.advancements.conditions.entity;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonPrimitive;
-import me.machinemaker.advancements.MinecraftGsonTestBase;
+import me.machinemaker.advancements.GsonTestBase;
 import org.bukkit.Tag;
 import org.bukkit.entity.EntityType;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class EntityTypeConditionTest extends MinecraftGsonTestBase {
+class EntityTypeConditionTest extends GsonTestBase {
 
     @Test
     void testEntityTypeConditionTag() {

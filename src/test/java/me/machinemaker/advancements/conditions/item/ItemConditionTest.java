@@ -4,7 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import io.papermc.paper.potion.Potion;
-import me.machinemaker.advancements.MinecraftGsonTestBase;
+import me.machinemaker.advancements.GsonTestBase;
 import me.machinemaker.advancements.conditions.misc.NBTCondition;
 import me.machinemaker.advancements.mocks.DummyEnchantments;
 import me.machinemaker.advancements.mocks.DummyPotions;
@@ -18,7 +18,7 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class ItemConditionTest extends MinecraftGsonTestBase {
+class ItemConditionTest extends GsonTestBase {
 
     static {
         DummyEnchantments.setup();

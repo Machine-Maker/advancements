@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="me.machinemaker.advancements.adapters.KeyedAdapterTest" tests="12" skipped="0" failures="0" errors="0" timestamp="2022-03-18T20:38:38" hostname="Jakes-MBP.attlocal.net" time="0.009">
+<testsuite name="me.machinemaker.advancements.adapters.KeyedAdapterTest" tests="12" skipped="0" failures="0" errors="0" timestamp="2022-10-30T08:46:05" hostname="Jakes-MBP.askey.com" time="0.014">
   <properties/>
-  <testcase name="[1] class org.bukkit.Material, [ANVIL, DIAMOND, CHEST]" classname="me.machinemaker.advancements.adapters.KeyedAdapterTest" time="0.0"/>
+  <testcase name="[1] class org.bukkit.Material, [ANVIL, DIAMOND, CHEST]" classname="me.machinemaker.advancements.adapters.KeyedAdapterTest" time="0.001"/>
+  <testcase name="[2] class org.bukkit.Fluid, [FLOWING_LAVA, WATER]" classname="me.machinemaker.advancements.adapters.KeyedAdapterTest" time="0.0"/>
+  <testcase name="[3] class org.bukkit.block.Biome, [BADLANDS, BEACH]" classname="me.machinemaker.advancements.adapters.KeyedAdapterTest" time="0.0"/>
+  <testcase name="[4] io.papermc.paper.registry.Reference&lt;io.papermc.paper.world.structure.ConfiguredStructure&gt;, [ReferenceImpl[registry=Mock for Registry, hashCode: 74502531, key=minecraft:end_city], ReferenceImpl[registry=Mock for Registry, hashCode: 74502531, key=minecraft:nether_fossil]]" classname="me.machinemaker.advancements.adapters.KeyedAdapterTest" time="0.0"/>
+  <testcase name="[5] class org.bukkit.enchantments.Enchantment, [Enchantment[minecraft:power, ARROW_DAMAGE], Enchantment[minecraft:sharpness, DAMAGE_ALL]]" classname="me.machinemaker.advancements.adapters.KeyedAdapterTest" time="0.0"/>
+  <testcase name="[6] class org.bukkit.potion.PotionEffectType, [PotionEffectType[22, ABSORPTION], PotionEffectType[3, FAST_DIGGING]]" classname="me.machinemaker.advancements.adapters.KeyedAdapterTest" time="0.0"/>
+  <testcase name="[1] class org.bukkit.Material, [ANVIL, DIAMOND, CHEST]" classname="me.machinemaker.advancements.adapters.KeyedAdapterTest" time="0.001"/>
   <testcase name="[2] class org.bukkit.Fluid, [FLOWING_LAVA, WATER]" classname="me.machinemaker.advancements.adapters.KeyedAdapterTest" time="0.0"/>
   <testcase name="[3] class org.bukkit.block.Biome, [BADLANDS, BEACH]" classname="me.machinemaker.advancements.adapters.KeyedAdapterTest" time="0.001"/>
-  <testcase name="[4] io.papermc.paper.registry.Reference&lt;io.papermc.paper.world.structure.ConfiguredStructure&gt;, [ReferenceImpl[registry=Mock for Registry, hashCode: 2027363825, key=minecraft:end_city], ReferenceImpl[registry=Mock for Registry, hashCode: 2027363825, key=minecraft:nether_fossil]]" classname="me.machinemaker.advancements.adapters.KeyedAdapterTest" time="0.0"/>
+  <testcase name="[4] io.papermc.paper.registry.Reference&lt;io.papermc.paper.world.structure.ConfiguredStructure&gt;, [ReferenceImpl[registry=Mock for Registry, hashCode: 74502531, key=minecraft:end_city], ReferenceImpl[registry=Mock for Registry, hashCode: 74502531, key=minecraft:nether_fossil]]" classname="me.machinemaker.advancements.adapters.KeyedAdapterTest" time="0.001"/>
   <testcase name="[5] class org.bukkit.enchantments.Enchantment, [Enchantment[minecraft:power, ARROW_DAMAGE], Enchantment[minecraft:sharpness, DAMAGE_ALL]]" classname="me.machinemaker.advancements.adapters.KeyedAdapterTest" time="0.001"/>
-  <testcase name="[6] class org.bukkit.potion.PotionEffectType, [PotionEffectType[22, ABSORPTION], PotionEffectType[3, FAST_DIGGING]]" classname="me.machinemaker.advancements.adapters.KeyedAdapterTest" time="0.0"/>
-  <testcase name="[1] class org.bukkit.Material, [ANVIL, DIAMOND, CHEST]" classname="me.machinemaker.advancements.adapters.KeyedAdapterTest" time="0.0"/>
-  <testcase name="[2] class org.bukkit.Fluid, [FLOWING_LAVA, WATER]" classname="me.machinemaker.advancements.adapters.KeyedAdapterTest" time="0.001"/>
-  <testcase name="[3] class org.bukkit.block.Biome, [BADLANDS, BEACH]" classname="me.machinemaker.advancements.adapters.KeyedAdapterTest" time="0.0"/>
-  <testcase name="[4] io.papermc.paper.registry.Reference&lt;io.papermc.paper.world.structure.ConfiguredStructure&gt;, [ReferenceImpl[registry=Mock for Registry, hashCode: 2027363825, key=minecraft:end_city], ReferenceImpl[registry=Mock for Registry, hashCode: 2027363825, key=minecraft:nether_fossil]]" classname="me.machinemaker.advancements.adapters.KeyedAdapterTest" time="0.001"/>
-  <testcase name="[5] class org.bukkit.enchantments.Enchantment, [Enchantment[minecraft:power, ARROW_DAMAGE], Enchantment[minecraft:sharpness, DAMAGE_ALL]]" classname="me.machinemaker.advancements.adapters.KeyedAdapterTest" time="0.0"/>
   <testcase name="[6] class org.bukkit.potion.PotionEffectType, [PotionEffectType[22, ABSORPTION], PotionEffectType[3, FAST_DIGGING]]" classname="me.machinemaker.advancements.adapters.KeyedAdapterTest" time="0.0"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>

@@ -3,7 +3,7 @@ package me.machinemaker.advancements.conditions.blocks;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.JsonParseException;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.stream.JsonReader;
@@ -77,7 +77,7 @@ public record PropertyCondition(List<Matcher> properties) implements Condition<P
                 final @Nullable String max = GsonHelper.getString(object, "max", null);
                 return min != null && min.equals(max) ? new ExactMatcher(name, min) : new RangedMatcher(name, min, max);
             } else {
-                throw new JsonSyntaxException("Expected string or object, got " + element.getClass().getSimpleName());
+                throw new JsonParseException("Expected string or object, got " + element.getClass().getSimpleName());
             }
         }
     }
@@ -198,7 +198,7 @@ public record PropertyCondition(List<Matcher> properties) implements Condition<P
                 }
                 return new PropertyCondition(List.copyOf(properties));
             } else {
-                throw new JsonSyntaxException("Expected object or null, got " + in.peek());
+                throw new JsonParseException("Expected object or null, got " + in.peek());
             }
         }
     }

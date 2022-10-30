@@ -4,6 +4,8 @@ import com.google.gson.annotations.JsonAdapter;
 import io.papermc.paper.statistics.Statistic;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
+import me.machinemaker.advancements.adapters.Adapters;
+import me.machinemaker.advancements.adapters.GsonBuilderApplicable;
 import me.machinemaker.advancements.adapters.factories.NonNullMapAdapterFactory;
 import me.machinemaker.advancements.adapters.maps.StatisticMapAdapter;
 import me.machinemaker.advancements.adapters.types.GameModeAdapter;
@@ -19,7 +21,6 @@ import org.checkerframework.framework.qual.DefaultQualifier;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-@DefaultQualifier(NonNull.class)
 public record PlayerCondition(
         IntegerRange level,
         @Nullable @JsonAdapter(GameModeAdapter.class) GameMode gamemode,
@@ -27,14 +28,11 @@ public record PlayerCondition(
         @JsonAdapter(value = NonNullMapAdapterFactory.class, nullSafe = false) Object2BooleanMap<NamespacedKey> recipes,
         @JsonAdapter(value = NonNullMapAdapterFactory.class, nullSafe = false) Map<NamespacedKey, AdvancementCondition> advancements,
         EntityCondition lookingAt
-) implements Condition<PlayerCondition>, Buildable<PlayerCondition, PlayerCondition.Builder> {
+) implements EntitySubCondition, Buildable<PlayerCondition, PlayerCondition.Builder> {
+
+    public static final GsonBuilderApplicable BUILDER_APPLICABLE = Adapters.of(EntityCondition.BUILDER_APPLICABLE);
 
     public static final PlayerCondition ANY = new Builder().build();
-
-    @Override
-    public PlayerCondition any() {
-        return ANY;
-    }
 
     @Override
     public PlayerCondition.Builder toBuilder() {
@@ -46,6 +44,11 @@ public record PlayerCondition(
                 this.advancements,
                 this.lookingAt
         );
+    }
+
+    @Override
+    public EntitySubCondition any() {
+        return ANY;
     }
 
     @Override
@@ -73,7 +76,8 @@ public record PlayerCondition(
         private final Map<Statistic<?>, IntegerRange> stats;
         private final Object2BooleanMap<NamespacedKey> recipes;
         private final Map<NamespacedKey, AdvancementCondition> advancements;
-        private EntityCondition lookingAt = EntityCondition.Impl.delegate(() -> EntityCondition.ANY); // delegate need to resolve circular static field issue
+        private EntityCondition lookingAt = EntityCondition.ANY;
+        // private EntityCondition lookingAt = EntityCondition.Impl.delegate(() -> EntityCondition.ANY); // delegate need to resolve circular static field issue
 
         private Builder() {
             this.stats = new LinkedHashMap<>();

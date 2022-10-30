@@ -26,14 +26,14 @@ dependencies {
     }
     // implementation("io.leangen.geantyref:geantyref:1.3.13")
 
-    testImplementation("net.kyori:adventure-nbt:4.10.1")
+    testImplementation("net.kyori:adventure-nbt:4.11.0")
     testImplementation("me.machinemaker.machined-paper:machinedpaper-api:1.18.2-R0.1-SNAPSHOT") {
         exclude(group = "junit", module = "junit")
     }
-    testImplementation("net.kyori:adventure-text-serializer-gson:4.10.1")
-    testImplementation("org.mockito:mockito-core:4.3.1")
+    testImplementation("net.kyori:adventure-text-serializer-gson:4.11.0")
+    testImplementation("org.mockito:mockito-core:4.8.0")
     testImplementation("org.hamcrest:hamcrest:2.2")
-    testImplementation(platform("org.junit:junit-bom:5.8.1"))
+    testImplementation(platform("org.junit:junit-bom:5.9.0"))
     testImplementation("org.junit.jupiter:junit-jupiter-params")
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
@@ -42,5 +42,6 @@ dependencies {
 tasks {
     test {
         useJUnitPlatform()
+        jvmArgs("-Djunit.jupiter.extensions.autodetection.enabled=true")
     }
 }

@@ -1,93 +1,177 @@
 package me.machinemaker.advancements.conditions.entity;
 
-import com.google.gson.annotations.SerializedName;
+import java.util.Objects;
 import me.machinemaker.advancements.adapters.Adapters;
 import me.machinemaker.advancements.adapters.GsonBuilderApplicable;
 import me.machinemaker.advancements.conditions.Condition;
-import me.machinemaker.advancements.conditions.ConditionDelegate;
 import me.machinemaker.advancements.conditions.effects.PotionEffectsCondition;
 import me.machinemaker.advancements.conditions.misc.NBTCondition;
 import me.machinemaker.advancements.conditions.world.DistanceCondition;
 import me.machinemaker.advancements.conditions.world.LocationCondition;
-import me.machinemaker.advancements.util.Buildable;
-import org.bukkit.entity.Cat;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 
-import java.lang.reflect.Proxy;
-import java.util.Collection;
-import java.util.Objects;
-import java.util.Set;
-import java.util.function.Supplier;
+public final class EntityCondition implements Condition<EntityCondition> {
 
-public interface EntityCondition extends Condition<EntityCondition>, Buildable<EntityCondition, EntityCondition.Builder> {
+    public static final GsonBuilderApplicable BUILDER_APPLICABLE = Adapters.of(EntityTypeCondition.BUILDER_APPLICABLE, LocationCondition.BUILDER_APPLICABLE);
+    public static final EntityCondition ANY = new EntityCondition(EntityTypeCondition.ANY, DistanceCondition.ANY, LocationCondition.ANY, LocationCondition.ANY, PotionEffectsCondition.ANY, NBTCondition.ANY, EntityFlagsCondition.ANY, EntityEquipmentCondition.ANY, EntitySubCondition.ANY, null);
 
-    GsonBuilderApplicable BUILDER_APPLICABLE = Adapters.of(EntityTypeCondition.BUILDER_APPLICABLE, LocationCondition.BUILDER_APPLICABLE);
-    EntityCondition ANY = new Impl(
-            EntityTypeCondition.ANY,
-            DistanceCondition.ANY,
-            LocationCondition.ANY,
-            LocationCondition.ANY,
-            PotionEffectsCondition.ANY,
-            NBTCondition.ANY,
-            EntityFlagsCondition.ANY,
-            EntityEquipmentCondition.ANY,
-            PlayerCondition.ANY,
-            FishingHookCondition.ANY,
-            LightningBoltCondition.ANY,
-            null,
-            null
-    );
+    private final EntityTypeCondition type;
+    private final DistanceCondition distance;
+    private final LocationCondition location;
+    private final LocationCondition steppingOn;
+    private final PotionEffectsCondition effects;
+    private final NBTCondition nbt;
+    private final EntityFlagsCondition flags;
+    private final EntityEquipmentCondition equipment;
+    private final EntitySubCondition typeSpecific;
+    private final EntityCondition vehicle;
+    private final EntityCondition passenger;
+    private final EntityCondition targetedEntity;
+    private final @Nullable String team;
 
-    EntityTypeCondition type();
+    public EntityCondition(final EntityTypeCondition type, final DistanceCondition distance, final LocationCondition location, final LocationCondition steppingOn, final PotionEffectsCondition effects, final NBTCondition nbt, final EntityFlagsCondition flags, final EntityEquipmentCondition equipment, final EntitySubCondition typeSpecific, final EntityCondition vehicle, final EntityCondition passenger, final EntityCondition targetedEntity, final @Nullable String team) {
+        this.type = type;
+        this.distance = distance;
+        this.location = location;
+        this.steppingOn = steppingOn;
+        this.effects = effects;
+        this.nbt = nbt;
+        this.flags = flags;
+        this.equipment = equipment;
+        this.typeSpecific = typeSpecific;
+        this.vehicle = vehicle;
+        this.passenger = passenger;
+        this.targetedEntity = targetedEntity;
+        this.team = team;
+    }
 
-    DistanceCondition distance();
-
-    LocationCondition location();
-
-    LocationCondition steppingOn();
-
-    PotionEffectsCondition effects();
-
-    NBTCondition nbt();
-
-    EntityFlagsCondition flags();
-
-    EntityEquipmentCondition equipment();
-
-    PlayerCondition player();
-
-    FishingHookCondition fishingHook();
-
-    LightningBoltCondition lightningBolt();
-
-    EntityCondition vehicle();
-
-    EntityCondition passenger();
-
-    EntityCondition targetedEntity();
-
-    @Nullable String team();
-
-    @SerializedName("catType") Cat.@Nullable Type catType();
-
-    @Override
-    default EntityCondition any() {
-        return ANY;
+    private EntityCondition(final EntityTypeCondition type, final DistanceCondition distance, final LocationCondition location, final LocationCondition steppingOn, final PotionEffectsCondition effects, final NBTCondition nbt, final EntityFlagsCondition flags, final EntityEquipmentCondition equipment, final EntitySubCondition typeSpecific, final @Nullable String team) {
+        this.type = type;
+        this.distance = distance;
+        this.location = location;
+        this.steppingOn = steppingOn;
+        this.effects = effects;
+        this.nbt = nbt;
+        this.flags = flags;
+        this.equipment = equipment;
+        this.typeSpecific = typeSpecific;
+        this.vehicle = this;
+        this.passenger = this;
+        this.targetedEntity = this;
+        this.team = team;
     }
 
     @Contract(value = " -> new", pure = true)
-    static Builder builder() {
-        return new Builder();
+    static EntityCondition.Builder builder() {
+        return new EntityCondition.Builder();
     }
 
-    @ApiStatus.Internal
-    static Collection<Class<? extends EntityCondition>> types() {
-        return Set.of(EntityCondition.class, Impl.class);
+    @Override
+    public EntityCondition any() {
+        return ANY;
     }
 
-    final class Builder implements Condition.Builder<EntityCondition> {
+    public EntityTypeCondition type() {
+        return this.type;
+    }
+
+    public DistanceCondition distance() {
+        return this.distance;
+    }
+
+    public LocationCondition location() {
+        return this.location;
+    }
+
+    public LocationCondition steppingOn() {
+        return this.steppingOn;
+    }
+
+    public PotionEffectsCondition effects() {
+        return this.effects;
+    }
+
+    public NBTCondition nbt() {
+        return this.nbt;
+    }
+
+    public EntityFlagsCondition flags() {
+        return this.flags;
+    }
+
+    public EntityEquipmentCondition equipment() {
+        return this.equipment;
+    }
+
+    public EntitySubCondition typeSpecific() {
+        return this.typeSpecific;
+    }
+
+    public EntityCondition vehicle() {
+        return this.vehicle;
+    }
+
+    public EntityCondition passenger() {
+        return this.passenger;
+    }
+
+    public EntityCondition targetedEntity() {
+        return this.targetedEntity;
+    }
+
+    public @Nullable String team() {
+        return this.team;
+    }
+
+    @Override
+    public boolean equals(final @Nullable Object obj) {
+        if (obj == this) return true;
+        if (obj == null || obj.getClass() != this.getClass()) return false;
+        final var that = (EntityCondition) obj;
+        return Objects.equals(this.type, that.type) &&
+                Objects.equals(this.distance, that.distance) &&
+                Objects.equals(this.location, that.location) &&
+                Objects.equals(this.steppingOn, that.steppingOn) &&
+                Objects.equals(this.effects, that.effects) &&
+                Objects.equals(this.nbt, that.nbt) &&
+                Objects.equals(this.flags, that.flags) &&
+                Objects.equals(this.equipment, that.equipment) &&
+                Objects.equals(this.typeSpecific, that.typeSpecific) &&
+                Objects.equals(this.vehicle, that.vehicle) &&
+                Objects.equals(this.passenger, that.passenger) &&
+                Objects.equals(this.targetedEntity, that.targetedEntity) &&
+                Objects.equals(this.team, that.team);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.type, this.distance, this.location, this.steppingOn, this.effects, this.nbt, this.flags, this.equipment, this.typeSpecific, this.vehicle, this.passenger, this.targetedEntity, this.team);
+    }
+
+    @Override
+    public String toString() {
+        if (this.isAny()) {
+            return "EntityCondition{ANY}";
+        }
+        return "EntityCondition{" +
+                "type=" + this.type +
+                ", distance=" + this.distance +
+                ", location=" + this.location +
+                ", steppingOn=" + this.steppingOn +
+                ", effects=" + this.effects +
+                ", nbt=" + this.nbt +
+                ", flags=" + this.flags +
+                ", equipment=" + this.equipment +
+                ", typeSpecific=" + this.typeSpecific +
+                ", vehicle=" + this.vehicle +
+                ", passenger=" + this.passenger +
+                ", targetedEntity=" + this.targetedEntity +
+                ", team='" + this.team + '\'' +
+                '}';
+    }
+
+    public static final class Builder implements Condition.Builder<EntityCondition> {
 
         private EntityTypeCondition type = EntityTypeCondition.ANY;
         private DistanceCondition distance = DistanceCondition.ANY;
@@ -97,19 +181,16 @@ public interface EntityCondition extends Condition<EntityCondition>, Buildable<E
         private NBTCondition nbt = NBTCondition.ANY;
         private EntityFlagsCondition flags = EntityFlagsCondition.ANY;
         private EntityEquipmentCondition equipment = EntityEquipmentCondition.ANY;
-        private PlayerCondition player = PlayerCondition.ANY;
-        private FishingHookCondition fishingHook = FishingHookCondition.ANY;
-        private LightningBoltCondition lightningBolt = LightningBoltCondition.ANY;
+        private EntitySubCondition typeSpecific = EntitySubCondition.ANY;
         private EntityCondition vehicle = EntityCondition.ANY;
         private EntityCondition passenger = EntityCondition.ANY;
         private EntityCondition targetedEntity = EntityCondition.ANY;
         private @Nullable String team;
-        private Cat.@Nullable Type catType;
 
         private Builder() {
         }
 
-        private Builder(EntityCondition other) {
+        private Builder(final EntityCondition other) {
             this.type = other.type();
             this.distance = other.distance();
             this.location = other.location();
@@ -118,14 +199,11 @@ public interface EntityCondition extends Condition<EntityCondition>, Buildable<E
             this.nbt = other.nbt();
             this.flags = other.flags();
             this.equipment = other.equipment();
-            this.player = other.player();
-            this.fishingHook = other.fishingHook();
-            this.lightningBolt = other.lightningBolt();
+            this.typeSpecific = other.typeSpecific();
             this.vehicle = other.vehicle();
             this.passenger = other.passenger();
             this.targetedEntity = other.targetedEntity();
             this.team = other.team();
-            this.catType = other.catType();
         }
 
         public EntityTypeCondition type() {
@@ -133,7 +211,7 @@ public interface EntityCondition extends Condition<EntityCondition>, Buildable<E
         }
 
         @Contract(value = "_ -> this", mutates = "this")
-        public Builder type(EntityTypeCondition type) {
+        public Builder type(final EntityTypeCondition type) {
             this.type = type;
             return this;
         }
@@ -143,7 +221,7 @@ public interface EntityCondition extends Condition<EntityCondition>, Buildable<E
         }
 
         @Contract(value = "_ -> this", mutates = "this")
-        public Builder distance(DistanceCondition distance) {
+        public Builder distance(final DistanceCondition distance) {
             this.distance = distance;
             return this;
         }
@@ -153,7 +231,7 @@ public interface EntityCondition extends Condition<EntityCondition>, Buildable<E
         }
 
         @Contract(value = "_ -> this", mutates = "this")
-        public Builder location(LocationCondition location) {
+        public Builder location(final LocationCondition location) {
             this.location = location;
             return this;
         }
@@ -163,7 +241,7 @@ public interface EntityCondition extends Condition<EntityCondition>, Buildable<E
         }
 
         @Contract(value = "_ -> this", mutates = "this")
-        public Builder steppingOn(LocationCondition steppingOn) {
+        public Builder steppingOn(final LocationCondition steppingOn) {
             this.steppingOn = steppingOn;
             return this;
         }
@@ -173,7 +251,7 @@ public interface EntityCondition extends Condition<EntityCondition>, Buildable<E
         }
 
         @Contract(value = "_ -> this", mutates = "this")
-        public Builder effects(PotionEffectsCondition effects) {
+        public Builder effects(final PotionEffectsCondition effects) {
             this.effects = effects;
             return this;
         }
@@ -183,7 +261,7 @@ public interface EntityCondition extends Condition<EntityCondition>, Buildable<E
         }
 
         @Contract(value = "_ -> this", mutates = "this")
-        public Builder nbt(NBTCondition nbt) {
+        public Builder nbt(final NBTCondition nbt) {
             this.nbt = nbt;
             return this;
         }
@@ -193,7 +271,7 @@ public interface EntityCondition extends Condition<EntityCondition>, Buildable<E
         }
 
         @Contract(value = "_ -> this", mutates = "this")
-        public Builder flags(EntityFlagsCondition flags) {
+        public Builder flags(final EntityFlagsCondition flags) {
             this.flags = flags;
             return this;
         }
@@ -203,38 +281,18 @@ public interface EntityCondition extends Condition<EntityCondition>, Buildable<E
         }
 
         @Contract(value = "_ -> this", mutates = "this")
-        public Builder equipment(EntityEquipmentCondition equipment) {
+        public Builder equipment(final EntityEquipmentCondition equipment) {
             this.equipment = equipment;
             return this;
         }
 
-        public PlayerCondition player() {
-            return this.player;
+        public EntitySubCondition typeSpecific() {
+            return this.typeSpecific;
         }
 
         @Contract(value = "_ -> this", mutates = "this")
-        public Builder player(PlayerCondition player) {
-            this.player = player;
-            return this;
-        }
-
-        public FishingHookCondition fishingHook() {
-            return this.fishingHook;
-        }
-
-        @Contract(value = "_ -> this", mutates = "this")
-        public Builder fishingHook(FishingHookCondition fishingHook) {
-            this.fishingHook = fishingHook;
-            return this;
-        }
-
-        public LightningBoltCondition lightningBolt() {
-            return this.lightningBolt;
-        }
-
-        @Contract(value = "_ -> this", mutates = "this")
-        public Builder lightningBolt(LightningBoltCondition lightningBolt) {
-            this.lightningBolt = lightningBolt;
+        public Builder typeSpecific(final EntitySubCondition typeSpecific) {
+            this.typeSpecific = typeSpecific;
             return this;
         }
 
@@ -243,7 +301,7 @@ public interface EntityCondition extends Condition<EntityCondition>, Buildable<E
         }
 
         @Contract(value = "_ -> this", mutates = "this")
-        public Builder vehicle(EntityCondition vehicle) {
+        public Builder vehicle(final EntityCondition vehicle) {
             this.vehicle = vehicle;
             return this;
         }
@@ -253,7 +311,7 @@ public interface EntityCondition extends Condition<EntityCondition>, Buildable<E
         }
 
         @Contract(value = "_ -> this", mutates = "this")
-        public Builder passenger(EntityCondition passenger) {
+        public Builder passenger(final EntityCondition passenger) {
             this.passenger = passenger;
             return this;
         }
@@ -263,7 +321,7 @@ public interface EntityCondition extends Condition<EntityCondition>, Buildable<E
         }
 
         @Contract(value = "_ -> this", mutates = "this")
-        public Builder targetedEntity(EntityCondition targetedEntity) {
+        public Builder targetedEntity(final EntityCondition targetedEntity) {
             this.targetedEntity = targetedEntity;
             return this;
         }
@@ -273,261 +331,14 @@ public interface EntityCondition extends Condition<EntityCondition>, Buildable<E
         }
 
         @Contract(value = "_ -> this", mutates = "this")
-        public Builder team(@Nullable String team) {
+        public Builder team(final @Nullable String team) {
             this.team = team;
-            return this;
-        }
-
-        public Cat.@Nullable Type catType() {
-            return this.catType;
-        }
-
-        @Contract(value = "_ -> this", mutates = "this")
-        public Builder catType(Cat.@Nullable Type catType) {
-            this.catType = catType;
             return this;
         }
 
         @Override
         public EntityCondition build() {
-            return new Impl(this.type,
-                    this.distance,
-                    this.location,
-                    this.steppingOn,
-                    this.effects,
-                    this.nbt,
-                    this.flags,
-                    this.equipment,
-                    this.player,
-                    this.fishingHook,
-                    this.lightningBolt,
-                    this.vehicle,
-                    this.passenger,
-                    this.targetedEntity,
-                    this.team,
-                    this.catType
-            );
+            return new EntityCondition(this.type, this.distance, this.location, this.steppingOn, this.effects, this.nbt, this.flags, this.equipment, this.typeSpecific, this.vehicle, this.passenger, this.targetedEntity, this.team);
         }
     }
-
-    //<editor-fold defaultstate="collapsed" desc="Impl">
-    @SuppressWarnings("DuplicatedCode") // need second ctor to set "this" in ctor
-    final class Impl implements EntityCondition {
-        private final EntityTypeCondition type;
-        private final DistanceCondition distance;
-        private final LocationCondition location;
-        private final LocationCondition steppingOn;
-        private final PotionEffectsCondition effects;
-        private final NBTCondition nbt;
-        private final EntityFlagsCondition flags;
-        private final EntityEquipmentCondition equipment;
-        private final PlayerCondition player;
-        private final FishingHookCondition fishingHook;
-        private final LightningBoltCondition lightningBolt;
-        private final EntityCondition vehicle;
-        private final EntityCondition passenger;
-        private final EntityCondition targetedEntity;
-        private final @Nullable String team;
-        @SerializedName("catType")
-        private final Cat.@Nullable Type catType;
-
-        private Impl(
-                EntityTypeCondition type,
-                DistanceCondition distance,
-                LocationCondition location,
-                LocationCondition steppingOn,
-                PotionEffectsCondition effects,
-                NBTCondition nbt,
-                EntityFlagsCondition flags,
-                EntityEquipmentCondition equipment,
-                PlayerCondition player,
-                FishingHookCondition fishingHook,
-                LightningBoltCondition lightningBolt,
-                EntityCondition vehicle,
-                EntityCondition passenger,
-                EntityCondition targetedEntity,
-                @Nullable String team,
-                Cat.@Nullable Type catType
-        ) {
-            this.type = type;
-            this.distance = distance;
-            this.location = location;
-            this.steppingOn = steppingOn;
-            this.effects = effects;
-            this.nbt = nbt;
-            this.flags = flags;
-            this.equipment = equipment;
-            this.player = player;
-            this.fishingHook = fishingHook;
-            this.lightningBolt = lightningBolt;
-            this.vehicle = vehicle;
-            this.passenger = passenger;
-            this.targetedEntity = targetedEntity;
-            this.team = team;
-            this.catType = catType;
-        }
-
-        //<editor-fold defaultstate="collapsed" desc="duplicate ctor">
-        private Impl(
-                EntityTypeCondition type,
-                DistanceCondition distance,
-                LocationCondition location,
-                LocationCondition steppingOn,
-                PotionEffectsCondition effects,
-                NBTCondition nbt,
-                EntityFlagsCondition flags,
-                EntityEquipmentCondition equipment,
-                PlayerCondition player,
-                FishingHookCondition fishingHook,
-                LightningBoltCondition lightningBolt,
-                @Nullable String team,
-                Cat.@Nullable Type catType
-        ) {
-            this.type = type;
-            this.distance = distance;
-            this.location = location;
-            this.steppingOn = steppingOn;
-            this.effects = effects;
-            this.nbt = nbt;
-            this.flags = flags;
-            this.equipment = equipment;
-            this.player = player;
-            this.fishingHook = fishingHook;
-            this.lightningBolt = lightningBolt;
-            this.vehicle = this;
-            this.passenger = this;
-            this.targetedEntity = this;
-            this.team = team;
-            this.catType = catType;
-        }
-        //</editor-fold>
-
-        @Override
-        public EntityCondition.Builder toBuilder() {
-            return new EntityCondition.Builder(this);
-        }
-
-        @Override
-        public EntityTypeCondition type() {
-            return this.type;
-        }
-
-        @Override
-        public DistanceCondition distance() {
-            return this.distance;
-        }
-
-        @Override
-        public LocationCondition location() {
-            return this.location;
-        }
-
-        @Override
-        public LocationCondition steppingOn() {
-            return this.steppingOn;
-        }
-
-        @Override
-        public PotionEffectsCondition effects() {
-            return this.effects;
-        }
-
-        @Override
-        public NBTCondition nbt() {
-            return this.nbt;
-        }
-
-        @Override
-        public EntityFlagsCondition flags() {
-            return this.flags;
-        }
-
-        @Override
-        public EntityEquipmentCondition equipment() {
-            return this.equipment;
-        }
-
-        @Override
-        public PlayerCondition player() {
-            return this.player;
-        }
-
-        @Override
-        public FishingHookCondition fishingHook() {
-            return this.fishingHook;
-        }
-
-        @Override
-        public LightningBoltCondition lightningBolt() {
-            return this.lightningBolt;
-        }
-
-        @Override
-        public EntityCondition vehicle() {
-            return this.vehicle;
-        }
-
-        @Override
-        public EntityCondition passenger() {
-            return this.passenger;
-        }
-
-        @Override
-        public EntityCondition targetedEntity() {
-            return this.targetedEntity;
-        }
-
-        @Override
-        public @Nullable String team() {
-            return this.team;
-        }
-
-        @Override
-        @SerializedName("catType")
-        public Cat.@Nullable Type catType() {
-            return this.catType;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof EntityCondition that)) return false;
-            return this.type.equals(that.type()) && this.distance.equals(that.distance()) && this.location.equals(that.location()) && this.steppingOn.equals(that.steppingOn()) && this.effects.equals(that.effects()) && this.nbt.equals(that.nbt()) && this.flags.equals(that.flags()) && this.equipment.equals(that.equipment()) && this.player.equals(that.player()) && this.fishingHook.equals(that.fishingHook()) && this.lightningBolt.equals(that.lightningBolt()) && this.vehicle.equals(that.vehicle()) && this.passenger.equals(that.passenger()) && this.targetedEntity.equals(that.targetedEntity()) && Objects.equals(this.team, that.team()) && this.catType == that.catType();
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(this.type, this.distance, this.location, this.steppingOn, this.effects, this.nbt, this.flags, this.equipment, this.player, this.fishingHook, this.lightningBolt, this.vehicle, this.passenger, this.targetedEntity, this.team, this.catType);
-        }
-
-        @Override
-        public String toString() {
-            if (this.isAny()) {
-                return "EntityCondition{ANY}";
-            }
-            return "EntityCondition{" +
-                    "type=" + this.type +
-                    ", distance=" + this.distance +
-                    ", location=" + this.location +
-                    ", steppingOn=" + this.steppingOn +
-                    ", effects=" + this.effects +
-                    ", nbt=" + this.nbt +
-                    ", flags=" + this.flags +
-                    ", equipment=" + this.equipment +
-                    ", player=" + this.player +
-                    ", fishingHook=" + this.fishingHook +
-                    ", lightningBolt=" + this.lightningBolt +
-                    ", vehicle=" + this.vehicle +
-                    ", passenger=" + this.passenger +
-                    ", targetedEntity=" + this.targetedEntity +
-                    ", team='" + this.team + '\'' +
-                    ", catType=" + this.catType +
-                    '}';
-        }
-
-        static EntityCondition delegate(Supplier<EntityCondition> supplier) {
-            return (EntityCondition) Proxy.newProxyInstance(EntityCondition.class.getClassLoader(), new Class[]{EntityCondition.class}, new ConditionDelegate<>(supplier));
-        }
-    }
-    //</editor-fold>
 }

@@ -18,6 +18,11 @@ public record DamageCondition(
 
     public static final DamageCondition ANY = new Builder().build();
 
+    @Contract(value = " -> new", pure = true)
+    public static Builder builder() {
+        return new Builder();
+    }
+
     @Override
     public DamageCondition any() {
         return ANY;
@@ -42,11 +47,6 @@ public record DamageCondition(
                 '}';
     }
 
-    @Contract(value = " -> new", pure = true)
-    public static Builder builder() {
-        return new Builder();
-    }
-
     public static final class Builder implements Condition.Builder<DamageCondition> {
 
         private DoubleRange dealtDamage = DoubleRange.ANY;
@@ -58,7 +58,7 @@ public record DamageCondition(
         private Builder() {
         }
 
-        public Builder(DamageCondition condition) {
+        public Builder(final DamageCondition condition) {
             this.dealtDamage = condition.dealtDamage;
             this.takenDamage = condition.takenDamage;
             this.sourceEntity = condition.sourceEntity;
@@ -71,7 +71,7 @@ public record DamageCondition(
         }
 
         @Contract(value = "_ -> this", mutates = "this")
-        public Builder dealtDamage(DoubleRange dealtDamage) {
+        public Builder dealtDamage(final DoubleRange dealtDamage) {
             this.dealtDamage = dealtDamage;
             return this;
         }
@@ -81,7 +81,7 @@ public record DamageCondition(
         }
 
         @Contract(value = "_ -> this", mutates = "this")
-        public Builder takenDamage(DoubleRange takenDamage) {
+        public Builder takenDamage(final DoubleRange takenDamage) {
             this.takenDamage = takenDamage;
             return this;
         }
@@ -91,7 +91,7 @@ public record DamageCondition(
         }
 
         @Contract(value = "_ -> this", mutates = "this")
-        public Builder sourceEntity(EntityCondition sourceEntity) {
+        public Builder sourceEntity(final EntityCondition sourceEntity) {
             this.sourceEntity = sourceEntity;
             return this;
         }
@@ -101,7 +101,7 @@ public record DamageCondition(
         }
 
         @Contract(value = "_ -> this", mutates = "this")
-        public Builder blocked(@Nullable Boolean blocked) {
+        public Builder blocked(final @Nullable Boolean blocked) {
             this.blocked = blocked;
             return this;
         }
@@ -111,7 +111,7 @@ public record DamageCondition(
         }
 
         @Contract(value = "_ -> this", mutates = "this")
-        public Builder type(DamageSourceCondition type) {
+        public Builder type(final DamageSourceCondition type) {
             this.type = type;
             return this;
         }

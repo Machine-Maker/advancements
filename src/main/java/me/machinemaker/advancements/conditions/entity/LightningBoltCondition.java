@@ -7,14 +7,15 @@ import me.machinemaker.advancements.util.Buildable;
 import org.jetbrains.annotations.Contract;
 
 // TODO tests
-public record LightningBoltCondition(IntegerRange blocksSetOnFire, EntityCondition entityStruck) implements Condition<LightningBoltCondition>, Buildable<LightningBoltCondition, LightningBoltCondition.Builder> {
+public record LightningBoltCondition(IntegerRange blocksSetOnFire,
+                                     EntityCondition entityStruck) implements EntitySubCondition, Buildable<LightningBoltCondition, LightningBoltCondition.Builder> {
 
     public static final LightningBoltCondition ANY = new Builder().build();
     public static final GsonBuilderApplicable BUILDER_APPLICABLE = EntityCondition.BUILDER_APPLICABLE; // must be declared AFTER the ANY field
 
-    @Override
-    public LightningBoltCondition any() {
-        return ANY;
+    @Contract(value = " -> new", pure = true)
+    public static Builder builder() {
+        return new Builder();
     }
 
     @Override
@@ -24,7 +25,7 @@ public record LightningBoltCondition(IntegerRange blocksSetOnFire, EntityConditi
 
     @Override
     public String toString() {
-        if (this.isAny()) {
+        if (this.equals(ANY)) {
             return "LightningBoltCondition{ANY}";
         }
         return "LightningBoltCondition{" +
@@ -33,19 +34,16 @@ public record LightningBoltCondition(IntegerRange blocksSetOnFire, EntityConditi
                 '}';
     }
 
-    @Contract(value = " -> new", pure = true)
-    public static Builder builder() {
-        return new Builder();
-    }
-
     public static final class Builder implements Condition.Builder<LightningBoltCondition> {
 
         private IntegerRange blocksSetOnFire = IntegerRange.ANY;
-        private EntityCondition entityStruck = EntityCondition.Impl.delegate(() -> EntityCondition.ANY);
-        
-        private Builder() {}
-        
-        public Builder(LightningBoltCondition condition) {
+        private EntityCondition entityStruck = EntityCondition.ANY;
+        // private EntityCondition entityStruck = EntityCondition.Impl.delegate(() -> EntityCondition.ANY);
+
+        private Builder() {
+        }
+
+        public Builder(final LightningBoltCondition condition) {
             this.blocksSetOnFire = condition.blocksSetOnFire;
             this.entityStruck = condition.entityStruck;
         }
@@ -55,7 +53,7 @@ public record LightningBoltCondition(IntegerRange blocksSetOnFire, EntityConditi
         }
 
         @Contract(value = "_ -> this", mutates = "this")
-        public Builder blocksSetOnFire(IntegerRange blocksSetOnFire) {
+        public Builder blocksSetOnFire(final IntegerRange blocksSetOnFire) {
             this.blocksSetOnFire = blocksSetOnFire;
             return this;
         }
@@ -65,7 +63,7 @@ public record LightningBoltCondition(IntegerRange blocksSetOnFire, EntityConditi
         }
 
         @Contract(value = "_ -> this", mutates = "this")
-        public Builder entityStruck(EntityCondition entityStruck) {
+        public Builder entityStruck(final EntityCondition entityStruck) {
             this.entityStruck = entityStruck;
             return this;
         }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="me.machinemaker.advancements.conditions.blocks.FluidConditionTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2022-03-18T20:38:38" hostname="Jakes-MBP.attlocal.net" time="0.003">
+<testsuite name="me.machinemaker.advancements.conditions.blocks.FluidConditionTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2022-10-30T08:46:05" hostname="Jakes-MBP.askey.com" time="0.003">
   <properties/>
   <testcase name="testFluidConditionWithFluidTag()" classname="me.machinemaker.advancements.conditions.blocks.FluidConditionTest" time="0.002"/>
   <testcase name="testFluidConditionWithFluid()" classname="me.machinemaker.advancements.conditions.blocks.FluidConditionTest" time="0.0"/>

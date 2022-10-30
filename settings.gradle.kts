@@ -1,2 +1,2 @@
 rootProject.name = "advancements"
-include("minecraft-tests")
+// include("minecraft-tests")

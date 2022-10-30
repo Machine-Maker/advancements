@@ -6,7 +6,7 @@ import io.papermc.paper.statistics.Statistic;
 import io.papermc.paper.statistics.StatisticType;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
-import me.machinemaker.advancements.MinecraftGsonTestBase;
+import me.machinemaker.advancements.GsonTestBase;
 import me.machinemaker.advancements.ranges.IntegerRange;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -18,7 +18,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class PlayerConditionTest extends MinecraftGsonTestBase {
+class PlayerConditionTest extends GsonTestBase {
 
     @Test
     void testPlayerCondition() {
@@ -47,7 +47,8 @@ class PlayerConditionTest extends MinecraftGsonTestBase {
         object.add("gamemode", JsonNull.INSTANCE);
         object.add("recipes", JsonNull.INSTANCE);
         anyTest(object, PlayerCondition.class);
-        anyTest("null", PlayerCondition.class);
+        // anyTest("null", PlayerCondition.class);
+        anyTest("null", EntitySubCondition.ANY.getClass());
         anyTest("{ \"advancements\": null }", PlayerCondition.class);
     }
 }

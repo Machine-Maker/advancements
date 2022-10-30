@@ -12,6 +12,7 @@ import me.machinemaker.advancements.conditions.entity.DamageCondition;
 import me.machinemaker.advancements.conditions.entity.DamageSourceCondition;
 import me.machinemaker.advancements.conditions.entity.EntityEquipmentCondition;
 import me.machinemaker.advancements.conditions.entity.EntityFlagsCondition;
+import me.machinemaker.advancements.conditions.entity.EntitySubCondition;
 import me.machinemaker.advancements.conditions.entity.EntityTypeCondition;
 import me.machinemaker.advancements.conditions.entity.PlayerCondition;
 import me.machinemaker.advancements.conditions.entity.EntityCondition;
@@ -51,13 +52,14 @@ public final class Conditions {
         register(EntityEquipmentCondition.ANY);
         register(EntityFlagsCondition.ANY);
         register(EntityTypeCondition.ANY, EntityTypeCondition.types());
-        register(FishingHookCondition.ANY);
+        register(EntitySubCondition.ANY, EntitySubCondition.TYPES.keySet(), EntitySubCondition.class);
+        // register(FishingHookCondition.ANY);
         register(DamageSourceCondition.ANY);
         register(DamageCondition.ANY);
-        register(EntityCondition.ANY, EntityCondition.types());
+        register(EntityCondition.ANY/* , EntityCondition.types() */);
         // player and lightning bolt must be registered AFTER entity
-        register(PlayerCondition.ANY);
-        register(LightningBoltCondition.ANY);
+        // register(PlayerCondition.ANY);
+        // register(LightningBoltCondition.ANY);
 
         register(EnchantmentCondition.ANY);
         register(ItemCondition.ANY);
@@ -75,9 +77,13 @@ public final class Conditions {
         register(condition, Collections.emptySet());
     }
 
-    private static <C extends Condition<? super C>> void register(C condition, Collection<Class<? extends C>> otherClasses) {
+    @SafeVarargs
+    private static <C extends Condition<? super C>> void register(C condition, Collection<Class<? extends C>> otherClasses, Class<? extends C> ...moreOtherClasses) {
         CONDITION_REGISTRY.put(TypeToken.get(condition.getClass()), condition);
         for (Class<?> otherClass : otherClasses) {
+            CONDITION_REGISTRY.put(TypeToken.get(otherClass), condition);
+        }
+        for (final Class<? extends C> otherClass : moreOtherClasses) {
             CONDITION_REGISTRY.put(TypeToken.get(otherClass), condition);
         }
     }

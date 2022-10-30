@@ -4,7 +4,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
@@ -18,7 +17,6 @@ import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -47,7 +45,7 @@ public class StatisticMapAdapter extends TypeAdapter<Map<Statistic<?>, IntegerRa
         if (in.peek() == JsonToken.NULL) {
             return stats;
         } else if (in.peek() != JsonToken.BEGIN_ARRAY) {
-            throw new JsonSyntaxException("Expected array, got " + in.peek());
+            throw new JsonParseException("Expected array, got " + in.peek());
         } else {
             JsonArray array = HELPER.arrayFromReader(in);
             for (JsonElement element : array) {

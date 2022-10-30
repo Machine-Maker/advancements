@@ -6,10 +6,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import me.machinemaker.advancements.adapters.Adapters;
 import me.machinemaker.advancements.conditions.Condition;
+import me.machinemaker.advancements.junit.ServerExtension;
 import org.junit.jupiter.api.TestInstance;
 
 import java.lang.reflect.Type;
 import java.util.function.Predicate;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
