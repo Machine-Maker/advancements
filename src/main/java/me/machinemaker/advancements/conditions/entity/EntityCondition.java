@@ -1,9 +1,10 @@
 package me.machinemaker.advancements.conditions.entity;
 
 import java.util.Objects;
-import me.machinemaker.advancements.adapters.Adapters;
-import me.machinemaker.advancements.adapters.GsonBuilderApplicable;
+import me.machinemaker.advancements.adapters.builders.Builders;
+import me.machinemaker.advancements.adapters.builders.GsonBuilderApplicable;
 import me.machinemaker.advancements.conditions.Condition;
+import me.machinemaker.advancements.conditions.ConditionType;
 import me.machinemaker.advancements.conditions.effects.PotionEffectsCondition;
 import me.machinemaker.advancements.conditions.misc.NBTCondition;
 import me.machinemaker.advancements.conditions.world.DistanceCondition;
@@ -13,8 +14,8 @@ import org.jetbrains.annotations.Contract;
 
 public final class EntityCondition implements Condition<EntityCondition> {
 
-    public static final GsonBuilderApplicable BUILDER_APPLICABLE = Adapters.of(EntityTypeCondition.BUILDER_APPLICABLE, LocationCondition.BUILDER_APPLICABLE);
-    public static final EntityCondition ANY = new EntityCondition(EntityTypeCondition.ANY, DistanceCondition.ANY, LocationCondition.ANY, LocationCondition.ANY, PotionEffectsCondition.ANY, NBTCondition.ANY, EntityFlagsCondition.ANY, EntityEquipmentCondition.ANY, EntitySubCondition.ANY, null);
+    public static final GsonBuilderApplicable BUILDER_APPLICABLE = Builders.collection(EntityTypeCondition.BUILDER_APPLICABLE, LocationCondition.BUILDER_APPLICABLE);
+    public static final EntityCondition ANY = new EntityCondition(EntityTypeCondition.ANY, DistanceCondition.conditionType().any(), LocationCondition.ANY, LocationCondition.ANY, PotionEffectsCondition.ANY, NBTCondition.conditionType().any(), EntityFlagsCondition.ANY, EntityEquipmentCondition.ANY, EntitySubCondition.ANY, null);
 
     private final EntityTypeCondition type;
     private final DistanceCondition distance;
@@ -130,18 +131,18 @@ public final class EntityCondition implements Condition<EntityCondition> {
         if (obj == null || obj.getClass() != this.getClass()) return false;
         final var that = (EntityCondition) obj;
         return Objects.equals(this.type, that.type) &&
-                Objects.equals(this.distance, that.distance) &&
-                Objects.equals(this.location, that.location) &&
-                Objects.equals(this.steppingOn, that.steppingOn) &&
-                Objects.equals(this.effects, that.effects) &&
-                Objects.equals(this.nbt, that.nbt) &&
-                Objects.equals(this.flags, that.flags) &&
-                Objects.equals(this.equipment, that.equipment) &&
-                Objects.equals(this.typeSpecific, that.typeSpecific) &&
-                Objects.equals(this.vehicle, that.vehicle) &&
-                Objects.equals(this.passenger, that.passenger) &&
-                Objects.equals(this.targetedEntity, that.targetedEntity) &&
-                Objects.equals(this.team, that.team);
+            Objects.equals(this.distance, that.distance) &&
+            Objects.equals(this.location, that.location) &&
+            Objects.equals(this.steppingOn, that.steppingOn) &&
+            Objects.equals(this.effects, that.effects) &&
+            Objects.equals(this.nbt, that.nbt) &&
+            Objects.equals(this.flags, that.flags) &&
+            Objects.equals(this.equipment, that.equipment) &&
+            Objects.equals(this.typeSpecific, that.typeSpecific) &&
+            Objects.equals(this.vehicle, that.vehicle) &&
+            Objects.equals(this.passenger, that.passenger) &&
+            Objects.equals(this.targetedEntity, that.targetedEntity) &&
+            Objects.equals(this.team, that.team);
     }
 
     @Override
@@ -155,30 +156,30 @@ public final class EntityCondition implements Condition<EntityCondition> {
             return "EntityCondition{ANY}";
         }
         return "EntityCondition{" +
-                "type=" + this.type +
-                ", distance=" + this.distance +
-                ", location=" + this.location +
-                ", steppingOn=" + this.steppingOn +
-                ", effects=" + this.effects +
-                ", nbt=" + this.nbt +
-                ", flags=" + this.flags +
-                ", equipment=" + this.equipment +
-                ", typeSpecific=" + this.typeSpecific +
-                ", vehicle=" + this.vehicle +
-                ", passenger=" + this.passenger +
-                ", targetedEntity=" + this.targetedEntity +
-                ", team='" + this.team + '\'' +
-                '}';
+            "type=" + this.type +
+            ", distance=" + this.distance +
+            ", location=" + this.location +
+            ", steppingOn=" + this.steppingOn +
+            ", effects=" + this.effects +
+            ", nbt=" + this.nbt +
+            ", flags=" + this.flags +
+            ", equipment=" + this.equipment +
+            ", typeSpecific=" + this.typeSpecific +
+            ", vehicle=" + this.vehicle +
+            ", passenger=" + this.passenger +
+            ", targetedEntity=" + this.targetedEntity +
+            ", team='" + this.team + '\'' +
+            '}';
     }
 
     public static final class Builder implements Condition.Builder<EntityCondition> {
 
         private EntityTypeCondition type = EntityTypeCondition.ANY;
-        private DistanceCondition distance = DistanceCondition.ANY;
+        private DistanceCondition distance = DistanceCondition.conditionType().any();
         private LocationCondition location = LocationCondition.ANY;
         private LocationCondition steppingOn = LocationCondition.ANY;
         private PotionEffectsCondition effects = PotionEffectsCondition.ANY;
-        private NBTCondition nbt = NBTCondition.ANY;
+        private NBTCondition nbt = NBTCondition.conditionType().any();
         private EntityFlagsCondition flags = EntityFlagsCondition.ANY;
         private EntityEquipmentCondition equipment = EntityEquipmentCondition.ANY;
         private EntitySubCondition typeSpecific = EntitySubCondition.ANY;

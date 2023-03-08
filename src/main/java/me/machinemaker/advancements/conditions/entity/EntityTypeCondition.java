@@ -12,7 +12,8 @@ import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import me.machinemaker.advancements.GsonHelper;
 import me.machinemaker.advancements.adapters.Adapters;
-import me.machinemaker.advancements.adapters.GsonBuilderApplicable;
+import me.machinemaker.advancements.adapters.builders.Builders;
+import me.machinemaker.advancements.adapters.builders.GsonBuilderApplicable;
 import me.machinemaker.advancements.conditions.Condition;
 import me.machinemaker.advancements.tags.EntityTag;
 import org.bukkit.Tag;
@@ -29,7 +30,7 @@ import java.util.Set;
 @JsonAdapter(EntityTypeCondition.Adapter.class)
 public abstract class EntityTypeCondition implements Condition<EntityTypeCondition> {
 
-    public static final GsonBuilderApplicable BUILDER_APPLICABLE = Adapters.of(Adapters.ENTITY_TYPE_ADAPTER, Adapters.ENTITY_TAG_ADAPTER);
+    public static final GsonBuilderApplicable BUILDER_APPLICABLE = Builders.collection(Adapters.ENTITY_TYPE_ADAPTER, Adapters.ENTITY_TAG_ADAPTER);
     public static final EntityTypeCondition ANY = new EntityTypeCondition() {
 
         @Override

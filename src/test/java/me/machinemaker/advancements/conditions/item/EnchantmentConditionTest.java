@@ -3,77 +3,88 @@ package me.machinemaker.advancements.conditions.item;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
-import me.machinemaker.advancements.GsonTestBase;
-import me.machinemaker.advancements.mocks.DummyEnchantments;
+import me.machinemaker.advancements.conditions.ConditionTest;
 import me.machinemaker.advancements.ranges.IntegerRange;
+import me.machinemaker.advancements.tests.mocks.DummyEnchantments;
+import me.machinemaker.advancements.tests.providers.CompoundProvider;
+import me.machinemaker.advancements.tests.providers.RangeProviders;
 import org.bukkit.enchantments.Enchantment;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.function.Predicate;
-
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
-class EnchantmentConditionTest extends GsonTestBase {
+class EnchantmentConditionTest extends ConditionTest<EnchantmentCondition> {
 
     static {
         DummyEnchantments.setup();
     }
 
-    @Test
-    void testSingleEnchantmentCondition() {
-        EnchantmentCondition condition = new EnchantmentCondition(Enchantment.ARROW_DAMAGE, IntegerRange.isExactly(2));
-        JsonObject object = new JsonObject();
+    EnchantmentConditionTest() {
+        super(EnchantmentCondition.conditionType());
+    }
+
+    @RangeProviders.Ints
+    void testSingleEnchantmentCondition(final IntegerRange range) {
+        final EnchantmentCondition.Builder builder = EnchantmentCondition.builder();
+        builder.enchantment(Enchantment.ARROW_DAMAGE).level(range);
+        final JsonObject object = new JsonObject();
         object.addProperty("enchantment", Enchantment.ARROW_DAMAGE.getKey().toString());
-        object.addProperty("level", 2);
-        assertEquals(object, tree(condition));
-        assertEquals(condition, fromJson(object, EnchantmentCondition.class));
+        object.add("level", this.toTree(range));
+        this.testJsonConversion(builder.build(), object);
     }
 
-    @Test
-    void testMultipleEnchantmentConditions() {
-        EnchantmentCondition condition1 = new EnchantmentCondition(Enchantment.DAMAGE_ALL, IntegerRange.isAtLeast(2));
-        EnchantmentCondition condition2 = new EnchantmentCondition(null, IntegerRange.isBetween(1, 3));
-        JsonArray array = new JsonArray();
-        JsonObject object1 = new JsonObject();
+    @CompoundProvider({RangeProviders.Ints.Provider.class, RangeProviders.Ints.Provider.class})
+    void testMultipleEnchantmentConditions(final IntegerRange range1, final IntegerRange range2) {
+        final EnchantmentCondition condition1 = EnchantmentCondition.builder()
+            .enchantment(Enchantment.DAMAGE_ALL).level(range1).build();
+        final EnchantmentCondition condition2 = EnchantmentCondition.builder()
+            .enchantment(null).level(range2).build();
+        final JsonArray array = new JsonArray();
+        final JsonObject object1 = new JsonObject();
         object1.addProperty("enchantment", Enchantment.DAMAGE_ALL.getKey().toString());
-        JsonObject object1Level = new JsonObject();
-        object1Level.addProperty("min", 2);
-        object1.add("level", object1Level);
+        object1.add("level", this.toTree(range1));
         array.add(object1);
-        JsonObject object2 = new JsonObject();
-        JsonObject object2Level = new JsonObject();
-        object2Level.addProperty("min", 1);
-        object2Level.addProperty("max", 3);
-        object2.add("level", object2Level);
+        final JsonObject object2 = new JsonObject();
+        object2.add("level", this.toTree(range2));
         array.add(object2);
-        EnchantmentCondition[] conditions = new EnchantmentCondition[]{condition1, condition2};
-        assertEquals(array, tree(conditions));
-        assertArrayEquals(conditions, fromJson(array, EnchantmentCondition[].class));
+        final EnchantmentCondition[] conditions = new EnchantmentCondition[]{condition1, condition2};
+        this.testJsonConversion(conditions, array, EnchantmentCondition[].class);
     }
 
     @Test
-    void testAnySingleEnchantmentCondition() {
-        JsonObject object = new JsonObject();
+    void testNoneEnchantmentCondition() {
+        final EnchantmentCondition[] none = new EnchantmentConditionImpl[0];
+        assertArrayEquals(none, this.fromTree("[]", EnchantmentCondition[].class));
+        assertArrayEquals(none, this.fromTree(JsonNull.INSTANCE, EnchantmentCondition[].class));
+        assertEquals(JsonNull.INSTANCE, this.toTree(none, EnchantmentCondition[].class));
+    }
+
+    @Override
+    protected void additionalAnyTests() {
+        final JsonObject object = new JsonObject();
         object.add("enchantment", JsonNull.INSTANCE);
-        anyTest(object, EnchantmentCondition.class);
-        anyTest("null", EnchantmentCondition.class);
-        anyTest("{ \"enchantment\": null }", EnchantmentCondition.class);
-        anyTest("{ \"level\": { \"min\": null } }", EnchantmentCondition.class);
+        this.testIsAny(object);
+        this.testIsAny("{ \"enchantment\": null }");
+        this.testIsAny("{ \"level\": { \"min\": null } }");
+
+        final JsonArray array = new JsonArray();
+        array.add(JsonNull.INSTANCE);
+        final JsonObject object1 = new JsonObject();
+        object1.add("level", JsonNull.INSTANCE);
+        array.add(object1);
+
+        this.testAllAny(this.fromTree(array, EnchantmentCondition[].class));
+        this.testAllAny(this.fromTree("[ null, null, null ]", EnchantmentCondition[].class));
+        this.testAllAny(this.fromTree("[ {}, null ]", EnchantmentCondition[].class));
+        this.testAllAny(this.fromTree("[ null, { \"level\": null } ]", EnchantmentCondition[].class));
     }
 
-    @Test
-    void testAnyMultipleEnchantmentConditions() {
-        JsonArray array = new JsonArray();
-        array.add(JsonNull.INSTANCE);
-        JsonObject object = new JsonObject();
-        object.add("levels", JsonNull.INSTANCE);
-        array.add(object);
-        Predicate<EnchantmentCondition[]> predicate = conditions -> Arrays.stream(conditions).allMatch(Predicate.isEqual(EnchantmentCondition.ANY));
-        test(array, EnchantmentCondition[].class, predicate);
-        test("[ null, null, null ]", EnchantmentCondition[].class, predicate);
-        test("[ {}, null ]", EnchantmentCondition[].class, predicate);
-        test("[ null, { \"level\": null } ]", EnchantmentCondition[].class, predicate);
+    private void testAllAny(final EnchantmentCondition[] conditions) {
+        for (final EnchantmentCondition condition : conditions) {
+            this.checkIsAny(condition);
+        }
     }
 }

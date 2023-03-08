@@ -14,7 +14,8 @@ import com.google.gson.annotations.JsonAdapter;
 import java.lang.reflect.Type;
 import me.machinemaker.advancements.GsonHelper;
 import me.machinemaker.advancements.adapters.Adapters;
-import me.machinemaker.advancements.adapters.GsonBuilderApplicable;
+import me.machinemaker.advancements.adapters.builders.Builders;
+import me.machinemaker.advancements.adapters.builders.GsonBuilderApplicable;
 import me.machinemaker.advancements.conditions.Condition;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.ApiStatus;
@@ -22,7 +23,7 @@ import org.jetbrains.annotations.ApiStatus;
 @JsonAdapter(EntitySubCondition.Adapter.class)
 public interface EntitySubCondition extends Condition<EntitySubCondition> {
 
-    GsonBuilderApplicable BUILDER_APPLICABLE = Adapters.of(PlayerCondition.BUILDER_APPLICABLE, LightningBoltCondition.BUILDER_APPLICABLE);
+    GsonBuilderApplicable BUILDER_APPLICABLE = Builders.collection(PlayerCondition.BUILDER_APPLICABLE, LightningBoltCondition.BUILDER_APPLICABLE);
     EntitySubCondition ANY = new EntitySubCondition() {
         @Override
         public String toString() {

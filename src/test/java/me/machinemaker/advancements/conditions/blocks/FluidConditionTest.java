@@ -2,42 +2,59 @@ package me.machinemaker.advancements.conditions.blocks;
 
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
-import me.machinemaker.advancements.GsonTestBase;
+import io.papermc.paper.world.data.BlockProperty;
+import java.util.Set;
+import me.machinemaker.advancements.conditions.ConditionTest;
+import me.machinemaker.advancements.tests.providers.BlockProviders;
+import me.machinemaker.advancements.tests.providers.CompoundProvider;
+import me.machinemaker.advancements.tests.providers.MaterialProviders;
+import me.machinemaker.advancements.tests.providers.Providers;
 import org.bukkit.Fluid;
 import org.bukkit.Tag;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static me.machinemaker.advancements.conditions.blocks.FluidConditionUtils.addFluid;
+import static me.machinemaker.advancements.conditions.blocks.FluidConditionUtils.addProperties;
 
-class FluidConditionTest extends GsonTestBase {
+class FluidConditionTest extends ConditionTest<FluidCondition> {
 
-    @Test
-    void testFluidConditionWithFluid() {
-        FluidCondition condition = FluidCondition.forFluid(Fluid.LAVA);
-        JsonObject obj = new JsonObject();
-        obj.addProperty("fluid", Fluid.LAVA.getKey().toString());
-        assertEquals(obj, tree(condition));
-        assertEquals(condition, fromJson(obj, FluidCondition.class));
+    FluidConditionTest() {
+        super(FluidCondition.conditionType());
+    }
+
+    @Providers.Config(count = 3)
+    @MaterialProviders.Fluid
+    void testFluidConditionWithFluid(final Fluid fluid) {
+        final FluidCondition.Builder builder = FluidCondition.builder();
+        final JsonObject obj = new JsonObject();
+        addFluid(builder, obj, fluid);
+        this.testJsonConversion(builder.build(), obj);
     }
 
     @Test
     void testFluidConditionWithFluidTag() {
-        FluidCondition condition = FluidCondition.forTag(Tag.FLUIDS_WATER);
-        JsonObject obj = new JsonObject();
+        final FluidCondition condition = FluidCondition.forTag(Tag.FLUIDS_WATER);
+        final JsonObject obj = new JsonObject();
         obj.addProperty("tag", Tag.FLUIDS_WATER.getKey().toString());
-        assertEquals(obj, tree(condition));
-        assertEquals(condition, fromJson(obj, FluidCondition.class));
+        this.testJsonConversion(condition, obj);
     }
 
-    // TODO block data condition test
+    @Providers.Config(maxSize = 4, count = 3)
+    @CompoundProvider({BlockProviders.Properties.Provider.class, MaterialProviders.Fluid.Provider.class})
+    void testFluidConditionWithBlockProperty(final Set<BlockProperty<?>> propertySet, final Fluid fluid) {
+        final FluidCondition.Builder builder = FluidCondition.builder();
+        final JsonObject obj = new JsonObject();
+        addFluid(builder, obj, fluid);
+        addProperties(builder, obj, propertySet);
+        this.testJsonConversion(builder.build(), obj);
+    }
 
-    @Test
-    void testAnyFluidCondition() {
-        JsonObject obj = new JsonObject();
+    @Override
+    protected void additionalAnyTests() {
+        final JsonObject obj = new JsonObject();
         obj.add("fluid", JsonNull.INSTANCE);
-        anyTest(obj, FluidCondition.class);
-        anyTest("null", FluidCondition.class);
-        anyTest("{ \"tag\": null }", FluidCondition.class);
-        anyTest("{ \"fluid\": null }", FluidCondition.class);
+        this.testIsAny(obj);
+        this.testIsAny("{ \"tag\": null }");
+        this.testIsAny("{ \"fluid\": null }");
     }
 }

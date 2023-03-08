@@ -11,7 +11,7 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import me.machinemaker.advancements.adapters.Adapters;
-import me.machinemaker.advancements.adapters.GsonBuilderApplicable;
+import me.machinemaker.advancements.adapters.builders.GsonBuilderApplicable;
 import me.machinemaker.advancements.conditions.Condition;
 import me.machinemaker.advancements.conditions.Conditions;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -132,9 +132,9 @@ public class GsonHelper {
 
     public GsonHelper() {
         this.builder = new GsonBuilder()
-                .setVersion(1.0)
-                .registerTypeAdapterFactory(Adapters.RECORD_TYPE_ADAPTER_FACTORY.factory())
-                .registerTypeAdapterFactory(Adapters.WRAPPER_TYPE_ADAPTER_FACTORY.factory());
+                .setVersion(1.0);
+        Adapters.RECORD_TYPE_ADAPTER_FACTORY.applyTo(this.builder);
+        Adapters.WRAPPER_TYPE_ADAPTER_FACTORY.applyTo(this.builder);
     }
 
     public GsonHelper(GsonBuilder builder) {

@@ -1,63 +1,38 @@
 package me.machinemaker.advancements.ranges;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonToken;
-import me.machinemaker.advancements.GsonHelper;
-import me.machinemaker.advancements.adapters.util.IgnoreRecordTypeAdapter;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import me.machinemaker.advancements.adapters.builders.GsonBuilderApplicable;
+import me.machinemaker.advancements.conditions.ConditionType;
 import org.jetbrains.annotations.Contract;
 
-import java.io.IOException;
+public sealed interface DoubleRange extends NumberRange<Double, DoubleRange> permits DoubleRangeImpl {
 
-@IgnoreRecordTypeAdapter
-@JsonAdapter(value = DoubleRange.Adapter.class, nullSafe = false)
-public record DoubleRange(@Nullable Double min, @Nullable Double max) implements NumberRange<Double> {
-
-    public static final DoubleRange ANY = new DoubleRange(null, null);
-
-    @Contract("_ -> new")
-    public static DoubleRange isExactly(double value) {
-        return new DoubleRange(value, value);
+    @Contract(pure = true)
+    static ConditionType<DoubleRange> conditionType() {
+        return DoubleRangeImpl.TYPE;
     }
 
-    @Contract("_, _ -> new")
-    public static DoubleRange isBetween(double min, double max) {
-        return new DoubleRange(min, max);
+    @Contract(value = "_ -> new", pure = true)
+    static DoubleRange isExactly(final double value) {
+        return new DoubleRangeImpl(value, value);
     }
 
-    @Contract("_ -> new")
-    public static DoubleRange isAtLeast(double min) {
-        return new DoubleRange(min, null);
+    @Contract(value = "_, _ -> new", pure = true)
+    static DoubleRange isBetween(final double min, final double max) {
+        return new DoubleRangeImpl(min, max);
     }
 
-    @Contract("_ -> new")
-    public static DoubleRange isAtMost(double max) {
-        return new DoubleRange(null, max);
+    @Contract(value = "_ -> new", pure = true)
+    static DoubleRange isAtLeast(final double min) {
+        return new DoubleRangeImpl(min, null);
     }
 
-    @Override
-    public NumberRange<Double> any() {
-        return ANY;
+    @Contract(value = "_ -> new", pure = true)
+    static DoubleRange isAtMost(final double max) {
+        return new DoubleRangeImpl(null, max);
     }
 
-    static final class Adapter extends NumberRange.Adapter<DoubleRange> {
-
-        @Override
-        public DoubleRange read(JsonReader in) throws IOException {
-            if (in.peek() == JsonToken.NUMBER) {
-                return DoubleRange.isExactly(in.nextDouble());
-            } else if (in.peek() == JsonToken.BEGIN_OBJECT) {
-                JsonObject obj = HELPER.objectFromReader(in);
-                final @Nullable Double min = GsonHelper.getDouble(obj, "min", null);
-                final @Nullable Double max = GsonHelper.getDouble(obj, "max", null);
-                return new DoubleRange(min, max);
-            } else {
-                throw new JsonParseException(in.peek() + " was not expected for DoubleRange");
-            }
-        }
+    @Contract(pure = true)
+    static GsonBuilderApplicable requiredGson() {
+        return DoubleRangeImpl.REQUIRED_GSON;
     }
-
 }

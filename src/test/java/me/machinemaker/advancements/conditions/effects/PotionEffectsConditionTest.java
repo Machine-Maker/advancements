@@ -3,7 +3,7 @@ package me.machinemaker.advancements.conditions.effects;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import me.machinemaker.advancements.GsonTestBase;
-import me.machinemaker.advancements.mocks.DummyEffects;
+import me.machinemaker.advancements.tests.mocks.DummyEffects;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.junit.jupiter.api.Test;

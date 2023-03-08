@@ -1,6 +1,6 @@
 package me.machinemaker.advancements.conditions.entity;
 
-import me.machinemaker.advancements.adapters.GsonBuilderApplicable;
+import me.machinemaker.advancements.adapters.builders.GsonBuilderApplicable;
 import me.machinemaker.advancements.conditions.Condition;
 import me.machinemaker.advancements.ranges.IntegerRange;
 import me.machinemaker.advancements.util.Buildable;
@@ -36,7 +36,7 @@ public record LightningBoltCondition(IntegerRange blocksSetOnFire,
 
     public static final class Builder implements Condition.Builder<LightningBoltCondition> {
 
-        private IntegerRange blocksSetOnFire = IntegerRange.ANY;
+        private IntegerRange blocksSetOnFire = IntegerRange.conditionType().any();
         private EntityCondition entityStruck = EntityCondition.ANY;
         // private EntityCondition entityStruck = EntityCondition.Impl.delegate(() -> EntityCondition.ANY);
 

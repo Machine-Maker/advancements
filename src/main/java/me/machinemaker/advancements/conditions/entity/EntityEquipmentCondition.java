@@ -1,7 +1,7 @@
 package me.machinemaker.advancements.conditions.entity;
 
 import com.google.gson.annotations.SerializedName;
-import me.machinemaker.advancements.adapters.GsonBuilderApplicable;
+import me.machinemaker.advancements.adapters.builders.GsonBuilderApplicable;
 import me.machinemaker.advancements.conditions.Condition;
 import me.machinemaker.advancements.conditions.item.ItemCondition;
 import me.machinemaker.advancements.util.Buildable;
@@ -16,32 +16,31 @@ public record EntityEquipmentCondition(
         @SerializedName("offhand") ItemCondition offHand
 ) implements Condition<EntityEquipmentCondition>, Buildable<EntityEquipmentCondition, EntityEquipmentCondition.Builder> {
 
-    public static final GsonBuilderApplicable BUILDER_APPLICABLE = ItemCondition.BUILDER_APPLICABLE;
-    public static final EntityEquipmentCondition ANY = new EntityEquipmentCondition(ItemCondition.ANY, ItemCondition.ANY, ItemCondition.ANY, ItemCondition.ANY, ItemCondition.ANY, ItemCondition.ANY);
+    public static final EntityEquipmentCondition ANY = builder().build();
 
     @Contract(value = "_ -> new", pure = true)
     public static EntityEquipmentCondition forHead(ItemCondition head) {
-        return new EntityEquipmentCondition(head, ItemCondition.ANY, ItemCondition.ANY, ItemCondition.ANY, ItemCondition.ANY, ItemCondition.ANY);
+        return builder().head(head).build();
     }
 
     @Contract(value = "_ -> new", pure = true)
     public static EntityEquipmentCondition forChest(ItemCondition chest) {
-        return new EntityEquipmentCondition(ItemCondition.ANY, chest, ItemCondition.ANY, ItemCondition.ANY, ItemCondition.ANY, ItemCondition.ANY);
+        return builder().chest(chest).build();
     }
 
     @Contract(value = "_ -> new", pure = true)
     public static EntityEquipmentCondition forLegs(ItemCondition legs) {
-        return new EntityEquipmentCondition(ItemCondition.ANY, ItemCondition.ANY, legs, ItemCondition.ANY, ItemCondition.ANY, ItemCondition.ANY);
+        return builder().legs(legs).build();
     }
 
     @Contract(value = "_ -> new", pure = true)
     public static EntityEquipmentCondition forFeet(ItemCondition feet) {
-        return new EntityEquipmentCondition(ItemCondition.ANY, ItemCondition.ANY, ItemCondition.ANY, feet, ItemCondition.ANY, ItemCondition.ANY);
+        return builder().feet(feet).build();
     }
 
     @Contract(value = "_, _ -> new", pure = true)
     public static EntityEquipmentCondition forHands(ItemCondition mainHand, ItemCondition offHand) {
-        return new EntityEquipmentCondition(ItemCondition.ANY, ItemCondition.ANY, ItemCondition.ANY, ItemCondition.ANY, mainHand, offHand);
+        return builder().mainHand(mainHand).offHand(offHand).build();
     }
 
     // TODO from EntityEquipment factory method
@@ -78,12 +77,12 @@ public record EntityEquipmentCondition(
 
     public static final class Builder implements Condition.Builder<EntityEquipmentCondition> {
 
-        private ItemCondition head = ItemCondition.ANY;
-        private ItemCondition chest = ItemCondition.ANY;
-        private ItemCondition legs = ItemCondition.ANY;
-        private ItemCondition feet = ItemCondition.ANY;
-        private ItemCondition mainHand = ItemCondition.ANY;
-        private ItemCondition offHand = ItemCondition.ANY;
+        private ItemCondition head = ItemCondition.conditionType().any();
+        private ItemCondition chest = ItemCondition.conditionType().any();
+        private ItemCondition legs = ItemCondition.conditionType().any();
+        private ItemCondition feet = ItemCondition.conditionType().any();
+        private ItemCondition mainHand = ItemCondition.conditionType().any();
+        private ItemCondition offHand = ItemCondition.conditionType().any();
 
         private Builder(EntityEquipmentCondition condition) {
             this.head = condition.head;

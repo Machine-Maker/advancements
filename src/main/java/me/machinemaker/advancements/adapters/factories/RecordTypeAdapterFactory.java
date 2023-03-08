@@ -84,13 +84,16 @@ public class RecordTypeAdapterFactory implements TypeAdapterFactory {
     }
 
     @Override
-    public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+    public <T> TypeAdapter<T> create(final Gson gson, final TypeToken<T> type) {
         @SuppressWarnings("unchecked")
-        Class<T> clazz = (Class<T>) type.getRawType();
-        if (!clazz.isRecord() || clazz.isAnnotationPresent(IgnoreRecordTypeAdapter.class)) { // Some records have their own serializers
+        final Class<T> clazz = (Class<T>) type.getRawType();
+        final TypeAdapter<T> delegate;
+        if (!clazz.isRecord() || clazz.isAnnotationPresent(IgnoreRecordTypeAdapter.class)) {
             return null;
+        } else {
+            delegate = gson.getDelegateAdapter(this, type);
         }
-        TypeAdapter<T> delegate = gson.getDelegateAdapter(this, type);
+        final Class<T> actualClass = clazz;
 
         return new TypeAdapter<>() {
             @Override
@@ -104,7 +107,7 @@ public class RecordTypeAdapterFactory implements TypeAdapterFactory {
                 if (reader.peek() == JsonToken.NULL) {
                     return delegate.read(reader);
                 }
-                var recordComponents = clazz.getRecordComponents();
+                var recordComponents = actualClass.getRecordComponents();
                 var typeMap = new HashMap<String, TypeToken<?>>();
                 var adapterMap = new HashMap<String, TypeAdapter<?>>();
                 for (RecordComponent recordComponent : recordComponents) {
@@ -113,7 +116,7 @@ public class RecordTypeAdapterFactory implements TypeAdapterFactory {
                         typeMap.put(name, type);
                         try {
                             // roundabout way of getting field annotations applied to a record component, is there a better way?
-                            Field recordField = clazz.getDeclaredField(recordComponent.getName());
+                            Field recordField = actualClass.getDeclaredField(recordComponent.getName());
                             if (recordField.isAnnotationPresent(JsonAdapter.class)) {
                                 final JsonAdapter annotation = recordField.getAnnotation(JsonAdapter.class);
                                 final TypeAdapter<?> adapter = createTypeAdapter(gson, annotation.value(), TypeToken.get(recordComponent.getGenericType()));
@@ -174,7 +177,7 @@ public class RecordTypeAdapterFactory implements TypeAdapterFactory {
                 }
                 try {
                     final Constructor<T> ctor;
-                    ctor = clazz.getDeclaredConstructor(argTypes);
+                    ctor = actualClass.getDeclaredConstructor(argTypes);
                     ctor.trySetAccessible();
                     return ctor.newInstance(args);
                 } catch (NoSuchMethodException | InstantiationException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {

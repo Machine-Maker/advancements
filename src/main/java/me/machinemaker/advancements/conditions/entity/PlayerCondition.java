@@ -1,11 +1,14 @@
 package me.machinemaker.advancements.conditions.entity;
 
 import com.google.gson.annotations.JsonAdapter;
-import io.papermc.paper.statistics.Statistic;
+import io.papermc.paper.statistic.Statistic;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import me.machinemaker.advancements.adapters.Adapters;
-import me.machinemaker.advancements.adapters.GsonBuilderApplicable;
+import me.machinemaker.advancements.adapters.builders.Builders;
+import me.machinemaker.advancements.adapters.builders.GsonBuilderApplicable;
 import me.machinemaker.advancements.adapters.factories.NonNullMapAdapterFactory;
 import me.machinemaker.advancements.adapters.maps.StatisticMapAdapter;
 import me.machinemaker.advancements.adapters.types.GameModeAdapter;
@@ -14,35 +17,34 @@ import me.machinemaker.advancements.ranges.IntegerRange;
 import me.machinemaker.advancements.util.Buildable;
 import org.bukkit.GameMode;
 import org.bukkit.NamespacedKey;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.framework.qual.DefaultQualifier;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 public record PlayerCondition(
-        IntegerRange level,
-        @Nullable @JsonAdapter(GameModeAdapter.class) GameMode gamemode,
-        @JsonAdapter(value = StatisticMapAdapter.class, nullSafe = false) Map<Statistic<?>, IntegerRange> stats,
-        @JsonAdapter(value = NonNullMapAdapterFactory.class, nullSafe = false) Object2BooleanMap<NamespacedKey> recipes,
-        @JsonAdapter(value = NonNullMapAdapterFactory.class, nullSafe = false) Map<NamespacedKey, AdvancementCondition> advancements,
-        EntityCondition lookingAt
+    IntegerRange level,
+    @Nullable @JsonAdapter(GameModeAdapter.class) GameMode gamemode,
+    @JsonAdapter(value = StatisticMapAdapter.class, nullSafe = false) Map<Statistic<?>, IntegerRange> stats,
+    @JsonAdapter(value = NonNullMapAdapterFactory.class, nullSafe = false) Object2BooleanMap<NamespacedKey> recipes,
+    @JsonAdapter(value = NonNullMapAdapterFactory.class, nullSafe = false) Map<NamespacedKey, AdvancementCondition> advancements,
+    EntityCondition lookingAt
 ) implements EntitySubCondition, Buildable<PlayerCondition, PlayerCondition.Builder> {
 
-    public static final GsonBuilderApplicable BUILDER_APPLICABLE = Adapters.of(EntityCondition.BUILDER_APPLICABLE);
+    public static final GsonBuilderApplicable BUILDER_APPLICABLE = Builders.collection(EntityCondition.BUILDER_APPLICABLE);
 
     public static final PlayerCondition ANY = new Builder().build();
+
+    public static Builder builder() {
+        return new Builder();
+    }
 
     @Override
     public PlayerCondition.Builder toBuilder() {
         return new Builder(
-                this.level,
-                this.gamemode,
-                this.stats,
-                this.recipes,
-                this.advancements,
-                this.lookingAt
+            this.level,
+            this.gamemode,
+            this.stats,
+            this.recipes,
+            this.advancements,
+            this.lookingAt
         );
     }
 
@@ -57,25 +59,22 @@ public record PlayerCondition(
             return "PlayerCondition{ANY}";
         }
         return "PlayerCondition{" +
-                "level=" + this.level +
-                ", gamemode=" + this.gamemode +
-                ", stats=" + this.stats +
-                ", recipes=" + this.recipes +
-                ", advancements=" + this.advancements +
-                ", lookingAt=" + this.lookingAt +
-                '}';
-    }
-
-    public static Builder builder() {
-        return new Builder();
+            "level=" + this.level +
+            ", gamemode=" + this.gamemode +
+            ", stats=" + this.stats +
+            ", recipes=" + this.recipes +
+            ", advancements=" + this.advancements +
+            ", lookingAt=" + this.lookingAt +
+            '}';
     }
 
     public static class Builder implements Condition.Builder<PlayerCondition> {
-        private IntegerRange level = IntegerRange.ANY;
-        private @Nullable GameMode gameMode;
+
         private final Map<Statistic<?>, IntegerRange> stats;
         private final Object2BooleanMap<NamespacedKey> recipes;
         private final Map<NamespacedKey, AdvancementCondition> advancements;
+        private IntegerRange level = IntegerRange.conditionType().any();
+        private @Nullable GameMode gameMode;
         private EntityCondition lookingAt = EntityCondition.ANY;
         // private EntityCondition lookingAt = EntityCondition.Impl.delegate(() -> EntityCondition.ANY); // delegate need to resolve circular static field issue
 
@@ -85,7 +84,7 @@ public record PlayerCondition(
             this.advancements = new LinkedHashMap<>();
         }
 
-        private Builder(IntegerRange level, @Nullable GameMode gameMode, Map<Statistic<?>, IntegerRange> stats, Object2BooleanMap<NamespacedKey> recipes, Map<NamespacedKey, AdvancementCondition> advancements, EntityCondition lookingAt) {
+        private Builder(final IntegerRange level, final @Nullable GameMode gameMode, final Map<Statistic<?>, IntegerRange> stats, final Object2BooleanMap<NamespacedKey> recipes, final Map<NamespacedKey, AdvancementCondition> advancements, final EntityCondition lookingAt) {
             this.level = level;
             this.gameMode = gameMode;
             this.stats = stats;
@@ -98,7 +97,7 @@ public record PlayerCondition(
             return this.level;
         }
 
-        public Builder level(IntegerRange level) {
+        public Builder level(final IntegerRange level) {
             this.level = level;
             return this;
         }
@@ -107,7 +106,7 @@ public record PlayerCondition(
             return this.gameMode;
         }
 
-        public Builder gameMode(@Nullable GameMode gameMode) {
+        public Builder gameMode(final @Nullable GameMode gameMode) {
             this.gameMode = gameMode;
             return this;
         }
@@ -116,7 +115,7 @@ public record PlayerCondition(
             return this.stats;
         }
 
-        public Builder addStat(Statistic<?> stat, IntegerRange value) {
+        public Builder addStat(final Statistic<?> stat, final IntegerRange value) {
             this.stats.put(stat, value);
             return this;
         }
@@ -125,7 +124,7 @@ public record PlayerCondition(
             return this.recipes;
         }
 
-        public Builder addRecipe(NamespacedKey recipeKey, boolean unlocked) {
+        public Builder addRecipe(final NamespacedKey recipeKey, final boolean unlocked) {
             this.recipes.put(recipeKey, unlocked);
             return this;
         }
@@ -134,12 +133,12 @@ public record PlayerCondition(
             return this.advancements;
         }
 
-        public Builder checkAdvancementDone(NamespacedKey advancementKey, boolean done) {
+        public Builder checkAdvancementDone(final NamespacedKey advancementKey, final boolean done) {
             this.advancements.put(advancementKey, AdvancementCondition.done(done));
             return this;
         }
 
-        public Builder checkAdvancementCriteria(NamespacedKey advancementKey, Object2BooleanMap<String> criteria) {
+        public Builder checkAdvancementCriteria(final NamespacedKey advancementKey, final Object2BooleanMap<String> criteria) {
             this.advancements.put(advancementKey, AdvancementCondition.criteria(criteria));
             return this;
         }
@@ -148,7 +147,7 @@ public record PlayerCondition(
             return this.lookingAt;
         }
 
-        public Builder lookingAt(EntityCondition lookingAt) {
+        public Builder lookingAt(final EntityCondition lookingAt) {
             this.lookingAt = lookingAt;
             return this;
         }

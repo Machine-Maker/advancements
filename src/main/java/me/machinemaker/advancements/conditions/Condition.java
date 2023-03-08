@@ -1,11 +1,9 @@
 package me.machinemaker.advancements.conditions;
 
-import me.machinemaker.advancements.util.Buildable;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.framework.qual.DefaultQualifier;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 
-@DefaultQualifier(NonNull.class)
+@ApiStatus.NonExtendable
 public interface Condition<C extends Condition<C>> {
 
     /**
@@ -14,27 +12,25 @@ public interface Condition<C extends Condition<C>> {
      * @return true if any input will match this condition
      */
     default boolean isAny() {
-        return this.equals(this.any());
+        throw new UnsupportedOperationException();
+    }
+    // boolean isAny();
+
+    // legacy
+    default C any() {
+        throw new UnsupportedOperationException();
     }
 
-    /**
-     * Returns the "any" instance of this condition.
-     *
-     * @return the "any" instance
-     */
-    @Contract(pure = true)
-    C any();
-
-    /**
-     * When serializing, if the condition is any, should the field be set to null
-     *
-     * @return true to set to null
-     */
     default boolean anyIsNull() {
-        return true;
+        throw new UnsupportedOperationException();
     }
 
-    interface Builder<C extends Condition<? super C>> extends Buildable.Builder<C> {
+    @ApiStatus.NonExtendable
+    interface Buildable<C extends Condition<C>, B extends Builder<C>> extends Condition<C>, me.machinemaker.advancements.util.Buildable<C, B> {
+    }
+
+    @ApiStatus.NonExtendable
+    interface Builder<C extends Condition<? super C>> extends me.machinemaker.advancements.util.Buildable.Builder<C> {
 
         /**
          * Constructs a new condition.

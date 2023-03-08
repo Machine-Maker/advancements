@@ -5,6 +5,11 @@ public record FishingHookCondition(boolean isOpenWater) implements EntitySubCond
     public static final FishingHookCondition ANY = new FishingHookCondition(false);
 
     @Override
+    public EntitySubCondition any() {
+        return ANY;
+    }
+
+    @Override
     public String toString() {
         if (this.equals(ANY)) {
             return "FishingHookCondition{ANY}";

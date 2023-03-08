@@ -4,73 +4,71 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import me.machinemaker.advancements.GsonTestBase;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.concurrent.ThreadLocalRandom;
+import me.machinemaker.advancements.conditions.ConditionTest;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class DoubleRangeTest extends GsonTestBase {
+class DoubleRangeTest extends ConditionTest<DoubleRange> {
 
-    @DoubleTest
-    void testIsExactly(double testDouble) {
-        DoubleRange range = DoubleRange.isExactly(testDouble);
-        JsonElement element = new JsonPrimitive(testDouble);
-        assertThat(GSON.toJson(range), equalTo(GSON.toJson(element)));
-
-        JsonObject obj = new JsonObject();
-        obj.addProperty("min", testDouble);
-        obj.addProperty("max", testDouble);
-        assertThat(GSON.fromJson(obj, DoubleRange.class), equalTo(range));
+    DoubleRangeTest() {
+        super(DoubleRange.conditionType());
     }
 
     @DoubleTest
-    void testIsBetween(double testDouble) {
-        double otherTestDouble = testDouble + ThreadLocalRandom.current().nextDouble();
-        DoubleRange range = DoubleRange.isBetween(testDouble, otherTestDouble);
-        JsonObject obj = new JsonObject();
+    void testIsExactly(final double testDouble) {
+        final DoubleRange range = DoubleRange.isExactly(testDouble);
+        final JsonElement element = new JsonPrimitive(testDouble);
+        this.testJsonConversion(range, element);
+
+        final JsonObject obj = new JsonObject();
+        obj.addProperty("min", testDouble);
+        obj.addProperty("max", testDouble);
+        assertEquals(range, this.fromTree(obj));
+    }
+
+    @DoubleTest
+    void testIsBetween(final double testDouble) {
+        final double otherTestDouble = testDouble + ThreadLocalRandom.current().nextDouble();
+        final DoubleRange range = DoubleRange.isBetween(testDouble, otherTestDouble);
+        final JsonObject obj = new JsonObject();
         obj.addProperty("min", testDouble);
         obj.addProperty("max", otherTestDouble);
-        assertThat(GSON.toJson(range), equalTo(GSON.toJson(obj)));
-        assertThat(GSON.fromJson(obj, DoubleRange.class), equalTo(range));
+        this.testJsonConversion(range, obj);
     }
 
     @DoubleTest
-    void testIsAtLeast(double testDouble) {
-        DoubleRange range = DoubleRange.isAtLeast(testDouble);
-        JsonObject obj = new JsonObject();
+    void testIsAtLeast(final double testDouble) {
+        final DoubleRange range = DoubleRange.isAtLeast(testDouble);
+        final JsonObject obj = new JsonObject();
         obj.addProperty("min", testDouble);
-        assertThat(GSON.toJson(range), equalTo(GSON.toJson(obj)));
-        assertThat(GSON.fromJson(obj, DoubleRange.class), equalTo(range));
+        this.testJsonConversion(range, obj);
     }
 
     @DoubleTest
-    void testIsAtMost(double testDouble) {
-        DoubleRange range = DoubleRange.isAtMost(testDouble);
-        JsonObject obj = new JsonObject();
+    void testIsAtMost(final double testDouble) {
+        final DoubleRange range = DoubleRange.isAtMost(testDouble);
+        final JsonObject obj = new JsonObject();
         obj.addProperty("max", testDouble);
-        assertThat(GSON.toJson(range), equalTo(GSON.toJson(obj)));
-        assertThat(GSON.fromJson(obj, DoubleRange.class), equalTo(range));
+        this.testJsonConversion(range, obj);
     }
 
-    @Test
-    void testAnyRange() {
-        JsonObject obj = new JsonObject();
+    @Override
+    protected void additionalAnyTests() {
+        final JsonObject obj = new JsonObject();
         obj.add("min", JsonNull.INSTANCE);
-        anyTest(obj, DoubleRange.class);
+        this.testIsAny(obj);
     }
 
     @ParameterizedTest
     @ValueSource(doubles = {2.5, -65.32})
     @Target(ElementType.METHOD)
     @Retention(RetentionPolicy.RUNTIME)
-    @interface DoubleTest { }
+    @interface DoubleTest {}
 }

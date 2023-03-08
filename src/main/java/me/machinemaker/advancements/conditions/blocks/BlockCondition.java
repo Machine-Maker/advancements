@@ -1,12 +1,11 @@
 package me.machinemaker.advancements.conditions.blocks;
 
 import com.google.common.base.Preconditions;
-import com.google.common.base.Predicates;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
-import me.machinemaker.advancements.adapters.Adapters;
-import me.machinemaker.advancements.adapters.GsonBuilderApplicable;
+import java.util.Set;
+import me.machinemaker.advancements.adapters.builders.GsonBuilderApplicable;
 import me.machinemaker.advancements.conditions.Condition;
+import me.machinemaker.advancements.conditions.ConditionType;
 import me.machinemaker.advancements.conditions.misc.NBTCondition;
 import me.machinemaker.advancements.tags.BlockTag;
 import me.machinemaker.advancements.util.Buildable;
@@ -14,23 +13,19 @@ import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.Unmodifiable;
+import org.jetbrains.annotations.UnmodifiableView;
 
-import java.util.HashSet;
-import java.util.Set;
+public interface BlockCondition extends Condition<BlockCondition>, Buildable<BlockCondition, BlockCondition.Builder> {
 
-public record BlockCondition(
-        @Nullable BlockTag tag,
-        @Nullable Set<Material> blocks,
-        PropertyCondition state,
-        NBTCondition nbt
-) implements Condition<BlockCondition>, Buildable<BlockCondition, BlockCondition.Builder> {
-
-    public static final GsonBuilderApplicable BUILDER_APPLICABLE = Adapters.of(Adapters.MATERIAL_ADAPTER, Adapters.BLOCK_TAG_ADAPTER);
-    public static final BlockCondition ANY = new BlockCondition(null, null, PropertyCondition.ANY, NBTCondition.ANY);
+    @Contract(pure = true)
+    static ConditionType<BlockCondition> conditionType() {
+        return BlockConditionImpl.TYPE;
+    }
 
     @Contract(value = "_ -> new", pure = true)
-    public static BlockCondition forTag(Tag<Material> tag) {
-        return new BlockCondition(tag instanceof BlockTag blockTag ? blockTag : new BlockTag(tag), null, PropertyCondition.ANY, NBTCondition.ANY);
+    static BlockCondition forTag(final Tag<Material> tag) {
+        return new BlockConditionImpl(tag instanceof BlockTag blockTag ? blockTag : new BlockTag(tag), null, BlockPropertyCondition.conditionType().any(), NBTCondition.conditionType().any());
     }
 
     /**
@@ -41,7 +36,7 @@ public record BlockCondition(
      * @throws IllegalArgumentException if any of the materials isn't a block
      */
     @Contract(value = "_ -> new", pure = true)
-    public static BlockCondition forBlocks(Material ...blocks) {
+    static BlockCondition forBlocks(final Material... blocks) {
         return forBlocks(Sets.newHashSet(blocks));
     }
 
@@ -53,119 +48,63 @@ public record BlockCondition(
      * @throws IllegalArgumentException if any of the materials isn't a block
      */
     @Contract(value = "_ -> new", pure = true)
-    public static BlockCondition forBlocks(Set<Material> blocks) {
+    static BlockCondition forBlocks(final Set<Material> blocks) {
         Preconditions.checkArgument(blocks.stream().allMatch(Material::isBlock), "Cannot have a material that isn't a block");
-        return new BlockCondition(null, blocks, PropertyCondition.ANY, NBTCondition.ANY);
-    }
-
-    @Override
-    public BlockCondition any() {
-        return ANY;
-    }
-
-    @Override
-    public Builder toBuilder() {
-        return new Builder(this);
-    }
-
-    @Override
-    public String toString() {
-        if (this.isAny()) {
-            return "BlockCondition{ANY}";
-        }
-        return "BlockCondition{" +
-                "tag=" + this.tag +
-                ", blocks=" + this.blocks +
-                ", state=" + this.state +
-                ", nbt=" + this.nbt +
-                '}';
+        return new BlockConditionImpl(null, blocks, BlockPropertyCondition.conditionType().any(), NBTCondition.conditionType().any());
     }
 
     @Contract(value = "-> new", pure = true)
-    public static Builder builder() {
-        return new Builder();
+    static Builder builder() {
+        return new BlockConditionImpl.BuilderImpl();
     }
 
-    public static final class Builder implements Condition.Builder<BlockCondition> {
+    @Contract(pure = true)
+    static GsonBuilderApplicable requiredGson() {
+        return BlockConditionImpl.REQUIRED_GSON;
+    }
 
-        private @Nullable BlockTag tag;
-        private @Nullable Set<Material> blocks;
-        private PropertyCondition state;
-        private NBTCondition nbt;
+    @Contract(pure = true)
+    @Nullable BlockTag tag();
 
-        private Builder() {
-            this.tag = null;
-            this.blocks = null;
-            this.state = PropertyCondition.ANY;
-            this.nbt = NBTCondition.ANY;
-        }
+    @Contract(pure = true)
+    @Unmodifiable @Nullable Set<Material> blocks();
 
-        private Builder(BlockCondition condition) {
-            this.tag = condition.tag;
-            this.blocks = condition.blocks != null ? new HashSet<>(condition.blocks) : null;
-            this.state = condition.state;
-            this.nbt = condition.nbt;
-        }
+    @Contract(pure = true)
+    BlockPropertyCondition state();
 
-        public @Nullable BlockTag tag() {
-            return this.tag;
-        }
+    @Contract(pure = true)
+    NBTCondition nbt();
+
+    interface Builder extends Condition.Builder<BlockCondition> {
+
+        @Contract(pure = true)
+        @Nullable BlockTag tag();
 
         @Contract(value = "_ -> this", mutates = "this")
-        public Builder tag(@Nullable BlockTag tag) {
-            this.tag = tag;
-            return this;
-        }
+        Builder tag(final @Nullable BlockTag tag);
 
-        public @Nullable Set<Material> blocks() {
-            return this.blocks;
-        }
+        @Contract(pure = true)
+        @Nullable @UnmodifiableView Set<Material> blocks();
 
         @Contract(value = "_ -> this", mutates = "this")
-        public Builder blocks(@Nullable Set<Material> blocks) {
-            Preconditions.checkArgument(blocks == null || blocks.stream().allMatch(Material::isBlock), "Cannot have a material that isn't a block");
-            this.blocks = blocks;
-            return this;
-        }
+        Builder blocks(final @Nullable Set<Material> blocks);
 
         @Contract(value = "_ -> this", mutates = "this")
-        public Builder blocks(Material ...blocks) {
-            return this.blocks(Sets.newHashSet(blocks));
-        }
+        Builder blocks(final Material... blocks);
 
         @Contract(value = "_ -> this", mutates = "this")
-        public Builder addBlock(Material block) {
-            Preconditions.checkArgument(block.isBlock(), "Cannot add a material that isn't a block");
-            if (this.blocks == null) {
-                this.blocks = new HashSet<>();
-            }
-            this.blocks.add(block);
-            return this;
-        }
+        Builder addBlock(final Material block);
 
-        public PropertyCondition state() {
-            return this.state;
-        }
+        @Contract(pure = true)
+        BlockPropertyCondition state();
 
         @Contract(value = "_ -> this", mutates = "this")
-        public Builder state(PropertyCondition state) {
-            this.state = state;
-            return this;
-        }
+        Builder state(final BlockPropertyCondition state);
 
-        public NBTCondition nbt() {
-            return this.nbt;
-        }
+        @Contract(pure = true)
+        NBTCondition nbt();
 
         @Contract(value = "_ -> this", mutates = "this")
-        public Builder nbt(NBTCondition nbt) {
-            this.nbt = nbt;
-            return this;
-        }
-
-        @Override
-        public BlockCondition build() {
-            return new BlockCondition(this.tag, this.blocks, this.state, this.nbt);
-        }
+        Builder nbt(final NBTCondition nbt);
     }
 }

@@ -2,46 +2,45 @@ package me.machinemaker.advancements.adapters.types.keyed;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.reflect.TypeToken;
-import org.bukkit.Keyed;
-import org.bukkit.NamespacedKey;
-import org.checkerframework.checker.nullness.qual.Nullable;
-
 import java.util.Map;
 import java.util.Objects;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.Keyed;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class KeyedEnumTypeAdapter<E extends Enum<E> & Keyed> extends KeyedTypeAdapter<E> {
 
-    private final Map<NamespacedKey, E> map;
+    private final Map<Key, E> map;
 
-    KeyedEnumTypeAdapter(Class<E> type) {
+    KeyedEnumTypeAdapter(final Class<E> type) {
         super(TypeToken.get(type));
-        final ImmutableMap.Builder<NamespacedKey, E> builder = ImmutableMap.builder();
-        for (E constant : type.getEnumConstants()) {
-            builder.put(constant.getKey(), constant);
+        final ImmutableMap.Builder<Key, E> builder = ImmutableMap.builder();
+        for (final E constant : type.getEnumConstants()) {
+            builder.put(constant.key(), constant);
         }
         this.map = builder.build();
     }
 
     @Override
-    public E fromKey(NamespacedKey key) {
+    public E fromKey(final Key key) {
         return Objects.requireNonNull(this.map.get(key), key + " is an unrecognized key for " + this.getType());
     }
 
     @Override
-    public boolean equals(@Nullable Object o) {
+    public boolean equals(final @Nullable Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || this.getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
 
-        KeyedEnumTypeAdapter<?> that = (KeyedEnumTypeAdapter<?>) o;
+        final KeyedEnumTypeAdapter<?> that = (KeyedEnumTypeAdapter<?>) o;
 
-        return map.equals(that.map);
+        return this.map.equals(that.map);
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + map.hashCode();
+        result = 31 * result + this.map.hashCode();
         return result;
     }
 }

@@ -49,8 +49,8 @@ public record DamageCondition(
 
     public static final class Builder implements Condition.Builder<DamageCondition> {
 
-        private DoubleRange dealtDamage = DoubleRange.ANY;
-        private DoubleRange takenDamage = DoubleRange.ANY;
+        private DoubleRange dealtDamage = DoubleRange.conditionType().any();
+        private DoubleRange takenDamage = DoubleRange.conditionType().any();
         private EntityCondition sourceEntity = EntityCondition.ANY;
         private @Nullable Boolean blocked;
         private DamageSourceCondition type = DamageSourceCondition.ANY;

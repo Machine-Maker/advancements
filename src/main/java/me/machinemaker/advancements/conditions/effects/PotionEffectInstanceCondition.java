@@ -14,7 +14,7 @@ public record PotionEffectInstanceCondition(
         @Nullable Boolean visible
 ) implements Condition<PotionEffectInstanceCondition>, Buildable<PotionEffectInstanceCondition, PotionEffectInstanceCondition.Builder> {
 
-    public static final PotionEffectInstanceCondition ANY = new PotionEffectInstanceCondition(IntegerRange.ANY, IntegerRange.ANY, null, null);
+    public static final PotionEffectInstanceCondition ANY = new PotionEffectInstanceCondition(IntegerRange.conditionType().any(), IntegerRange.conditionType().any(), null, null);
 
     @Contract(value = "_ -> new", pure = true)
     public static PotionEffectInstanceCondition fromPotionEffect(PotionEffect potionEffect) {
@@ -56,8 +56,8 @@ public record PotionEffectInstanceCondition(
 
     public static final class Builder implements Condition.Builder<PotionEffectInstanceCondition> {
 
-        private IntegerRange amplifier = IntegerRange.ANY;
-        private IntegerRange duration = IntegerRange.ANY;
+        private IntegerRange amplifier = IntegerRange.conditionType().any();
+        private IntegerRange duration = IntegerRange.conditionType().any();
         private @Nullable Boolean ambient;
         private @Nullable Boolean visible;
 

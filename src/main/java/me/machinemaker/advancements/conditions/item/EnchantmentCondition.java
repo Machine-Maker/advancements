@@ -1,79 +1,64 @@
 package me.machinemaker.advancements.conditions.item;
 
-import com.google.gson.TypeAdapter;
-import com.google.gson.internal.bind.ArrayTypeAdapter;
-import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonToken;
-import com.google.gson.stream.JsonWriter;
-import me.machinemaker.advancements.GsonHelper;
-import me.machinemaker.advancements.adapters.Adapters;
-import me.machinemaker.advancements.adapters.GsonBuilderApplicable;
-import me.machinemaker.advancements.ranges.IntegerRange;
-import me.machinemaker.advancements.conditions.Condition;
-import org.bukkit.enchantments.Enchantment;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.framework.qual.DefaultQualifier;
-import org.jetbrains.annotations.Contract;
-
-import java.io.IOException;
+import java.util.Iterator;
 import java.util.Map;
+import me.machinemaker.advancements.adapters.builders.GsonBuilderApplicable;
+import me.machinemaker.advancements.conditions.Condition;
+import me.machinemaker.advancements.conditions.ConditionType;
+import me.machinemaker.advancements.ranges.IntegerRange;
+import org.bukkit.enchantments.Enchantment;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.Nullable;
 
-public record EnchantmentCondition(@Nullable Enchantment enchantment, IntegerRange level) implements Condition<EnchantmentCondition> {
+@ApiStatus.NonExtendable
+public interface EnchantmentCondition extends Condition.Buildable<EnchantmentCondition, EnchantmentCondition.Builder> {
 
-    public static final GsonBuilderApplicable BUILDER_APPLICABLE = Adapters.ENCHANTMENT_ADAPTER;
-    public static final EnchantmentCondition ANY = new EnchantmentCondition(null, IntegerRange.ANY);
-    public static final EnchantmentCondition[] NONE = new EnchantmentCondition[0];
+    @Contract(pure = true)
+    static ConditionType<EnchantmentCondition> conditionType() {
+        return EnchantmentConditionImpl.TYPE;
+    }
 
     @Contract(value = "_ -> new", pure = true)
-    public static EnchantmentCondition[] from(Map<Enchantment, Integer> map) {
-        EnchantmentCondition[] conditions = new EnchantmentCondition[map.size()];
-        var iterator = map.entrySet().iterator();
+    static EnchantmentCondition[] from(final Map<Enchantment, Integer> map) {
+        final EnchantmentCondition[] conditions = new EnchantmentConditionImpl[map.size()];
+        final Iterator<Map.Entry<Enchantment, Integer>> iterator = map.entrySet().iterator();
         for (int i = 0; i < conditions.length; i++) {
-            var entry = iterator.next();
-            conditions[i] = new EnchantmentCondition(entry.getKey(), IntegerRange.isExactly(entry.getValue()));
+            final Map.Entry<Enchantment, Integer> entry = iterator.next();
+            conditions[i] = new EnchantmentConditionImpl(entry.getKey(), IntegerRange.isExactly(entry.getValue()));
         }
         return conditions;
     }
 
-    @Override
-    public EnchantmentCondition any() {
-        return ANY;
+    @Contract(value = "-> new", pure = true)
+    static Builder builder() {
+        return new EnchantmentConditionImpl.BuilderImpl();
     }
 
-    @Override
-    public String toString() {
-        if (this.isAny()) {
-            return "EnchantmentCondition{ANY}";
-        }
-        return "EnchantmentCondition{" +
-                "enchantment=" + this.enchantment +
-                ", level=" + this.level +
-                '}';
+    @Contract(pure = true)
+    static GsonBuilderApplicable requiredGson() {
+        return EnchantmentConditionImpl.REQUIRED_GSON;
     }
 
-    static class ArrayAdapter extends TypeAdapter<EnchantmentCondition[]> {
+    @Contract(pure = true)
+    @Nullable Enchantment enchantment();
 
-        private static final TypeToken<EnchantmentCondition[]> TOKEN = TypeToken.get(EnchantmentCondition[].class);
-        private static final GsonHelper HELPER = new GsonHelper(BUILDER_APPLICABLE);
+    @Contract(pure = true)
+    IntegerRange level();
 
-        @Override
-        public void write(JsonWriter out, EnchantmentCondition @Nullable [] value) throws IOException {
-            if (value == null || value.length == 0) {
-                out.nullValue();
-            } else {
-                ArrayTypeAdapter.FACTORY.create(HELPER.gson(), TOKEN).write(out, value);
-            }
-        }
+    @ApiStatus.NonExtendable
+    interface Builder extends Condition.Builder<EnchantmentCondition> {
 
-        @Override
-        public EnchantmentCondition[] read(JsonReader in) throws IOException {
-            if (in.peek() == JsonToken.NULL) {
-                in.nextNull();
-                return NONE;
-            }
-            return ArrayTypeAdapter.FACTORY.create(HELPER.gson(), TOKEN).read(in);
-        }
+        @Contract(pure = true)
+        @Nullable Enchantment enchantment();
+
+        @Contract(value = "_ -> this", mutates = "this")
+        Builder enchantment(@Nullable Enchantment enchantment);
+
+        @Contract(pure = true)
+        IntegerRange level();
+
+        @Contract(value = "_ -> this", mutates = "this")
+        Builder level(IntegerRange level);
     }
 }

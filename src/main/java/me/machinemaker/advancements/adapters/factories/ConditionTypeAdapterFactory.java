@@ -7,27 +7,37 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
 import me.machinemaker.advancements.conditions.Condition;
 import me.machinemaker.advancements.conditions.Conditions;
-
-import java.io.IOException;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class ConditionTypeAdapterFactory implements TypeAdapterFactory {
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
-    public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+    public <T> @Nullable TypeAdapter<T> create(final Gson gson, final TypeToken<T> type) {
         if (!Condition.class.isAssignableFrom(type.getRawType())) {
             return null;
         }
-        TypeToken<? extends Condition<?>> conditionType = (TypeToken<? extends Condition<?>>) type;
-        if (!Conditions.isRegistered(conditionType)) {
-            throw new IllegalArgumentException(conditionType + " is not a registered condition type");
+        return (TypeAdapter<T>) this.createForCondition(gson, (TypeToken<Condition>) type);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <C extends Condition<C>, T extends C> TypeAdapter<T> createForCondition(final Gson gson, final TypeToken<C> type) {
+        final TypeToken<T> actualType;
+        if (Conditions.shouldConvertType(type)) {
+            actualType = (TypeToken<T>) Conditions.getAdapterType(type);
+        } else {
+            if (!Conditions.isRegistered(type)) {
+                throw new IllegalArgumentException(type + " is not a registered condition type");
+            }
+            actualType = (TypeToken<T>) type;
         }
-        TypeAdapter<Condition<?>> adapter = (TypeAdapter<Condition<?>>) gson.getDelegateAdapter(this, type);
-        return (TypeAdapter<T>) new TypeAdapter<Condition<?>>() {
+        final TypeAdapter<T> adapter = gson.getDelegateAdapter(this, actualType);
+        return new TypeAdapter<>() {
             @Override
-            public void write(JsonWriter out, Condition value) throws IOException {
+            public void write(final JsonWriter out, final @Nullable T value) throws IOException {
                 if (value == null) {
                     out.nullValue();
                 } else if (value.isAny()) {
@@ -42,21 +52,21 @@ public class ConditionTypeAdapterFactory implements TypeAdapterFactory {
             }
 
             @Override
-            public Condition<?> read(JsonReader in) throws IOException {
+            public T read(final JsonReader in) throws IOException {
                 if (in.peek() == JsonToken.NULL) {
                     in.nextNull();
-                    return Conditions.getDefaultCondition(conditionType);
+                    return Conditions.getDefaultCondition(actualType);
                 }
-                Condition<?> condition = adapter.read(in);
+                final @Nullable T condition = adapter.read(in);
                 if (condition != null && condition.isAny()) {
-                    return condition.any();
+                    return (T) condition.any();
                 }
                 return condition;
             }
 
             @Override
             public String toString() {
-                return "ConditionTypeAdapterFactory{type=" + type.getRawType() + "}";
+                return "ConditionTypeAdapterFactory{type=" + actualType.getRawType() + "}";
             }
         };
     }

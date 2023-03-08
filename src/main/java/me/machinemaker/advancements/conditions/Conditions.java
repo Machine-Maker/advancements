@@ -2,22 +2,27 @@ package me.machinemaker.advancements.conditions;
 
 import com.google.common.collect.Maps;
 import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Proxy;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import me.machinemaker.advancements.adapters.AdapterDelegate;
 import me.machinemaker.advancements.conditions.blocks.BlockCondition;
-import me.machinemaker.advancements.conditions.blocks.PropertyCondition;
 import me.machinemaker.advancements.conditions.blocks.FluidCondition;
 import me.machinemaker.advancements.conditions.blocks.LightCondition;
+import me.machinemaker.advancements.conditions.blocks.BlockPropertyCondition;
 import me.machinemaker.advancements.conditions.effects.PotionEffectInstanceCondition;
 import me.machinemaker.advancements.conditions.effects.PotionEffectsCondition;
 import me.machinemaker.advancements.conditions.entity.DamageCondition;
 import me.machinemaker.advancements.conditions.entity.DamageSourceCondition;
+import me.machinemaker.advancements.conditions.entity.EntityCondition;
 import me.machinemaker.advancements.conditions.entity.EntityEquipmentCondition;
 import me.machinemaker.advancements.conditions.entity.EntityFlagsCondition;
 import me.machinemaker.advancements.conditions.entity.EntitySubCondition;
 import me.machinemaker.advancements.conditions.entity.EntityTypeCondition;
-import me.machinemaker.advancements.conditions.entity.PlayerCondition;
-import me.machinemaker.advancements.conditions.entity.EntityCondition;
 import me.machinemaker.advancements.conditions.entity.FishingHookCondition;
-import me.machinemaker.advancements.conditions.entity.LightningBoltCondition;
 import me.machinemaker.advancements.conditions.item.EnchantmentCondition;
 import me.machinemaker.advancements.conditions.item.ItemCondition;
 import me.machinemaker.advancements.conditions.misc.NBTCondition;
@@ -26,33 +31,17 @@ import me.machinemaker.advancements.conditions.world.LocationCondition;
 import me.machinemaker.advancements.ranges.DoubleRange;
 import me.machinemaker.advancements.ranges.IntegerRange;
 
-import java.lang.reflect.Proxy;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-
 public final class Conditions {
 
-    private Conditions() {
-    }
-
     private static final Map<TypeToken<?>, Object> CONDITION_REGISTRY = Maps.newHashMap();
-
-    // public static final Type<DoubleRange> DOUBLE_RANGE_CONDITION = new Type<>()
+    private static final Map<TypeToken<?>, Class<? extends Condition<?>>> TYPE_TO_BASE_MAP = new HashMap<>();
 
     static {
-        register(DoubleRange.ANY);
-        register(IntegerRange.ANY);
-
-        register(BlockCondition.ANY);
-        register(PropertyCondition.ANY);
-        register(FluidCondition.ANY);
-        register(LightCondition.ANY);
-
         register(EntityEquipmentCondition.ANY);
         register(EntityFlagsCondition.ANY);
         register(EntityTypeCondition.ANY, EntityTypeCondition.types());
         register(EntitySubCondition.ANY, EntitySubCondition.TYPES.keySet(), EntitySubCondition.class);
+        register(FishingHookCondition.ANY); // while still an entity sub condition, it has its own ANY
         // register(FishingHookCondition.ANY);
         register(DamageSourceCondition.ANY);
         register(DamageCondition.ANY);
@@ -61,26 +50,44 @@ public final class Conditions {
         // register(PlayerCondition.ANY);
         // register(LightningBoltCondition.ANY);
 
-        register(EnchantmentCondition.ANY);
-        register(ItemCondition.ANY);
+        // register(EnchantmentCondition.ANY);
+        // register(ItemCondition.ANY);
 
         register(PotionEffectInstanceCondition.ANY);
         register(PotionEffectsCondition.ANY);
 
-        register(NBTCondition.ANY);
-
-        register(DistanceCondition.ANY);
         register(LocationCondition.ANY);
     }
 
-    private static <C extends Condition<? super C>> void register(C condition) {
+    private Conditions() {
+    }
+
+    @Deprecated(forRemoval = true)
+    private static <C extends Condition<? super C>> void register(final C condition) {
         register(condition, Collections.emptySet());
     }
 
     @SafeVarargs
-    private static <C extends Condition<? super C>> void register(C condition, Collection<Class<? extends C>> otherClasses, Class<? extends C> ...moreOtherClasses) {
+    @Deprecated(forRemoval = true)
+    private static <C extends Condition<? super C>> void register(final C condition, final Class<? extends C>... moreOtherClasses) {
+        register(condition, Collections.emptySet(), moreOtherClasses);
+    }
+
+    private static <C extends Condition<? super C>> void registerCustom(final Class<C> baseType, final C any) {
+        register(any, baseType);
+    }
+
+    private static <C extends Condition<? super C>> void registerNew(final Class<C> baseType, final C any) {
+        TYPE_TO_BASE_MAP.put(TypeToken.get(any.getClass()), baseType);
+        TYPE_TO_BASE_MAP.put(TypeToken.get(baseType), baseType);
+        register(any, baseType);
+    }
+
+    @SafeVarargs
+    @Deprecated(forRemoval = true)
+    private static <C extends Condition<? super C>> void register(final C condition, final Collection<Class<? extends C>> otherClasses, final Class<? extends C>... moreOtherClasses) {
         CONDITION_REGISTRY.put(TypeToken.get(condition.getClass()), condition);
-        for (Class<?> otherClass : otherClasses) {
+        for (final Class<?> otherClass : otherClasses) {
             CONDITION_REGISTRY.put(TypeToken.get(otherClass), condition);
         }
         for (final Class<? extends C> otherClass : moreOtherClasses) {
@@ -88,16 +95,16 @@ public final class Conditions {
         }
     }
 
-    public static boolean isRegistered(TypeToken<?> typeToken) {
+    public static boolean isRegistered(final TypeToken<?> typeToken) {
         return CONDITION_REGISTRY.containsKey(typeToken);
     }
 
-    public static <C extends Condition<? super C>> C getDefaultCondition(Class<C> classOfC) {
+    public static <C extends Condition<? super C>> C getDefaultCondition(final Class<C> classOfC) {
         return getDefaultCondition(TypeToken.get(classOfC));
     }
 
     @SuppressWarnings("unchecked")
-    public static <C extends Condition<?>> C getDefaultCondition(TypeToken<C> typeToken) {
+    public static <C extends Condition<?>> C getDefaultCondition(final TypeToken<C> typeToken) {
         if (!CONDITION_REGISTRY.containsKey(typeToken)) {
             throw new IllegalArgumentException(typeToken.getRawType() + " doesn't have a registered default condition");
         }
@@ -110,14 +117,12 @@ public final class Conditions {
         return (C) CONDITION_REGISTRY.get(typeToken);
     }
 
-    public static void init() {
-        // load classes
+    @SuppressWarnings("unchecked")
+    public static <C extends Condition<C>> TypeToken<? extends C> getAdapterType(final TypeToken<C> type) {
+        return TypeToken.get((Class<? extends C>) Objects.requireNonNull(TYPE_TO_BASE_MAP.get(type)).getAnnotation(AdapterDelegate.class).value());
     }
 
-
-    // public record Type<C>(@NotNull TypeToken<C> type, @NotNull C anyInstance, @NotNull GsonBuilderApplicable gsonBuilderApplicable, @NotNull Class<? super C> @NotNull...otherTypes) {
-    //     @SafeVarargs
-    //     public Type {
-    //     }
-    // }
+    public static boolean shouldConvertType(final TypeToken<?> type) {
+        return TYPE_TO_BASE_MAP.containsKey(type);
+    }
 }

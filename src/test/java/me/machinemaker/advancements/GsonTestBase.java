@@ -4,64 +4,72 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import me.machinemaker.advancements.adapters.Adapters;
-import me.machinemaker.advancements.conditions.Condition;
-import me.machinemaker.advancements.junit.ServerExtension;
-import org.junit.jupiter.api.TestInstance;
-
 import java.lang.reflect.Type;
 import java.util.function.Predicate;
-import org.junit.jupiter.api.extension.ExtendWith;
+import me.machinemaker.advancements.adapters.builders.Builders;
+import me.machinemaker.advancements.adapters.builders.GsonBuilderApplicable;
+import me.machinemaker.advancements.conditions.Condition;
+import org.junit.jupiter.api.TestInstance;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class GsonTestBase {
 
-    protected Gson GSON = Adapters.configure(new GsonBuilder()).setPrettyPrinting().create();
-
-    protected final void registerTypeAdapter(Type type, Object adapter) {
-        GSON = GSON.newBuilder().registerTypeAdapter(type, adapter).create();
+    public GsonTestBase() {
+        final GsonBuilder builder = new GsonBuilder().setPrettyPrinting();
+        this.applicable().applyTo(builder);
+        this.gson = builder.create();
     }
 
-    protected JsonObject object(String jsonString) {
-        return GSON.fromJson(jsonString, JsonObject.class);
+    protected Gson gson;
+
+    protected final void registerTypeAdapter(final Type type, final Object adapter) {
+        this.gson = this.gson.newBuilder().registerTypeAdapter(type, adapter).create();
     }
 
-    protected JsonElement tree(Object object) {
-        return GSON.toJsonTree(object);
+    protected GsonBuilderApplicable applicable() {
+        return Builders.collection();
     }
 
-    protected JsonElement tree(Object object, Type type) {
-        return GSON.toJsonTree(object, type);
+    protected JsonObject object(final String jsonString) {
+        return this.gson.fromJson(jsonString, JsonObject.class);
     }
 
-    protected <T> T fromJson(JsonElement jsonElement, Class<T> classOfT) {
-        return GSON.fromJson(jsonElement, classOfT);
+    protected JsonElement tree(final Object object) {
+        return this.gson.toJsonTree(object);
     }
 
-    protected <T> T fromJson(JsonElement jsonElement, Type type) {
-        return GSON.fromJson(jsonElement, type);
+    protected JsonElement tree(final Object object, final Type type) {
+        return this.gson.toJsonTree(object, type);
     }
 
-    protected <T> T fromJson(String json, Class<T> classOfT) {
-        return GSON.fromJson(json, classOfT);
+    protected <T> T fromJson(final JsonElement jsonElement, final Class<T> classOfT) {
+        return this.gson.fromJson(jsonElement, classOfT);
     }
 
-    protected String toJson(Object object) {
-        return GSON.toJson(object);
+    protected <T> T fromJson(final JsonElement jsonElement, final Type type) {
+        return this.gson.fromJson(jsonElement, type);
     }
 
-    protected <T extends Condition<? super T>> void anyTest(Object object, Class<T> classOfT) {
-        test(object, classOfT, t -> t == t.any());
+    protected <T> T fromJson(final String json, final Class<T> classOfT) {
+        return this.gson.fromJson(json, classOfT);
     }
 
-    protected <T> void test(Object object, Class<T> classOfT, Predicate<T> test) {
-        T testObject;
+    protected String toJson(final Object object) {
+        return this.gson.toJson(object);
+    }
+
+    protected <T extends Condition<? super T>> void anyTest(final Object object, final Class<T> classOfT) {
+        this.test(object, classOfT, t -> t == t.any() && t.equals(t.any()) && t.any().equals(t));
+    }
+
+    protected <T> void test(final Object object, final Class<T> classOfT, final Predicate<T> test) {
+        final T testObject;
         if (object instanceof String string) {
-            testObject = fromJson(string, classOfT);
+            testObject = this.fromJson(string, classOfT);
         } else if (object instanceof JsonElement jsonElement) {
-            testObject = fromJson(jsonElement, classOfT);
+            testObject = this.fromJson(jsonElement, classOfT);
         } else {
             throw new UnsupportedOperationException(object.getClass() + " is not a supported type");
         }
