@@ -2,8 +2,7 @@ package me.machinemaker.advancements.conditions.entity;
 
 import com.google.gson.annotations.SerializedName;
 import me.machinemaker.advancements.conditions.Condition;
-import me.machinemaker.advancements.ranges.DoubleRange;
-import me.machinemaker.advancements.util.Buildable;
+import me.machinemaker.advancements.conditions.range.DoubleRange;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.Contract;
 
@@ -14,7 +13,7 @@ public record DamageCondition(
         EntityCondition sourceEntity,
         @Nullable Boolean blocked,
         DamageSourceCondition type
-) implements Condition<DamageCondition>, Buildable<DamageCondition, DamageCondition.Builder> {
+) implements Condition.Buildable<DamageCondition, DamageCondition.Builder> {
 
     public static final DamageCondition ANY = new Builder().build();
 
@@ -51,7 +50,7 @@ public record DamageCondition(
 
         private DoubleRange dealtDamage = DoubleRange.conditionType().any();
         private DoubleRange takenDamage = DoubleRange.conditionType().any();
-        private EntityCondition sourceEntity = EntityCondition.ANY;
+        private EntityCondition sourceEntity = EntityCondition.conditionType().any();
         private @Nullable Boolean blocked;
         private DamageSourceCondition type = DamageSourceCondition.ANY;
 

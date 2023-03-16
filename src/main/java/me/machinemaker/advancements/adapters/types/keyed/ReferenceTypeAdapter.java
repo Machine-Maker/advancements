@@ -2,6 +2,7 @@ package me.machinemaker.advancements.adapters.types.keyed;
 
 import com.google.gson.reflect.TypeToken;
 import io.papermc.paper.registry.Reference;
+import net.kyori.adventure.key.Key;
 import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
@@ -11,13 +12,14 @@ public class ReferenceTypeAdapter<T extends Keyed> extends KeyedTypeAdapter<Refe
 
     private final Registry<T> registry;
 
-    ReferenceTypeAdapter(TypeToken<Reference<T>> type, Registry<T> registry) {
+    ReferenceTypeAdapter(final TypeToken<Reference<T>> type, final Registry<T> registry) {
         super(type);
         this.registry = registry;
     }
 
     @Override
-    public @Nullable Reference<T> fromKey(NamespacedKey key) {
-        return Reference.create(this.registry, key);
+    public @Nullable Reference<T> fromKey(final Key key) {
+        final NamespacedKey nsKey = key instanceof NamespacedKey ns ? ns : new NamespacedKey(key.namespace(), key.value());
+        return Reference.create(this.registry, nsKey);
     }
 }

@@ -8,6 +8,7 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.reflect.TypeToken;
 import io.papermc.paper.potion.Potion;
+import io.papermc.paper.statistic.CustomStatistic;
 import io.papermc.paper.statistic.StatisticType;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
@@ -16,18 +17,18 @@ import java.util.List;
 import java.util.function.UnaryOperator;
 import me.machinemaker.advancements.adapters.builders.Builders;
 import me.machinemaker.advancements.adapters.builders.GsonBuilderApplicable;
-import me.machinemaker.advancements.adapters.factories.ConditionTypeAdapterFactory;
-import me.machinemaker.advancements.adapters.factories.RecordTypeAdapterFactory;
-import me.machinemaker.advancements.adapters.types.NamespacedKeyAdapter;
+import me.machinemaker.advancements.adapters.types.GameModeAdapter;
+import me.machinemaker.advancements.adapters.types.KeyAdapter;
 import me.machinemaker.advancements.adapters.types.keyed.KeyedTypeAdapter;
 import me.machinemaker.advancements.tags.BlockTag;
 import me.machinemaker.advancements.tags.EntityTag;
 import me.machinemaker.advancements.tags.FluidTag;
 import me.machinemaker.advancements.tags.ItemTag;
+import net.kyori.adventure.key.Key;
 import org.bukkit.Fluid;
+import org.bukkit.GameMode;
 import org.bukkit.Keyed;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.Tag;
 import org.bukkit.block.Biome;
@@ -45,9 +46,6 @@ import org.jetbrains.annotations.ApiStatus;
 public final class Adapters {
 
     private static final List<UnaryOperator<GsonBuilder>> ADAPTERS = new ArrayList<>();
-    // Factories
-    public static final GsonBuilderApplicable RECORD_TYPE_ADAPTER_FACTORY = factory(new RecordTypeAdapterFactory());
-    public static final GsonBuilderApplicable WRAPPER_TYPE_ADAPTER_FACTORY = factory(new ConditionTypeAdapterFactory());
     // Keyed
     public static final GsonBuilderApplicable CAT_TYPE_ADAPTER = keyedAdapter(KeyedTypeAdapter.forEnum(Cat.Type.class));
     public static final GsonBuilderApplicable ENTITY_TYPE_ADAPTER = keyedAdapter(KeyedTypeAdapter.forRegistry(Registry.ENTITY_TYPE, EntityType.class));
@@ -56,12 +54,12 @@ public final class Adapters {
     public static final GsonBuilderApplicable BIOME_ADAPTER = keyedAdapter(KeyedTypeAdapter.forRegistry(Registry.BIOME, Biome.class));
     public static final GsonBuilderApplicable STRUCTURE_ADAPTER = keyedHierarchyAdapter(KeyedTypeAdapter.forRegistry(Registry.STRUCTURE, TypeToken.get(Structure.class)));
     public static final GsonBuilderApplicable STATISTIC_TYPE_ADAPTER = keyedAdapter(KeyedTypeAdapter.forRegistry(Registry.STATISTIC_TYPES, new TypeToken<StatisticType<?>>() {}));
+    public static final GsonBuilderApplicable CUSTOM_STAT_TYPE_ADAPTER = keyedAdapter(KeyedTypeAdapter.forRegistry(Registry.CUSTOM_STATISTICS, CustomStatistic.class));
     public static final GsonBuilderApplicable ENCHANTMENT_ADAPTER = keyedHierarchyAdapter(KeyedTypeAdapter.forRegistry(Registry.ENCHANTMENT, Enchantment.class));
-    public static final GsonBuilderApplicable POTION_EFFECT_TYPE_ADAPTER = keyedHierarchyAdapter(KeyedTypeAdapter.forRegistry(Registry.POTION_EFFECT_TYPE, PotionEffectType.class));
     public static final GsonBuilderApplicable POTION_ADAPTER = keyedHierarchyAdapter(KeyedTypeAdapter.forRegistry(Registry.POTION, Potion.class));
     // Misc. types
-    public static final GsonBuilderApplicable KEY_ADAPTER = hierarchyAdapter()
-    public static final GsonBuilderApplicable NAMESPACED_KEY_ADAPTER = adapter(new NamespacedKeyAdapter().nullSafe(), NamespacedKey.class);
+    public static final GsonBuilderApplicable KEY_ADAPTER = hierarchyAdapter(new KeyAdapter(), Key.class);
+    public static final GsonBuilderApplicable GAME_MODE_ADAPTER = adapter(new GameModeAdapter(), GameMode.class);
     // Tags
     public static final GsonBuilderApplicable BLOCK_TAG_ADAPTER = adapter(BaseTagAdapter.of(Tag.REGISTRY_BLOCKS, BlockTag::new, Material.class), BlockTag.class);
     public static final GsonBuilderApplicable FLUID_TAG_ADAPTER = adapter(BaseTagAdapter.of(Tag.REGISTRY_FLUIDS, FluidTag::new, Fluid.class), FluidTag.class);
@@ -69,14 +67,8 @@ public final class Adapters {
     public static final GsonBuilderApplicable ENTITY_TAG_ADAPTER = adapter(BaseTagAdapter.of(Tag.REGISTRY_ENTITY_TYPES, EntityTag::new, EntityType.class), EntityTag.class);
     // fastutil
     public static final GsonBuilderApplicable OBJECT_2_BOOLEAN_MAP_INSTANTIATOR = instantiator(type -> new Object2BooleanOpenHashMap<>(), Object2BooleanMap.class);
-    public static final Gson GSON = configure(new GsonBuilder()).setVersion(1.0).create();
 
     private Adapters() {
-    }
-
-    private static GsonBuilderApplicable factory(final TypeAdapterFactory factory) {
-        ADAPTERS.add(builder -> builder.registerTypeAdapterFactory(factory));
-        return Builders.factory(factory);
     }
 
     private static <A extends Keyed> GsonBuilderApplicable keyedAdapter(final KeyedTypeAdapter<A> adapter) {
@@ -105,12 +97,4 @@ public final class Adapters {
         ADAPTERS.add(builder -> builder.registerTypeAdapter(type, instanceCreator));
         return Builders.instantiator(type, instanceCreator);
     }
-
-    public static GsonBuilder configure(final GsonBuilder builder) {
-        ADAPTERS.forEach(op -> op.apply(builder));
-        builder.setFieldNamingStrategy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
-        return builder;
-    }
-
-
 }

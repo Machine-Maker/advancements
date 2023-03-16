@@ -1,41 +1,49 @@
 package me.machinemaker.advancements.conditions.entity;
 
-import com.google.gson.JsonArray;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
-import me.machinemaker.advancements.GsonTestBase;
-import me.machinemaker.advancements.conditions.item.ItemCondition;
-import org.bukkit.Material;
-import org.bukkit.Tag;
-import org.junit.jupiter.api.Test;
+import me.machinemaker.advancements.conditions.ConditionTest;
+import me.machinemaker.advancements.tests.mocks.DummyEnchantments;
+import me.machinemaker.advancements.tests.random.RandomProviders;
+import me.machinemaker.advancements.tests.sources.RandomItemSource;
+import me.machinemaker.advancements.tests.sources.Sources;
+import org.junit.jupiter.params.provider.ArgumentsSource;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+class EntityEquipmentConditionTest extends ConditionTest<EntityEquipmentCondition> {
 
-class EntityEquipmentConditionTest extends GsonTestBase {
-
-    @Test
-    void testEntityEquipmentConditionTestSingle() {
-        EntityEquipmentCondition condition = EntityEquipmentCondition.forHead(ItemCondition.forTag(Tag.ITEMS_BOATS));
-        JsonObject object = new JsonObject();
-        JsonObject headObject = new JsonObject();
-        headObject.addProperty("tag", Tag.ITEMS_BOATS.getKey().toString());
-        object.add("head", headObject);
-        assertEquals(object, tree(condition));
-        assertEquals(condition, fromJson(object, EntityEquipmentCondition.class));
+    static {
+        DummyEnchantments.setup();
     }
 
-    @Test
-    void testEntityEquipmentConditionMultiple() {
-        EntityEquipmentCondition condition = EntityEquipmentCondition.forHands(ItemCondition.forItems(Material.BONE), ItemCondition.forTag(Tag.ITEMS_COALS));
-        JsonObject object = new JsonObject();
-        JsonObject mainHand = new JsonObject();
-        JsonArray mainHandArray = new JsonArray();
-        mainHandArray.add(Material.BONE.getKey().toString());
-        mainHand.add("items", mainHandArray);
-        object.add("mainhand", mainHand);
-        JsonObject offHand = new JsonObject();
-        offHand.addProperty("tag", Tag.ITEMS_COALS.getKey().toString());
-        object.add("offhand", offHand);
-        assertEquals(object, tree(condition));
-        assertEquals(condition, fromJson(object, EntityEquipmentCondition.class));
+    EntityEquipmentConditionTest() {
+        super(EntityEquipmentCondition.conditionType());
+    }
+
+    @Sources.Config(count = 1000)
+    @ArgumentsSource(Provider.class)
+    void testEntityEquipmentCondition(final EntityEquipmentCondition condition) {
+        final JsonObject obj = new JsonObject();
+        this.add(obj, "head", condition.head());
+        this.add(obj, "chest", condition.chest());
+        this.add(obj, "legs", condition.legs());
+        this.add(obj, "feet", condition.feet());
+        this.add(obj, "mainhand", condition.mainhand());
+        this.add(obj, "offhand", condition.offhand());
+
+    }
+
+    private static final class Provider extends RandomItemSource<EntityEquipmentCondition> {
+
+        Provider() {
+            super(RandomProviders.ENTITY_EQUIPMENT_CONDITION);
+        }
+    }
+
+    @Override
+    protected void additionalAnyTests() {
+        final JsonObject obj = new JsonObject();
+        obj.add("chest", JsonNull.INSTANCE);
+        this.testIsAny(obj);
+        this.testIsAny("{ \"legs\": null, \"chest\":  null }");
     }
 }

@@ -6,6 +6,7 @@ import com.google.gson.JsonPrimitive;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
 import me.machinemaker.advancements.GsonTestBase;
+import me.machinemaker.advancements.conditions.entity.sub.AdvancementCondition;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

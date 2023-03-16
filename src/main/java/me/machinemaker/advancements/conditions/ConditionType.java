@@ -5,11 +5,16 @@ import me.machinemaker.advancements.adapters.builders.GsonBuilderApplicable;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 
-public interface ConditionType<C extends Condition<C>> {
+public interface ConditionType<C extends Condition<? super C>> {
 
     @ApiStatus.Internal
-    static <C extends Condition<C>> ConditionType<C> create(final Class<C> baseType, final C any, final Supplier<GsonBuilderApplicable> requiredGson) {
-        return new ConditionTypeImpl<>(baseType, any, requiredGson);
+    static <C extends Condition<? super C>> ConditionType<C> create(final Class<C> baseType, final C any, final Supplier<GsonBuilderApplicable> requiredGson) {
+        return create(baseType, any, requiredGson, true);
+    }
+
+    @ApiStatus.Internal
+    static <C extends Condition<? super C>> ConditionType<C> create(final Class<C> baseType, final C any, final Supplier<GsonBuilderApplicable> requiredGson, final boolean anyIsNull) {
+        return new ConditionTypeImpl<>(baseType, any, requiredGson, anyIsNull);
     }
 
     @Contract(pure = true)

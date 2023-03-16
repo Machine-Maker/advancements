@@ -133,8 +133,6 @@ public class GsonHelper {
     public GsonHelper() {
         this.builder = new GsonBuilder()
                 .setVersion(1.0);
-        Adapters.RECORD_TYPE_ADAPTER_FACTORY.applyTo(this.builder);
-        Adapters.WRAPPER_TYPE_ADAPTER_FACTORY.applyTo(this.builder);
     }
 
     public GsonHelper(GsonBuilder builder) {

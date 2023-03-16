@@ -17,7 +17,7 @@ public record DamageSourceCondition(
         @Nullable Boolean isLightning,
         EntityCondition directEntity,
         EntityCondition sourceEntity
-) implements Condition<DamageSourceCondition>, Buildable<DamageSourceCondition, DamageSourceCondition.Builder> {
+) implements Condition.Buildable<DamageSourceCondition, DamageSourceCondition.Builder> {
 
     public static final DamageSourceCondition ANY = new Builder().build();
 
@@ -65,8 +65,8 @@ public record DamageSourceCondition(
         private @Nullable Boolean isFire;
         private @Nullable Boolean isMagic;
         private @Nullable Boolean isLightning;
-        private EntityCondition directEntity = EntityCondition.ANY;
-        private EntityCondition sourceEntity = EntityCondition.ANY;
+        private EntityCondition directEntity = EntityCondition.conditionType().any();
+        private EntityCondition sourceEntity = EntityCondition.conditionType().any();
 
         private Builder() {
         }

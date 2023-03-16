@@ -1,8 +1,10 @@
 package me.machinemaker.advancements.conditions.item;
 
+import com.google.common.base.Preconditions;
 import com.google.gson.TypeAdapterFactory;
 import io.papermc.paper.potion.Potion;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import me.machinemaker.advancements.adapters.Adapters;
@@ -11,7 +13,7 @@ import me.machinemaker.advancements.adapters.builders.GsonBuilderApplicable;
 import me.machinemaker.advancements.adapters.factories.ConditionAdapterFactory;
 import me.machinemaker.advancements.conditions.ConditionType;
 import me.machinemaker.advancements.conditions.misc.NBTCondition;
-import me.machinemaker.advancements.ranges.IntegerRange;
+import me.machinemaker.advancements.conditions.range.IntegerRange;
 import me.machinemaker.advancements.tags.ItemTag;
 import me.machinemaker.advancements.util.Util;
 import org.bukkit.Material;
@@ -39,7 +41,7 @@ record ItemConditionImpl(
         NBTCondition.conditionType().any()
     );
     static final ConditionType<ItemCondition> TYPE = ConditionType.create(ItemCondition.class, ANY, ItemCondition::requiredGson);
-    static final TypeAdapterFactory FACTORY = new ConditionAdapterFactory<>(TYPE, ItemConditionImpl.class);
+    static final TypeAdapterFactory FACTORY = ConditionAdapterFactory.record(TYPE, ItemConditionImpl.class);
     static final GsonBuilderApplicable REQUIRED_GSON = Builders.collection(
         Adapters.ITEM_TAG_ADAPTER,
         Adapters.MATERIAL_ADAPTER,
@@ -139,6 +141,16 @@ record ItemConditionImpl(
         @Override
         public @Nullable Set<Material> items() {
             return this.items;
+        }
+
+        @Override
+        public ItemCondition.Builder addItem(final Material item) {
+            Preconditions.checkArgument(item.isItem(), "Cannot add a material that isn't an item");
+            if (this.items == null) {
+                this.items = new HashSet<>();
+            }
+            this.items.add(item);
+            return this;
         }
 
         @Override

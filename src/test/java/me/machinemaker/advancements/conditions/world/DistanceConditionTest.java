@@ -3,9 +3,10 @@ package me.machinemaker.advancements.conditions.world;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import me.machinemaker.advancements.conditions.ConditionTest;
-import me.machinemaker.advancements.ranges.DoubleRange;
-import me.machinemaker.advancements.tests.providers.CompoundProvider;
-import me.machinemaker.advancements.tests.providers.RangeProviders;
+import me.machinemaker.advancements.tests.random.RandomProviders;
+import me.machinemaker.advancements.tests.sources.RandomItemSource;
+import me.machinemaker.advancements.tests.sources.Sources;
+import org.junit.jupiter.params.provider.ArgumentsSource;
 
 class DistanceConditionTest extends ConditionTest<DistanceCondition> {
 
@@ -13,28 +14,23 @@ class DistanceConditionTest extends ConditionTest<DistanceCondition> {
         super(DistanceCondition.conditionType());
     }
 
-    @CompoundProvider({RangeProviders.Doubles.Provider.class, RangeProviders.Doubles.Provider.class, RangeProviders.Doubles.Provider.class})
-    void testDistanceConditionPosition(final DoubleRange x, final DoubleRange y, final DoubleRange z) {
-        final DistanceCondition.Builder builder = DistanceCondition.builder();
+    @Sources.Config(count = 1000)
+    @ArgumentsSource(Provider.class)
+    void testDistanceCondition(final DistanceCondition condition) {
         final JsonObject obj = new JsonObject();
-        builder.x(x);
-        obj.add("x", this.toTree(x));
-        builder.y(y);
-        obj.add("y", this.toTree(y));
-        builder.z(z);
-        obj.add("z", this.toTree(z));
-        this.testJsonConversion(builder.build(), obj);
+        this.add(obj, "x", condition.x());
+        this.add(obj, "y", condition.y());
+        this.add(obj, "z", condition.z());
+        this.add(obj, "horizontal", condition.horizontal());
+        this.add(obj, "absolute", condition.absolute());
+        this.testJsonConversion(condition, obj);
     }
 
-    @CompoundProvider({RangeProviders.Doubles.Provider.class, RangeProviders.Doubles.Provider.class})
-    void testDistanceConditionPosAndAbsolute(final DoubleRange z, final DoubleRange absolute) {
-        final DistanceCondition.Builder builder = DistanceCondition.builder();
-        final JsonObject obj = new JsonObject();
-        builder.z(z);
-        obj.add("z", this.toTree(z));
-        builder.absolute(absolute);
-        obj.add("absolute", this.toTree(absolute));
-        this.testJsonConversion(builder.build(), obj);
+    private static final class Provider extends RandomItemSource<DistanceCondition> {
+
+        Provider() {
+            super(RandomProviders.DISTANCE_CONDITION);
+        }
     }
 
     @Override

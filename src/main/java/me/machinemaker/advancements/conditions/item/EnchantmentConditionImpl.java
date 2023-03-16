@@ -16,7 +16,7 @@ import me.machinemaker.advancements.adapters.builders.Builders;
 import me.machinemaker.advancements.adapters.builders.GsonBuilderApplicable;
 import me.machinemaker.advancements.adapters.factories.ConditionAdapterFactory;
 import me.machinemaker.advancements.conditions.ConditionType;
-import me.machinemaker.advancements.ranges.IntegerRange;
+import me.machinemaker.advancements.conditions.range.IntegerRange;
 import org.bukkit.enchantments.Enchantment;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -25,7 +25,7 @@ record EnchantmentConditionImpl(@Nullable Enchantment enchantment, IntegerRange 
     static final EnchantmentCondition ANY = new EnchantmentConditionImpl(null, IntegerRange.conditionType().any());
     static final EnchantmentCondition[] NONE = new EnchantmentConditionImpl[0];
     static final ConditionType<EnchantmentCondition> TYPE = ConditionType.create(EnchantmentCondition.class, ANY, EnchantmentCondition::requiredGson);
-    static final TypeAdapterFactory FACTORY = new ConditionAdapterFactory<>(TYPE, EnchantmentConditionImpl.class);
+    static final TypeAdapterFactory FACTORY = ConditionAdapterFactory.record(TYPE, EnchantmentConditionImpl.class);
     static final GsonBuilderApplicable REQUIRED_GSON = Builders.collection(
         Adapters.ENCHANTMENT_ADAPTER,
         IntegerRange.requiredGson(),

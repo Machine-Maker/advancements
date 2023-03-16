@@ -5,7 +5,7 @@ import java.util.Map;
 import me.machinemaker.advancements.adapters.builders.GsonBuilderApplicable;
 import me.machinemaker.advancements.conditions.Condition;
 import me.machinemaker.advancements.conditions.ConditionType;
-import me.machinemaker.advancements.ranges.IntegerRange;
+import me.machinemaker.advancements.conditions.range.IntegerRange;
 import org.bukkit.enchantments.Enchantment;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;

@@ -3,11 +3,10 @@ package me.machinemaker.advancements.conditions.world;
 import me.machinemaker.advancements.adapters.builders.GsonBuilderApplicable;
 import me.machinemaker.advancements.conditions.Condition;
 import me.machinemaker.advancements.conditions.ConditionType;
-import me.machinemaker.advancements.ranges.DoubleRange;
-import me.machinemaker.advancements.util.Buildable;
+import me.machinemaker.advancements.conditions.range.DoubleRange;
 import org.jetbrains.annotations.Contract;
 
-public interface DistanceCondition extends Condition<DistanceCondition>, Buildable<DistanceCondition, DistanceCondition.Builder> {
+public interface DistanceCondition extends Condition.Buildable<DistanceCondition, DistanceCondition.Builder> {
 
     @Contract(pure = true)
     static ConditionType<DistanceCondition> conditionType() {

@@ -1,36 +1,34 @@
 package me.machinemaker.advancements.conditions.entity;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonNull;
 import com.google.gson.JsonPrimitive;
-import me.machinemaker.advancements.GsonTestBase;
-import org.bukkit.Tag;
-import org.bukkit.entity.EntityType;
-import org.junit.jupiter.api.Test;
+import me.machinemaker.advancements.conditions.ConditionTest;
+import me.machinemaker.advancements.tests.random.RandomProviders;
+import me.machinemaker.advancements.tests.sources.RandomItemSource;
+import me.machinemaker.advancements.tests.sources.Sources;
+import org.junit.jupiter.params.provider.ArgumentsSource;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+class EntityTypeConditionTest extends ConditionTest<EntityTypeCondition> {
 
-class EntityTypeConditionTest extends GsonTestBase {
-
-    @Test
-    void testEntityTypeConditionTag() {
-        EntityTypeCondition condition = EntityTypeCondition.of(Tag.ENTITY_TYPES_RAIDERS);
-        JsonElement element = new JsonPrimitive("#" + Tag.ENTITY_TYPES_RAIDERS.getKey());
-        assertEquals(element, tree(condition));
-        assertEquals(condition, fromJson(element, EntityTypeCondition.class));
+    EntityTypeConditionTest() {
+        super(EntityTypeCondition.conditionType(), false);
     }
 
-    @Test
-    void testEntityTypeConditionType() {
-        EntityTypeCondition condition = EntityTypeCondition.of(EntityType.BAT);
-        JsonElement element = new JsonPrimitive(EntityType.BAT.getKey().toString());
-        assertEquals(element, tree(condition));
-        assertEquals(condition, fromJson(element, EntityTypeCondition.class));
+
+    @Sources.Config(count = 1000)
+    @ArgumentsSource(Provider.class)
+    void testEntityTypeCondition(final EntityTypeCondition condition) {
+        final String str = condition instanceof final EntityTypeCondition.Tag tag ? '#' + tag.tag().key().asString() : ((EntityTypeCondition.Type) condition).type().key().asString();
+        this.testJsonConversion(condition, new JsonPrimitive(str));
     }
 
-    @Test
-    void testAnyEntityTypeCondition() {
-        anyTest(JsonNull.INSTANCE, EntityTypeCondition.class);
-        anyTest("null", EntityTypeCondition.class);
+    private static final class Provider extends RandomItemSource<EntityTypeCondition> {
+
+        Provider() {
+            super(RandomProviders.ENTITY_TYPE_CONDITION);
+        }
+    }
+
+    @Override
+    protected void additionalAnyTests() {
     }
 }

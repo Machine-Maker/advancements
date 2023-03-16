@@ -8,7 +8,7 @@ import me.machinemaker.advancements.adapters.builders.GsonBuilderApplicable;
 import me.machinemaker.advancements.conditions.Condition;
 import me.machinemaker.advancements.conditions.ConditionType;
 import me.machinemaker.advancements.conditions.misc.NBTCondition;
-import me.machinemaker.advancements.ranges.IntegerRange;
+import me.machinemaker.advancements.conditions.range.IntegerRange;
 import me.machinemaker.advancements.tags.ItemTag;
 import org.bukkit.Material;
 import org.bukkit.Tag;
@@ -83,6 +83,9 @@ public interface ItemCondition extends Condition.Buildable<ItemCondition, ItemCo
         @Contract(pure = true)
 
         @Nullable Set<Material> items();
+
+        @Contract(value = "_ -> this", mutates = "this")
+        Builder addItem(Material item);
 
         @Contract(value = "_ -> this", mutates = "this")
         Builder items(@Nullable Set<Material> items);

@@ -15,13 +15,14 @@ import org.bukkit.Registry;
 import org.bukkit.Server;
 import org.bukkit.Tag;
 import org.bukkit.generator.structure.Structure;
+import org.mockito.Mockito;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class DummyServer {
+public final class DummyServer {
 
     static final Map<String, Map<NamespacedKey, Tag<?>>> tagCache = Maps.newHashMap();
 
@@ -40,12 +41,12 @@ public class DummyServer {
     public static void setup() {
         //noinspection ConstantConditions
         if (Bukkit.getServer() != null) return;
-        final Server server = mock(Server.class);
+        final Server server = mock(Server.class, Mockito.withSettings().stubOnly());
         when(server.getTag(anyString(), any(NamespacedKey.class), any())).thenAnswer(invocation -> {
             final String registry = invocation.getArgument(0, String.class);
             final NamespacedKey key = invocation.getArgument(1, NamespacedKey.class);
             return tagCache.get(registry).computeIfAbsent(key, k -> {
-                final Tag<?> tag = mock(Tag.class);
+                final Tag<?> tag = mock(Tag.class, Mockito.withSettings().stubOnly());
                 when(tag.getKey()).thenReturn(k);
                 return tag;
             });
@@ -70,13 +71,13 @@ public class DummyServer {
     }
 
     @SuppressWarnings("unchecked")
-    static <T extends Keyed> Registry<T> createRegistry(final Class<T> type) {
+    private static <T extends Keyed> Registry<T> createRegistry(final Class<T> type) {
         if (type == Structure.class) {
             return (Registry<T>) new TestRegistry<>(TestStructure::new);
         }
         if (type == Potion.class) {
             return (Registry<T>) new TestRegistry<>(TestPotion::new);
         }
-        return mock(Registry.class);
+        return mock(Registry.class, Mockito.withSettings().stubOnly());
     }
 }

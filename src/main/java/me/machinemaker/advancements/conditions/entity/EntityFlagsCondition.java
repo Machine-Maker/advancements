@@ -1,110 +1,76 @@
 package me.machinemaker.advancements.conditions.entity;
 
+import me.machinemaker.advancements.adapters.builders.GsonBuilderApplicable;
 import me.machinemaker.advancements.conditions.Condition;
-import me.machinemaker.advancements.util.Buildable;
+import me.machinemaker.advancements.conditions.ConditionType;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
 
-public record EntityFlagsCondition(
-        @Nullable Boolean isOnFire,
-        @Nullable Boolean isCrouching,
-        @Nullable Boolean isSprinting,
-        @Nullable Boolean isSwimming,
-        @Nullable Boolean isBaby
-) implements Condition<EntityFlagsCondition>, Buildable<EntityFlagsCondition, EntityFlagsCondition.Builder> {
+@ApiStatus.NonExtendable
+public interface EntityFlagsCondition extends Condition.Buildable<EntityFlagsCondition, EntityFlagsCondition.Builder> {
 
-    public static final EntityFlagsCondition ANY = new EntityFlagsCondition(null, null, null, null, null);
-
-    @Override
-    public EntityFlagsCondition any() {
-        return ANY;
+    @Contract(pure = true)
+    static ConditionType<EntityFlagsCondition> conditionType() {
+        return EntityFlagsConditionImpl.TYPE;
     }
 
-    @Override
-    public Builder toBuilder() {
-        return new Builder(this);
+    @Contract(value = "-> new", pure = true)
+    static Builder builder() {
+        return new EntityFlagsConditionImpl.BuilderImpl();
     }
 
-    @Override
-    public String toString() {
-        if (this.isAny()) {
-            return "EntityFlagsCondition{ANY}";
-        }
-        return "EntityFlagsCondition{" +
-                "isOnFire=" + this.isOnFire +
-                ", isCrouching=" + this.isCrouching +
-                ", isSprinting=" + this.isSprinting +
-                ", isSwimming=" + this.isSwimming +
-                ", isBaby=" + this.isBaby +
-                '}';
+    @Contract(pure = true)
+    static GsonBuilderApplicable requiredGson() {
+        return EntityFlagsConditionImpl.REQUIRED_GSON;
     }
 
-    public static final class Builder implements Condition.Builder<EntityFlagsCondition> {
+    @Contract(pure = true)
+    @Nullable Boolean isOnFire();
 
-        private @Nullable Boolean isOnFire;
-        private @Nullable Boolean isCrouching;
-        private @Nullable Boolean isSprinting;
-        private @Nullable Boolean isSwimming;
-        private @Nullable Boolean isBaby;
+    @Contract(pure = true)
+    @Nullable Boolean isCrouching();
 
-        private Builder() {
-        }
+    @Contract(pure = true)
+    @Nullable Boolean isSprinting();
 
-        private Builder(EntityFlagsCondition condition) {
-            this.isOnFire = condition.isOnFire;
-            this.isCrouching = condition.isCrouching;
-            this.isSprinting = condition.isSprinting;
-            this.isSwimming = condition.isSwimming;
-            this.isBaby = condition.isBaby;
-        }
+    @Contract(pure = true)
+    @Nullable Boolean isSwimming();
 
-        public @Nullable Boolean isOnFire() {
-            return this.isOnFire;
-        }
+    @Contract(pure = true)
+    @Nullable Boolean isBaby();
 
-        public Builder isOnFire(@Nullable Boolean isOnFire) {
-            this.isOnFire = isOnFire;
-            return this;
-        }
+    @ApiStatus.NonExtendable
+    interface Builder extends Condition.Builder<EntityFlagsCondition> {
 
-        public @Nullable Boolean isCrouching() {
-            return this.isCrouching;
-        }
+        @Contract(pure = true)
+        @Nullable Boolean isOnFire();
 
-        public Builder isCrouching(@Nullable Boolean isCrouching) {
-            this.isCrouching = isCrouching;
-            return this;
-        }
+        @Contract(value = "_ -> this", mutates = "this")
+        Builder isOnFire(@Nullable Boolean isOnFire);
 
-        public @Nullable Boolean isSprinting() {
-            return this.isSprinting;
-        }
+        @Contract(pure = true)
+        @Nullable Boolean isCrouching();
 
-        public Builder isSprinting(@Nullable Boolean isSprinting) {
-            this.isSprinting = isSprinting;
-            return this;
-        }
+        @Contract(value = "_ -> this", mutates = "this")
+        Builder isCrouching(@Nullable Boolean isCrouching);
 
-        public @Nullable Boolean isSwimming() {
-            return this.isSwimming;
-        }
+        @Contract(pure = true)
+        @Nullable Boolean isSprinting();
 
-        public Builder isSwimming(@Nullable Boolean isSwimming) {
-            this.isSwimming = isSwimming;
-            return this;
-        }
+        @Contract(value = "_ -> this", mutates = "this")
+        Builder isSprinting(@Nullable Boolean isSprinting);
 
-        public @Nullable Boolean isBaby() {
-            return this.isBaby;
-        }
+        @Contract(pure = true)
+        @Nullable Boolean isSwimming();
 
-        public Builder isBaby(@Nullable Boolean isBaby) {
-            this.isBaby = isBaby;
-            return this;
-        }
+        @Contract(value = "_ -> this", mutates = "this")
+        Builder isSwimming(@Nullable Boolean isSwimming);
 
-        @Override
-        public EntityFlagsCondition build() {
-            return new EntityFlagsCondition(this.isOnFire, this.isCrouching, this.isSprinting, this.isSwimming, this.isBaby);
-        }
+        @Contract(pure = true)
+        @Nullable Boolean isBaby();
+
+        @Contract(value = "_ -> this", mutates = "this")
+        Builder isBaby(@Nullable Boolean isBaby);
     }
 }

@@ -5,13 +5,13 @@ import me.machinemaker.advancements.adapters.builders.Builders;
 import me.machinemaker.advancements.adapters.builders.GsonBuilderApplicable;
 import me.machinemaker.advancements.adapters.factories.ConditionAdapterFactory;
 import me.machinemaker.advancements.conditions.ConditionType;
-import me.machinemaker.advancements.ranges.DoubleRange;
+import me.machinemaker.advancements.conditions.range.DoubleRange;
 
 record DistanceConditionImpl(DoubleRange x, DoubleRange y, DoubleRange z, DoubleRange horizontal, DoubleRange absolute) implements DistanceCondition {
 
     static final DistanceCondition ANY = new DistanceConditionImpl(DoubleRange.conditionType().any(), DoubleRange.conditionType().any(), DoubleRange.conditionType().any(), DoubleRange.conditionType().any(), DoubleRange.conditionType().any());
     static final ConditionType<DistanceCondition> TYPE = ConditionType.create(DistanceCondition.class, ANY, DistanceCondition::requiredGson);
-    static final TypeAdapterFactory FACTORY = new ConditionAdapterFactory<>(TYPE, DistanceConditionImpl.class);
+    static final TypeAdapterFactory FACTORY = ConditionAdapterFactory.record(TYPE, DistanceConditionImpl.class);
     static final GsonBuilderApplicable REQUIRED_GSON = Builders.collection(DoubleRange.requiredGson(), Builders.factory(FACTORY));
 
     @Override

@@ -3,8 +3,6 @@ package me.machinemaker.advancements.conditions.entity.sub;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import me.machinemaker.advancements.GsonTestBase;
-import me.machinemaker.advancements.conditions.entity.EntitySubCondition;
-import me.machinemaker.advancements.conditions.entity.FishingHookCondition;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -13,7 +11,7 @@ class FishingHookConditionTest extends GsonTestBase {
 
     @Test
     void testFishingHookCondition() {
-        final FishingHookCondition condition = new FishingHookCondition(true);
+        final FishingHookCondition condition = new FishingHookConditionImpl(true);
         final JsonObject object = new JsonObject();
         object.addProperty("is_open_water", true);
         assertEquals(object, this.tree(condition));

@@ -3,18 +3,18 @@ package me.machinemaker.advancements.conditions.item;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
+import java.util.List;
 import me.machinemaker.advancements.conditions.ConditionTest;
-import me.machinemaker.advancements.ranges.IntegerRange;
 import me.machinemaker.advancements.tests.mocks.DummyEnchantments;
-import me.machinemaker.advancements.tests.providers.CompoundProvider;
-import me.machinemaker.advancements.tests.providers.RangeProviders;
-import org.bukkit.enchantments.Enchantment;
+import me.machinemaker.advancements.tests.random.RandomProviders;
+import me.machinemaker.advancements.tests.sources.RandomItemSource;
+import me.machinemaker.advancements.tests.sources.RandomItemsSource;
+import me.machinemaker.advancements.tests.sources.Sources;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.provider.ArgumentsSource;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
 
 class EnchantmentConditionTest extends ConditionTest<EnchantmentCondition> {
 
@@ -26,32 +26,42 @@ class EnchantmentConditionTest extends ConditionTest<EnchantmentCondition> {
         super(EnchantmentCondition.conditionType());
     }
 
-    @RangeProviders.Ints
-    void testSingleEnchantmentCondition(final IntegerRange range) {
-        final EnchantmentCondition.Builder builder = EnchantmentCondition.builder();
-        builder.enchantment(Enchantment.ARROW_DAMAGE).level(range);
-        final JsonObject object = new JsonObject();
-        object.addProperty("enchantment", Enchantment.ARROW_DAMAGE.getKey().toString());
-        object.add("level", this.toTree(range));
-        this.testJsonConversion(builder.build(), object);
+    @Sources.Config(count = 1000)
+    @ArgumentsSource(SingleProvider.class)
+    void testSingleEnchantmentCondition(final EnchantmentCondition condition) {
+        final JsonObject obj = this.create(condition);
+        this.testJsonConversion(condition, obj);
     }
 
-    @CompoundProvider({RangeProviders.Ints.Provider.class, RangeProviders.Ints.Provider.class})
-    void testMultipleEnchantmentConditions(final IntegerRange range1, final IntegerRange range2) {
-        final EnchantmentCondition condition1 = EnchantmentCondition.builder()
-            .enchantment(Enchantment.DAMAGE_ALL).level(range1).build();
-        final EnchantmentCondition condition2 = EnchantmentCondition.builder()
-            .enchantment(null).level(range2).build();
+    private JsonObject create(final EnchantmentCondition condition) {
+        final JsonObject obj = new JsonObject();
+        this.add(obj, "enchantment", condition.enchantment());
+        this.add(obj, "level", condition.level());
+        return obj;
+    }
+
+    @Sources.Config(count = 1000, maxSize = 3)
+    @ArgumentsSource(MultipleProvider.class)
+    void testMultipleEnchantmentCondition(final List<EnchantmentCondition> conditions) {
         final JsonArray array = new JsonArray();
-        final JsonObject object1 = new JsonObject();
-        object1.addProperty("enchantment", Enchantment.DAMAGE_ALL.getKey().toString());
-        object1.add("level", this.toTree(range1));
-        array.add(object1);
-        final JsonObject object2 = new JsonObject();
-        object2.add("level", this.toTree(range2));
-        array.add(object2);
-        final EnchantmentCondition[] conditions = new EnchantmentCondition[]{condition1, condition2};
-        this.testJsonConversion(conditions, array, EnchantmentCondition[].class);
+        conditions.forEach(c -> {
+            array.add(this.create(c));
+        });
+        this.testJsonConversion(conditions.toArray(EnchantmentCondition[]::new), array, EnchantmentCondition[].class);
+    }
+
+    private static final class SingleProvider extends RandomItemSource<EnchantmentCondition> {
+
+        SingleProvider() {
+            super(RandomProviders.ENCHANTMENT_CONDITION);
+        }
+    }
+
+    private static final class MultipleProvider extends RandomItemsSource<EnchantmentCondition> {
+
+        MultipleProvider() {
+            super(RandomProviders.ENCHANTMENT_CONDITION);
+        }
     }
 
     @Test

@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-class NBTConditionTest extends GsonTestBase {
+class NBTConditionTest extends ConditionTest<NBTCondition> {
 
     private static final Codec<CompoundBinaryTag, String, IOException, IOException> CODEC = Codec.codec(TagStringIO.get()::asCompound, TagStringIO.get()::asString);
 
@@ -56,9 +56,8 @@ class NBTConditionTest extends GsonTestBase {
         return NBTCondition.create(BinaryTagHolder.encode(tag, CODEC));
     }
 
-    @Override
-    protected GsonBuilderApplicable applicable() {
-        return NBTCondition.requiredGson();
+    NBTConditionTest() {
+        super(NBTCondition.conditionType(), false);
     }
 
     @Test
@@ -67,13 +66,10 @@ class NBTConditionTest extends GsonTestBase {
         final @Nullable BinaryTagHolder holder = condition.tag();
         assertNotNull(holder);
         final JsonElement primitive = new JsonPrimitive(holder.string());
-        assertEquals(primitive, this.tree(condition));
-        assertEquals(condition, this.fromJson(primitive, NBTCondition.class));
+        this.testJsonConversion(condition, primitive);
     }
 
-    @Test
-    void testAnyCondition() {
-        this.anyTest(JsonNull.INSTANCE, NBTCondition.class);
-        this.anyTest("null", NBTCondition.class);
+    @Override
+    protected void additionalAnyTests() {
     }
 }
