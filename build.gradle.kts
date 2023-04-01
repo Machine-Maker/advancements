@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.paperweight.userdev)
 }
 
-group="me.machinemaker"
+group="me.machinemaker.datapacks"
 version="1.0-SNAPSHOT"
 
 repositories {
@@ -38,7 +38,7 @@ dependencies {
     testImplementation(libs.mockito.core)
     testImplementation(libs.mockito.junit)
 
-    "paperweightDevelopmentBundle"(libs.machinedpaper.devbundle)
+    paperweight.devBundle(libs.machinedpaper.devbundle)
 }
 
 configurations {
