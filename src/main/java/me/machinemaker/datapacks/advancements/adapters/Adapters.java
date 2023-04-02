@@ -14,6 +14,7 @@ import me.machinemaker.datapacks.advancements.adapters.types.GameModeAdapter;
 import me.machinemaker.datapacks.advancements.adapters.types.KeyAdapter;
 import me.machinemaker.datapacks.advancements.adapters.types.Typed;
 import me.machinemaker.datapacks.advancements.conditions.Conditions;
+import me.machinemaker.datapacks.advancements.conditions.misc.TagCondition;
 import me.machinemaker.datapacks.advancements.tags.BlockTag;
 import me.machinemaker.datapacks.advancements.tags.EntityTag;
 import me.machinemaker.datapacks.advancements.tags.FluidTag;
@@ -61,6 +62,7 @@ public final class Adapters {
         typeHierarchyAdapter(new KeyAdapter());
         typeAdapter(GameMode.class, GameModeAdapter.INSTANCE);
         typeAdapter(Object2BooleanMap.class, (InstanceCreator<Object>) type -> new Object2BooleanOpenHashMap<>());
+        BUILDER.registerTypeAdapterFactory(TagCondition.FACTORY);
         Conditions.applyToGsonBuilder(BUILDER);
     }
 

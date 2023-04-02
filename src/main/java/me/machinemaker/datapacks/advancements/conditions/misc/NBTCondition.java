@@ -6,7 +6,7 @@ import net.kyori.adventure.nbt.api.BinaryTagHolder;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
-public interface NBTCondition extends Condition<NBTCondition> {
+public interface NBTCondition extends Condition {
 
     @Contract(pure = true)
     static ConditionType<NBTCondition> conditionType() {

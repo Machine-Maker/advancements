@@ -13,10 +13,7 @@ import me.machinemaker.datapacks.advancements.conditions.block.FluidCondition;
 import me.machinemaker.datapacks.advancements.conditions.block.LightCondition;
 import me.machinemaker.datapacks.advancements.conditions.effect.PotionEffectInstanceCondition;
 import me.machinemaker.datapacks.advancements.conditions.effect.PotionEffectsCondition;
-import me.machinemaker.datapacks.advancements.conditions.entity.EntityCondition;
-import me.machinemaker.datapacks.advancements.conditions.entity.EntityEquipmentCondition;
-import me.machinemaker.datapacks.advancements.conditions.entity.EntityFlagsCondition;
-import me.machinemaker.datapacks.advancements.conditions.entity.EntityTypeCondition;
+import me.machinemaker.datapacks.advancements.conditions.entity.*;
 import me.machinemaker.datapacks.advancements.conditions.entity.sub.EntitySubCondition;
 import me.machinemaker.datapacks.advancements.conditions.item.EnchantmentCondition;
 import me.machinemaker.datapacks.advancements.conditions.item.ItemCondition;
@@ -31,8 +28,8 @@ import org.jetbrains.annotations.ApiStatus;
 public final class Conditions {
 
     private static final List<ConditionType<?>> CONDITION_TYPES = new ArrayList<>();
-    private static final Map<TypeToken<?>, Condition<?>> DEFAULT_OBJECT_BY_BASE_TYPE;
-    private static final ImmutableMap.Builder<TypeToken<?>, Condition<?>> DEFAULT_OBJECT_BY_BASE_TYPE_BUILDER = ImmutableMap.builder();
+    private static final Map<TypeToken<?>, Condition> DEFAULT_OBJECT_BY_BASE_TYPE;
+    private static final ImmutableMap.Builder<TypeToken<?>, Condition> DEFAULT_OBJECT_BY_BASE_TYPE_BUILDER = ImmutableMap.builder();
 
     static {
         register(IntegerRange.conditionType());
@@ -46,6 +43,8 @@ public final class Conditions {
         register(PotionEffectInstanceCondition.conditionType());
         register(PotionEffectsCondition.conditionType());
 
+        register(DamageSourceCondition.conditionType());
+        register(DamageCondition.conditionType());
         register(EntityCondition.conditionType());
         register(EntitySubCondition.conditionType());
         register(EntityEquipmentCondition.conditionType());
@@ -65,7 +64,7 @@ public final class Conditions {
     private Conditions() {
     }
 
-    private static <C extends Condition<C>> void register(final ConditionType<C> type) {
+    private static <C extends Condition> void register(final ConditionType<C> type) {
         DEFAULT_OBJECT_BY_BASE_TYPE_BUILDER.put(TypeToken.get(type.baseType()), type.any());
         CONDITION_TYPES.add(type);
     }

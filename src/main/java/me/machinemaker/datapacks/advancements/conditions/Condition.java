@@ -4,7 +4,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 
 @ApiStatus.NonExtendable
-public interface Condition<C extends Condition<C>> {
+public interface Condition {
 
     /**
      * Checks if this condition will match any input.
@@ -14,11 +14,11 @@ public interface Condition<C extends Condition<C>> {
     boolean isAny();
 
     @ApiStatus.NonExtendable
-    interface Buildable<C extends Condition<C>, B extends Builder<C>> extends Condition<C>, me.machinemaker.datapacks.advancements.utils.Buildable<C, B> {
+    interface Buildable<C extends Condition, B extends Builder<C>> extends Condition, me.machinemaker.datapacks.advancements.utils.Buildable<C, B> {
     }
 
     @ApiStatus.NonExtendable
-    interface Builder<C extends Condition<? super C>> extends me.machinemaker.datapacks.advancements.utils.Buildable.Builder<C> {
+    interface Builder<C extends Condition> extends me.machinemaker.datapacks.advancements.utils.Buildable.Builder<C> {
 
         /**
          * Constructs a new condition.

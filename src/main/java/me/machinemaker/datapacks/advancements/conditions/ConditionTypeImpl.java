@@ -4,7 +4,7 @@ import com.google.gson.GsonBuilder;
 import java.util.function.Consumer;
 import me.machinemaker.datapacks.advancements.adapters.factories.ConditionAdapterFactory;
 
-final class ConditionTypeImpl<C extends Condition<? super C>> implements ConditionType<C> {
+final class ConditionTypeImpl<C extends Condition> implements ConditionType<C> {
 
     private final Class<C> baseType;
     private final C any;

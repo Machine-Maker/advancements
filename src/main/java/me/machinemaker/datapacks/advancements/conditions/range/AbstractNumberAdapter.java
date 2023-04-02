@@ -4,7 +4,7 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
 
-abstract sealed class AbstractNumberAdapter<N extends NumberRange<? extends Number, ?>> extends TypeAdapter<N> permits IntegerRangeImpl.Adapter, DoubleRangeImpl.Adapter {
+abstract sealed class AbstractNumberAdapter<N extends NumberRange<? extends Number>> extends TypeAdapter<N> permits IntegerRangeImpl.Adapter, DoubleRangeImpl.Adapter {
 
     @Override
     public void write(final JsonWriter out, final N value) throws IOException {

@@ -3,7 +3,7 @@ package me.machinemaker.datapacks.advancements.conditions.range;
 import me.machinemaker.datapacks.advancements.conditions.ConditionType;
 import org.jetbrains.annotations.Contract;
 
-public sealed interface IntegerRange extends NumberRange<Integer, IntegerRange> permits IntegerRangeImpl {
+public sealed interface IntegerRange extends NumberRange<Integer> permits IntegerRangeImpl {
 
     @Contract(pure = true)
     static ConditionType<IntegerRange> conditionType() {

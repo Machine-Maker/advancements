@@ -6,40 +6,40 @@ import java.util.function.Consumer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 
-public interface ConditionType<C extends Condition<? super C>> {
+public interface ConditionType<C extends Condition> {
 
     @ApiStatus.Internal
-    static <C extends Condition<? super C>> ConditionType<C> create(final Class<C> baseType, final C any, final Object adapter) {
+    static <C extends Condition> ConditionType<C> create(final Class<C> baseType, final C any, final Object adapter) {
         return new ConditionTypeImpl<>(baseType, any, builder -> builder.registerTypeHierarchyAdapter(baseType, adapter), true);
     }
 
     @ApiStatus.Internal
-    static <C extends Condition<? super C>> ConditionType<C> create(final Class<C> baseType, final C any, final TypeAdapterFactory factory) {
+    static <C extends Condition> ConditionType<C> create(final Class<C> baseType, final C any, final TypeAdapterFactory factory) {
         return new ConditionTypeImpl<>(baseType, any, builder -> builder.registerTypeAdapterFactory(factory), true);
     }
 
     @ApiStatus.Internal
-    static <C extends Condition<? super C>> ConditionType<C> create(final Class<C> baseType, final C any, final Consumer<GsonBuilder> builderConsumer) {
+    static <C extends Condition> ConditionType<C> create(final Class<C> baseType, final C any, final Consumer<GsonBuilder> builderConsumer) {
         return new ConditionTypeImpl<>(baseType, any, builderConsumer, true);
     }
 
     @ApiStatus.Internal
-    static <C extends Condition<? super C>, R extends C> ConditionType<C> create(final Class<C> baseType, final C any, final Class<R> implType) {
+    static <C extends Condition, R extends C> ConditionType<C> create(final Class<C> baseType, final C any, final Class<R> implType) {
         return create(baseType, any, implType, true);
     }
 
     @ApiStatus.Internal
-    static <C extends Condition<? super C>, R extends C> ConditionType<C> create(final Class<C> baseType, final C any, final Class<R> implType, final Consumer<GsonBuilder> builderConsumer) {
+    static <C extends Condition, R extends C> ConditionType<C> create(final Class<C> baseType, final C any, final Class<R> implType, final Consumer<GsonBuilder> builderConsumer) {
         return create(baseType, any, implType, builderConsumer, true);
     }
 
     @ApiStatus.Internal
-    static <C extends Condition<? super C>, R extends C> ConditionType<C> create(final Class<C> baseType, final C any, final Class<R> implType, final boolean anyIsNull) {
+    static <C extends Condition, R extends C> ConditionType<C> create(final Class<C> baseType, final C any, final Class<R> implType, final boolean anyIsNull) {
         return create(baseType, any, implType, ignored -> {}, anyIsNull);
     }
 
     @ApiStatus.Internal
-    private static <C extends Condition<? super C>, R extends C> ConditionType<C> create(final Class<C> baseType, final C any, final Class<R> implType, final Consumer<GsonBuilder> builderConsumer, final boolean anyIsNull) {
+    private static <C extends Condition, R extends C> ConditionType<C> create(final Class<C> baseType, final C any, final Class<R> implType, final Consumer<GsonBuilder> builderConsumer, final boolean anyIsNull) {
         return new ConditionTypeImpl<>(baseType, any, implType, builderConsumer, anyIsNull);
     }
 

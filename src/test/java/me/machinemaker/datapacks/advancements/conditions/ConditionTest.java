@@ -14,24 +14,24 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public abstract class ConditionTest<C extends Condition<? super C>> extends GsonTest {
+public abstract class ConditionTest<C extends Condition> extends GsonTest {
 
     private final ConditionType<C> type;
-    private final Condition<? super C> anyType;
+    private final Condition anyType;
     private final boolean hasAdditionalAnyTests;
 
     protected ConditionTest(final ConditionType<C> type) {
         this(type, true);
     }
 
-    protected ConditionTest(final ConditionType<C> type, final Condition<? super C> anyType) {
+    protected ConditionTest(final ConditionType<C> type, final Condition anyType) {
         this(type, anyType, true);
     }
 
     protected ConditionTest(final ConditionType<C> type, final boolean hasAdditionalAnyTests) {
         this(type, type.any(), hasAdditionalAnyTests);
     }
-    protected ConditionTest(final ConditionType<C> type, final Condition<? super C> anyType, final boolean hasAdditionalAnyTests) {
+    protected ConditionTest(final ConditionType<C> type, final Condition anyType, final boolean hasAdditionalAnyTests) {
         this.type = type;
         this.anyType = anyType;
         this.hasAdditionalAnyTests = hasAdditionalAnyTests;
@@ -70,7 +70,7 @@ public abstract class ConditionTest<C extends Condition<? super C>> extends Gson
         checkIsAny(condition, this.anyType);
     }
 
-    private static void checkIsAny(final Condition<?> condition, final Object anyType) {
+    private static void checkIsAny(final Condition condition, final Object anyType) {
         assertSame(anyType, condition);
         assertEquals(condition, anyType);
         assertEquals(anyType, condition);

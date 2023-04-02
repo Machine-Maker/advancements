@@ -5,7 +5,7 @@ import me.machinemaker.datapacks.advancements.conditions.Condition;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.Contract;
 
-public sealed interface NumberRange<N extends Number, C extends NumberRange<N, C>> extends Condition<C> permits DoubleRange, IntegerRange {
+public sealed interface NumberRange<N extends Number> extends Condition permits DoubleRange, IntegerRange {
 
     @Contract(pure = true)
     @Nullable N min();

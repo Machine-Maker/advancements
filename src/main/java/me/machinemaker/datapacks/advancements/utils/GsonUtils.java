@@ -54,7 +54,7 @@ public final class GsonUtils {
         return object.get(property).getAsDouble();
     }
 
-    public static <C extends Condition<C>> C deserializeCondition(final Gson gson, final JsonObject obj, final String key, final Class<C> classOfC) {
+    public static <C extends Condition> C deserializeCondition(final Gson gson, final JsonObject obj, final String key, final Class<C> classOfC) {
         if (isNull(obj, key)) {
             return Conditions.getDefaultValue(TypeToken.get(classOfC));
         }

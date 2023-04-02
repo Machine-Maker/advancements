@@ -8,7 +8,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 
 @ApiStatus.NonExtendable
-public interface EntityTypeCondition extends Condition<EntityTypeCondition> {
+public interface EntityTypeCondition extends Condition {
 
     @Contract(pure = true)
     static ConditionType<EntityTypeCondition> conditionType() {

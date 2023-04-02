@@ -64,7 +64,7 @@ public final class ConditionAdapterFactory<C> implements TypeAdapterFactory {
         }
     }
 
-    public static <C extends Condition<? super C>> ConditionAdapterFactory<C> record(final ConditionType<C> type, final Class<? extends C> recordClass) {
+    public static <C extends Condition> ConditionAdapterFactory<C> record(final ConditionType<C> type, final Class<? extends C> recordClass) {
         return record(type.baseType(), type.anyIsNull(), type.any(), Condition::isAny, recordClass);
     }
 
@@ -74,30 +74,35 @@ public final class ConditionAdapterFactory<C> implements TypeAdapterFactory {
         for (int i = 0; i < components.length; i++) {
             final RecordComponent recordComponent = recordClass.getRecordComponents()[i];
             final String name;
-            if (recordComponent.isAnnotationPresent(SerializedName.class)) {
-                name = recordComponent.getAnnotation(SerializedName.class).value();
-            } else {
-                name = recordComponent.getName();
+            try {
+                final Field f = recordClass.getDeclaredField(recordComponent.getName());
+                name = getFieldName(f);
+            } catch (final NoSuchFieldException e) {
+                throw new RuntimeException(e);
             }
             components[i] = new Component(name, recordComponent.getType(), recordComponent.getGenericType());
         }
         return new ConditionAdapterFactory<>(baseClass, anyIsNull, anyCheck == null ? v -> false : anyCheck, any, recordClass, components);
     }
 
-    public static <C extends Condition<? super C>> ConditionAdapterFactory<C> type(final ConditionType<C> type, final Class<? extends C> implType) {
+    public static <C extends Condition> ConditionAdapterFactory<C> type(final ConditionType<C> type, final Class<? extends C> implType) {
         final List<Component> components = new ArrayList<>();
         for (final Field field : implType.getDeclaredFields()) {
             if (!Modifier.isStatic(field.getModifiers())) {
-                final String name;
-                if (field.isAnnotationPresent(SerializedName.class)) {
-                    name = field.getAnnotation(SerializedName.class).value();
-                } else {
-                    name = field.getName();
-                }
-                components.add(new Component(name, field.getType(), field.getGenericType()));
+                components.add(new Component(getFieldName(field), field.getType(), field.getGenericType()));
             }
         }
         return new ConditionAdapterFactory<>(type.baseType(), type.anyIsNull(), Condition::isAny, type.any(), implType, components.toArray(Component[]::new));
+    }
+
+    private static String getFieldName(final Field field) {
+        final String name;
+        if (field.isAnnotationPresent(SerializedName.class)) {
+            name = field.getAnnotation(SerializedName.class).value();
+        } else {
+            name = field.getName();
+        }
+        return name;
     }
 
     private record Component(

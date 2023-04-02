@@ -5,7 +5,7 @@ import me.machinemaker.datapacks.advancements.conditions.ConditionType;
 import me.machinemaker.datapacks.advancements.conditions.range.IntegerRange;
 import org.jetbrains.annotations.Contract;
 
-public interface LightCondition extends Condition<LightCondition> {
+public interface LightCondition extends Condition {
 
     @Contract(pure = true)
     static ConditionType<LightCondition> conditionType() {

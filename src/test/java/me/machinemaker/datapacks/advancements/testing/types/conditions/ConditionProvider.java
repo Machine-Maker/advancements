@@ -12,7 +12,7 @@ import me.machinemaker.datapacks.advancements.conditions.Condition;
 import me.machinemaker.datapacks.advancements.testing.Provider;
 import oshi.util.Memoizer;
 
-public abstract class ConditionProvider<C extends Condition<? super C>, B extends Condition.Builder<C>> implements Provider<C> {
+public abstract class ConditionProvider<C extends Condition, B extends Condition.Builder<C>> implements Provider<C> {
 
     private final ImmutableList.Builder<Component<B>> conditionsBuilder = ImmutableList.builder();
     private final Supplier<List<Component<B>>> conditions = Memoizer.memoize(() -> new ArrayList<>(this.conditionsBuilder.build()));

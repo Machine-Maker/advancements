@@ -6,7 +6,7 @@ import me.machinemaker.datapacks.advancements.conditions.range.IntegerRange;
 import me.machinemaker.datapacks.advancements.conditions.range.NumberRange;
 import me.machinemaker.datapacks.advancements.testing.Provider;
 
-public abstract class RangeProvider<N extends Number, R extends NumberRange<N, R>> implements Provider<R> {
+public abstract class RangeProvider<N extends Number, R extends NumberRange<N>> implements Provider<R> {
 
     abstract N randomNumber();
 
