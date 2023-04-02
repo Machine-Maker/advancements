@@ -15,13 +15,14 @@ import net.minecraft.world.level.material.Fluid;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Tag;
-import org.bukkit.craftbukkit.v1_19_R2.tag.CraftBlockTag;
-import org.bukkit.craftbukkit.v1_19_R2.tag.CraftEntityTag;
-import org.bukkit.craftbukkit.v1_19_R2.tag.CraftFluidTag;
-import org.bukkit.craftbukkit.v1_19_R2.tag.CraftItemTag;
-import org.bukkit.craftbukkit.v1_19_R2.util.CraftNamespacedKey;
+import org.bukkit.craftbukkit.v1_19_R3.tag.CraftBlockTag;
+import org.bukkit.craftbukkit.v1_19_R3.tag.CraftEntityTag;
+import org.bukkit.craftbukkit.v1_19_R3.tag.CraftFluidTag;
+import org.bukkit.craftbukkit.v1_19_R3.tag.CraftItemTag;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.mockito.invocation.InvocationOnMock;
+
+import static me.machinemaker.datapacks.utils.TestUtils.toResourceLocation;
 
 final class Tags {
 
@@ -30,7 +31,7 @@ final class Tags {
 
     static @Nullable Tag<?> getTag(final InvocationOnMock invocation, final Map<String, Map<ResourceLocation, Tag<?>>> tagMap) {
         final String registry = invocation.getArgument(0);
-        final ResourceLocation key = CraftNamespacedKey.toMinecraft(invocation.getArgument(1));
+        final ResourceLocation key = toResourceLocation(invocation.getArgument(1));
         final Class<?> clazz = invocation.getArgument(2);
         return tagMap.get(registry).computeIfAbsent(key, ignored -> createTag(registry, key, clazz));
     }

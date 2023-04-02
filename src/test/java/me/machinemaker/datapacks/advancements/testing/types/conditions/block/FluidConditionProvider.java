@@ -13,8 +13,9 @@ import net.minecraft.world.level.material.Fluid;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Tag;
-import org.bukkit.craftbukkit.v1_19_R2.util.CraftNamespacedKey;
 import oshi.util.Memoizer;
+
+import static me.machinemaker.datapacks.utils.TestUtils.fromResourceLocation;
 
 public class FluidConditionProvider extends ConditionProvider<FluidCondition, FluidCondition.Builder> {
 
@@ -36,7 +37,7 @@ public class FluidConditionProvider extends ConditionProvider<FluidCondition, Fl
         FLUID_TAG {
             @Override
             public void apply(final FluidCondition.Builder builder) {
-                final NamespacedKey randomTagKey = CraftNamespacedKey.fromMinecraft(this.randomElement(FLUID_TAGS.get()).location());
+                final NamespacedKey randomTagKey = fromResourceLocation(this.randomElement(FLUID_TAGS.get()).location());
                 final Tag<org.bukkit.Fluid> randomTag = Objects.requireNonNull(Bukkit.getTag(Tag.REGISTRY_FLUIDS, randomTagKey, org.bukkit.Fluid.class));
                 builder.tag(new FluidTag(randomTag));
             }

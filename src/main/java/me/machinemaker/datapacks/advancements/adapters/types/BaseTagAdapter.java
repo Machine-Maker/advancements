@@ -14,7 +14,9 @@ import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Tag;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.ApiStatus;
 
+@ApiStatus.Internal
 public final class BaseTagAdapter<T extends Tag<K>, K extends Keyed> extends TypeAdapter<T> implements Typed<T> {
 
     private final String tagRegistry;

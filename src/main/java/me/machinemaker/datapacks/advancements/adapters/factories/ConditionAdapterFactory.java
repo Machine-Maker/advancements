@@ -7,6 +7,7 @@ import com.google.gson.JsonNull;
 import com.google.gson.JsonParseException;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
+import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
@@ -23,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.function.Predicate;
 import me.machinemaker.datapacks.advancements.conditions.Condition;
 import me.machinemaker.datapacks.advancements.conditions.ConditionType;
 import me.machinemaker.datapacks.advancements.conditions.Conditions;
@@ -30,18 +32,20 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.Internal
-public final class ConditionAdapterFactory<C extends Condition<? super C>> implements TypeAdapterFactory {
+public final class ConditionAdapterFactory<C> implements TypeAdapterFactory {
 
-    private final ConditionType<? super C> type;
     private final Class<? super C> baseClass;
+    private final boolean anyIsNull;
+    private final Predicate<C> anyCheck;
     private final Component[] components;
     private final Constructor<? extends C> constructor;
-    private final C anyInstance;
+    private final @Nullable C anyInstance;
     private final Map<String, TypeToken<?>> typeMap = new HashMap<>();
 
-    private ConditionAdapterFactory(final ConditionType<? super C> conditionType, final Class<C> baseClass, final C anyInstance, final Class<? extends C> implType, final Component[] components) {
-        this.type = conditionType;
-        this.baseClass = baseClass;
+    private ConditionAdapterFactory(final Class<C> baseType, final boolean anyIsNull, final Predicate<C> anyCheck, final @Nullable C anyInstance, final Class<? extends C> implType, final Component[] components) {
+        this.baseClass = baseType;
+        this.anyIsNull = anyIsNull;
+        this.anyCheck = anyCheck;
         this.anyInstance = anyInstance;
         this.components = components;
 
@@ -61,30 +65,46 @@ public final class ConditionAdapterFactory<C extends Condition<? super C>> imple
     }
 
     public static <C extends Condition<? super C>> ConditionAdapterFactory<C> record(final ConditionType<C> type, final Class<? extends C> recordClass) {
-        return record(type, type.baseType(), recordClass);
+        return record(type.baseType(), type.anyIsNull(), type.any(), Condition::isAny, recordClass);
     }
-    public static <C extends Condition<? super C>> ConditionAdapterFactory<C> record(final ConditionType<? super C> type, final Class<C> baseClass, final Class<? extends C> recordClass) {
 
+    public static <C> ConditionAdapterFactory<C> record(final Class<C> baseClass, final boolean anyIsNull, final @Nullable C any, final @Nullable Predicate<C> anyCheck, final Class<? extends C> recordClass) {
         Preconditions.checkArgument(recordClass.isRecord(), "%s is not a record", recordClass);
         final Component[] components = new Component[recordClass.getRecordComponents().length];
         for (int i = 0; i < components.length; i++) {
             final RecordComponent recordComponent = recordClass.getRecordComponents()[i];
-            components[i] = new Component(recordComponent.getName(), recordComponent.getType(), recordComponent.getGenericType());
+            final String name;
+            if (recordComponent.isAnnotationPresent(SerializedName.class)) {
+                name = recordComponent.getAnnotation(SerializedName.class).value();
+            } else {
+                name = recordComponent.getName();
+            }
+            components[i] = new Component(name, recordComponent.getType(), recordComponent.getGenericType());
         }
-        return new ConditionAdapterFactory<>(type, baseClass, (C) type.any(), recordClass, components);
+        return new ConditionAdapterFactory<>(baseClass, anyIsNull, anyCheck == null ? v -> false : anyCheck, any, recordClass, components);
     }
 
     public static <C extends Condition<? super C>> ConditionAdapterFactory<C> type(final ConditionType<C> type, final Class<? extends C> implType) {
         final List<Component> components = new ArrayList<>();
         for (final Field field : implType.getDeclaredFields()) {
             if (!Modifier.isStatic(field.getModifiers())) {
-                components.add(new Component(field.getName(), field.getType(), field.getGenericType()));
+                final String name;
+                if (field.isAnnotationPresent(SerializedName.class)) {
+                    name = field.getAnnotation(SerializedName.class).value();
+                } else {
+                    name = field.getName();
+                }
+                components.add(new Component(name, field.getType(), field.getGenericType()));
             }
         }
-        return new ConditionAdapterFactory<>(type, type.baseType(), type.any(), implType, components.toArray(Component[]::new));
+        return new ConditionAdapterFactory<>(type.baseType(), type.anyIsNull(), Condition::isAny, type.any(), implType, components.toArray(Component[]::new));
     }
 
-    private record Component(String name, Class<?> type, Type genericType) {
+    private record Component(
+        String name,
+        Class<?> type,
+        Type genericType
+    ) {
     }
 
     @SuppressWarnings("unchecked")
@@ -124,9 +144,9 @@ public final class ConditionAdapterFactory<C extends Condition<? super C>> imple
                 out.nullValue();
                 return;
             }
-            Preconditions.checkArgument(ConditionAdapterFactory.this.type.baseType().isInstance(value), value + " is not an instance of required type");
-            if (value.isAny()) {
-                if (ConditionAdapterFactory.this.type.anyIsNull()) {
+            Preconditions.checkArgument(ConditionAdapterFactory.this.baseClass.isInstance(value), value + " is not an instance of required type");
+            if (ConditionAdapterFactory.this.anyCheck.test(value)) {
+                if (ConditionAdapterFactory.this.anyIsNull) {
                     out.nullValue();
                 } else {
                     out.beginObject().endObject();
@@ -139,7 +159,7 @@ public final class ConditionAdapterFactory<C extends Condition<? super C>> imple
 
         @Override
         public C read(final JsonReader in) throws IOException {
-            if (in.peek() == JsonToken.NULL) {
+            if (ConditionAdapterFactory.this.anyInstance != null && in.peek() == JsonToken.NULL) {
                 in.nextNull();
                 return ConditionAdapterFactory.this.anyInstance;
             } else if (in.peek() != JsonToken.BEGIN_OBJECT) {
@@ -157,7 +177,7 @@ public final class ConditionAdapterFactory<C extends Condition<? super C>> imple
                 }
             }
             in.endObject();
-            if (!ConditionAdapterFactory.this.type.anyIsNull() && arguments.isEmpty()) {
+            if (ConditionAdapterFactory.this.anyInstance != null && !ConditionAdapterFactory.this.anyIsNull && arguments.isEmpty()) {
                 return ConditionAdapterFactory.this.anyInstance;
             }
 
@@ -187,7 +207,7 @@ public final class ConditionAdapterFactory<C extends Condition<? super C>> imple
 
             try {
                 final C instance = ConditionAdapterFactory.this.constructor.newInstance(args);
-                if (instance.isAny()) {
+                if (ConditionAdapterFactory.this.anyInstance != null && ConditionAdapterFactory.this.anyCheck.test(instance)) {
                     return ConditionAdapterFactory.this.anyInstance;
                 }
                 return instance;
@@ -204,6 +224,7 @@ public final class ConditionAdapterFactory<C extends Condition<? super C>> imple
     /*
     From gson FieldNamingPolicy.java
      */
+    @SuppressWarnings("SameParameterValue")
     private static String separateCamelCase(final String name, final char separator) {
         final StringBuilder translation = new StringBuilder();
         for (int i = 0, length = name.length(); i < length; i++) {

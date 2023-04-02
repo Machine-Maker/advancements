@@ -15,8 +15,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Tag;
-import org.bukkit.craftbukkit.v1_19_R2.util.CraftNamespacedKey;
 import oshi.util.Memoizer;
+
+import static me.machinemaker.datapacks.utils.TestUtils.fromResourceLocation;
 
 public class BlockConditionProvider extends ConditionProvider<BlockCondition, BlockCondition.Builder> {
 
@@ -38,7 +39,7 @@ public class BlockConditionProvider extends ConditionProvider<BlockCondition, Bl
         BLOCK_TAG {
             @Override
             public void apply(final BlockCondition.Builder builder) {
-                final NamespacedKey randomTagKey = CraftNamespacedKey.fromMinecraft(this.randomElement(BLOCK_TAGS.get()).location());
+                final NamespacedKey randomTagKey = fromResourceLocation(this.randomElement(BLOCK_TAGS.get()).location());
                 final Tag<Material> randomTag = Objects.requireNonNull(Bukkit.getTag(Tag.REGISTRY_BLOCKS, randomTagKey, Material.class));
                 builder.tag(new BlockTag(randomTag));
             }

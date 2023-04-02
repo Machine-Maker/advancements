@@ -8,7 +8,9 @@ import java.io.IOException;
 import java.util.Locale;
 import org.bukkit.GameMode;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.ApiStatus;
 
+@ApiStatus.Internal
 public final class GameModeAdapter extends TypeAdapter<GameMode> {
 
     public static final TypeAdapter<GameMode> INSTANCE = new GameModeAdapter().nullSafe();

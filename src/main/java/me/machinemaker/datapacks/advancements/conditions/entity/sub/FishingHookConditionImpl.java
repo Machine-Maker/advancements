@@ -8,7 +8,7 @@ record FishingHookConditionImpl(
 ) implements EntitySubConditionImpl, FishingHookCondition {
 
     static final String TYPE = "fishing_hook";
-    static final TypeAdapterFactory FACTORY = ConditionAdapterFactory.record(EntitySubCondition.conditionType(), FishingHookCondition.class, FishingHookConditionImpl.class);
+    static final TypeAdapterFactory FACTORY = ConditionAdapterFactory.record(FishingHookCondition.class, false, null, null,  FishingHookConditionImpl.class);
 
     @Override
     public String serializedType() {

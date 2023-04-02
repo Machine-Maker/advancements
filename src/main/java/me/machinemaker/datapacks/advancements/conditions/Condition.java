@@ -11,19 +11,7 @@ public interface Condition<C extends Condition<C>> {
      *
      * @return true if any input will match this condition
      */
-    default boolean isAny() {
-        throw new UnsupportedOperationException();
-    }
-    // boolean isAny();
-
-    // legacy
-    default C any() {
-        throw new UnsupportedOperationException();
-    }
-
-    default boolean anyIsNull() {
-        throw new UnsupportedOperationException();
-    }
+    boolean isAny();
 
     @ApiStatus.NonExtendable
     interface Buildable<C extends Condition<C>, B extends Builder<C>> extends Condition<C>, me.machinemaker.datapacks.advancements.utils.Buildable<C, B> {

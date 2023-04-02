@@ -4,7 +4,7 @@ import java.util.Map;
 import net.minecraft.core.RegistryAccess;
 import org.bukkit.Keyed;
 import org.bukkit.Registry;
-import org.bukkit.craftbukkit.v1_19_R2.CraftRegistry;
+import org.bukkit.craftbukkit.v1_19_R3.CraftRegistry;
 import org.mockito.invocation.InvocationOnMock;
 
 final class Registries {

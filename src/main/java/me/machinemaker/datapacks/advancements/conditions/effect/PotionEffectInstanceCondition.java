@@ -25,6 +25,7 @@ public interface PotionEffectInstanceCondition extends Condition.Buildable<Potio
             .visible(potionEffect.hasParticles())
             .build();
     }
+
     @Contract(value = "-> new", pure = true)
     static Builder builder() {
         return new PotionEffectInstanceConditionImpl.BuilderImpl();

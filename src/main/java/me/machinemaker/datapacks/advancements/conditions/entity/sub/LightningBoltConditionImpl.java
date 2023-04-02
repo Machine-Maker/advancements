@@ -11,7 +11,7 @@ record LightningBoltConditionImpl(
 ) implements EntitySubConditionImpl, LightningBoltCondition {
 
     static final String TYPE = "lightning";
-    static final TypeAdapterFactory FACTORY = ConditionAdapterFactory.record(EntitySubCondition.conditionType(), LightningBoltCondition.class, LightningBoltConditionImpl.class);
+    static final TypeAdapterFactory FACTORY = ConditionAdapterFactory.record(LightningBoltCondition.class, false, null, null, LightningBoltConditionImpl.class);
 
     @Override
     public LightningBoltCondition.Builder toBuilder() {

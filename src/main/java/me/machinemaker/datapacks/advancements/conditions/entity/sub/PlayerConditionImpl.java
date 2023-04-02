@@ -24,7 +24,7 @@ record PlayerConditionImpl(
 ) implements EntitySubConditionImpl, PlayerCondition {
 
     static final String TYPE = "player";
-    static final TypeAdapterFactory FACTORY = ConditionAdapterFactory.record(EntitySubCondition.conditionType(), PlayerCondition.class, PlayerConditionImpl.class);
+    static final TypeAdapterFactory FACTORY = ConditionAdapterFactory.record(PlayerCondition.class, false, null, null, PlayerConditionImpl.class);
 
     PlayerConditionImpl {
         stats = Map.copyOf(stats);

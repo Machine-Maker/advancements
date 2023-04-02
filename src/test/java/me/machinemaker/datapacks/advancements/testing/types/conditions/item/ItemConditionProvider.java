@@ -8,6 +8,7 @@ import me.machinemaker.datapacks.advancements.conditions.item.ItemCondition;
 import me.machinemaker.datapacks.advancements.tags.ItemTag;
 import me.machinemaker.datapacks.advancements.testing.RandomProviders;
 import me.machinemaker.datapacks.advancements.testing.types.conditions.ConditionProvider;
+import me.machinemaker.datapacks.utils.TestUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -15,8 +16,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Tag;
-import org.bukkit.craftbukkit.v1_19_R2.util.CraftNamespacedKey;
 import oshi.util.Memoizer;
+
+import static me.machinemaker.datapacks.utils.TestUtils.fromResourceLocation;
 
 public class ItemConditionProvider extends ConditionProvider<ItemCondition, ItemCondition.Builder> {
 
@@ -36,7 +38,7 @@ public class ItemConditionProvider extends ConditionProvider<ItemCondition, Item
         TAG {
             @Override
             public void apply(final ItemCondition.Builder builder) {
-                final NamespacedKey randomTagKey = CraftNamespacedKey.fromMinecraft(this.randomElement(ITEM_TAGS.get()).location());
+                final NamespacedKey randomTagKey = fromResourceLocation(this.randomElement(ITEM_TAGS.get()).location());
                 final Tag<Material> randomTag = Objects.requireNonNull(Bukkit.getTag(Tag.REGISTRY_ITEMS, randomTagKey, Material.class));
                 builder.tag(new ItemTag(randomTag));
             }

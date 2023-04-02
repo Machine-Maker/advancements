@@ -16,10 +16,7 @@ import me.machinemaker.datapacks.advancements.conditions.block.FluidCondition;
 import me.machinemaker.datapacks.advancements.conditions.block.LightCondition;
 import me.machinemaker.datapacks.advancements.conditions.effect.PotionEffectInstanceCondition;
 import me.machinemaker.datapacks.advancements.conditions.effect.PotionEffectsCondition;
-import me.machinemaker.datapacks.advancements.conditions.entity.EntityCondition;
-import me.machinemaker.datapacks.advancements.conditions.entity.EntityEquipmentCondition;
-import me.machinemaker.datapacks.advancements.conditions.entity.EntityFlagsCondition;
-import me.machinemaker.datapacks.advancements.conditions.entity.EntityTypeCondition;
+import me.machinemaker.datapacks.advancements.conditions.entity.*;
 import me.machinemaker.datapacks.advancements.conditions.entity.sub.AdvancementCondition;
 import me.machinemaker.datapacks.advancements.conditions.entity.sub.EntitySubCondition;
 import me.machinemaker.datapacks.advancements.conditions.entity.sub.EntityVariantCondition;
@@ -42,10 +39,7 @@ import me.machinemaker.datapacks.advancements.testing.types.conditions.block.Flu
 import me.machinemaker.datapacks.advancements.testing.types.conditions.block.LightConditionProvider;
 import me.machinemaker.datapacks.advancements.testing.types.conditions.effect.PotionEffectInstanceConditionProvider;
 import me.machinemaker.datapacks.advancements.testing.types.conditions.effect.PotionEffectsConditionProvider;
-import me.machinemaker.datapacks.advancements.testing.types.conditions.entity.EntityConditionProvider;
-import me.machinemaker.datapacks.advancements.testing.types.conditions.entity.EntityEquipmentConditionProvider;
-import me.machinemaker.datapacks.advancements.testing.types.conditions.entity.EntityFlagsConditionProvider;
-import me.machinemaker.datapacks.advancements.testing.types.conditions.entity.EntityTypeConditionProvider;
+import me.machinemaker.datapacks.advancements.testing.types.conditions.entity.*;
 import me.machinemaker.datapacks.advancements.testing.types.conditions.entity.sub.EntitySubConditionProvider;
 import me.machinemaker.datapacks.advancements.testing.types.conditions.entity.sub.EntityVariantConditionProvider;
 import me.machinemaker.datapacks.advancements.testing.types.conditions.entity.sub.FishingHookConditionProvider;
@@ -138,6 +132,8 @@ public final class RandomProviders {
     public static final Provider<EntityEquipmentCondition> ENTITY_EQUIPMENT_CONDITION = new EntityEquipmentConditionProvider();
     public static final Provider<EntityFlagsCondition> ENTITY_FLAGS_CONDITION = new EntityFlagsConditionProvider();
     public static final Provider<EntityTypeCondition> ENTITY_TYPE_CONDITION = new EntityTypeConditionProvider();
+    public static final Provider<DamageSourceCondition> DAMAGE_SOURCE_CONDITION = new DamageSourceConditionProvider();
+    public static final Provider<DamageCondition> DAMAGE_CONDITION = new DamageConditionProvider();
     // entity sub condition
     public static final Provider<PlayerCondition> PLAYER_CONDITION = new PlayerConditionProvider();
     public static final Provider<LightningBoltCondition> LIGHTNING_BOLT_CONDITION = new LightningBoltConditionProvider();

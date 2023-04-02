@@ -6,7 +6,7 @@ plugins {
 }
 
 group="me.machinemaker.datapacks"
-version="1.0-SNAPSHOT"
+version="1.19.4-1"
 
 repositories {
     mavenLocal {
@@ -29,7 +29,6 @@ dependencies {
 
     testImplementation(libs.adventure.nbt)
     testImplementation(libs.adventure.gson)
-    testImplementation("org.hamcrest:hamcrest:2.2") // TODO remove
 
     testImplementation(libs.junit.api)
     testImplementation(libs.junit.params)

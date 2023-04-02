@@ -14,7 +14,7 @@ import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
 import me.machinemaker.datapacks.advancements.adapters.factories.HierarchyAdapterFactory;
-import me.machinemaker.datapacks.advancements.adapters.util.GsonContext;
+import me.machinemaker.datapacks.advancements.adapters.utils.GsonContext;
 import me.machinemaker.datapacks.advancements.conditions.ConditionType;
 import me.machinemaker.datapacks.advancements.tags.EntityTag;
 import org.bukkit.entity.EntityType;

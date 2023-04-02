@@ -6,7 +6,9 @@ import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.ApiStatus;
 
+@ApiStatus.Internal
 public final class RegistryTypeAdapter<T extends Keyed> extends KeyedTypeAdapter<T> {
 
     private final Registry<T> registry;

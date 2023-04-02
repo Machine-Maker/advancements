@@ -9,7 +9,7 @@ import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Stream;
-import me.machinemaker.datapacks.advancements.GsonTestBase;
+import me.machinemaker.datapacks.GsonTest;
 import org.bukkit.Fluid;
 import org.bukkit.Keyed;
 import org.bukkit.Material;
@@ -21,10 +21,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-class KeyedAdapterTest extends GsonTestBase {
+class KeyedAdapterTest extends GsonTest {
 
     static Stream<Arguments> args() {
         return Stream.of(
@@ -42,8 +41,7 @@ class KeyedAdapterTest extends GsonTestBase {
     @MethodSource("args")
     final <T extends Keyed> void testSingle(final Type typeOfT, final T... keyed) {
         final JsonElement element = new JsonPrimitive(keyed[0].getKey().toString());
-        assertEquals(this.toJson(element), this.toJson(keyed[0]));
-        assertEquals(keyed[0], this.fromJson(element, typeOfT));
+        this.testJsonConversion(keyed[0], element, typeOfT);
     }
 
     @SafeVarargs
@@ -53,7 +51,6 @@ class KeyedAdapterTest extends GsonTestBase {
         final Collection<Keyed> keyedCollection = Sets.newHashSet(keyed);
         final JsonArray array = new JsonArray();
         keyedCollection.forEach(m -> array.add(m.getKey().toString()));
-        assertEquals(this.toJson(keyedCollection), this.toJson(array));
-        assertEquals(keyedCollection, this.fromJson(array, TypeToken.getParameterized(Set.class, typeOfT).getType()));
+        this.testJsonConversion(keyedCollection, array, TypeToken.getParameterized(Set.class, typeOfT).getType());
     }
 }

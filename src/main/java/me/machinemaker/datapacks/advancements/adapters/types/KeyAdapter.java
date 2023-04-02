@@ -8,7 +8,9 @@ import java.io.IOException;
 import net.kyori.adventure.key.Key;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.intellij.lang.annotations.Subst;
+import org.jetbrains.annotations.ApiStatus;
 
+@ApiStatus.Internal
 public class KeyAdapter extends TypeAdapter<Key> implements Typed<Key> {
 
     @Override

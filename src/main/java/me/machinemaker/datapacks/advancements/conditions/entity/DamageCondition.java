@@ -1,123 +1,71 @@
 package me.machinemaker.datapacks.advancements.conditions.entity;
 
-import com.google.gson.annotations.SerializedName;
 import me.machinemaker.datapacks.advancements.conditions.Condition;
+import me.machinemaker.datapacks.advancements.conditions.ConditionType;
 import me.machinemaker.datapacks.advancements.conditions.range.DoubleRange;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 
-// TODO tests
-public record DamageCondition(
-        @SerializedName("dealt") DoubleRange dealtDamage,
-        @SerializedName("taken") DoubleRange takenDamage,
-        EntityCondition sourceEntity,
-        @Nullable Boolean blocked,
-        DamageSourceCondition type
-) implements Condition.Buildable<DamageCondition, DamageCondition.Builder> {
+@ApiStatus.NonExtendable
+public interface DamageCondition extends Condition.Buildable<DamageCondition, DamageCondition.Builder> {
 
-    public static final DamageCondition ANY = new Builder().build();
+    @Contract(pure = true)
+    static ConditionType<DamageCondition> conditionType() {
+        return DamageConditionImpl.TYPE;
+    }
 
     @Contract(value = " -> new", pure = true)
-    public static Builder builder() {
-        return new Builder();
+    static Builder builder() {
+        return new DamageConditionImpl.BuilderImpl();
     }
 
-    @Override
-    public DamageCondition any() {
-        return ANY;
-    }
+    @Contract(pure = true)
+    DoubleRange dealtDamage();
 
-    @Override
-    public Builder toBuilder() {
-        return new Builder(this);
-    }
+    @Contract(pure = true)
+    DoubleRange takenDamage();
 
-    @Override
-    public String toString() {
-        if (this.isAny()) {
-            return "DamageCondition{ANY}";
-        }
-        return "DamageCondition{" +
-                "dealtDamage=" + this.dealtDamage +
-                ", takenDamage=" + this.takenDamage +
-                ", sourceEntity=" + this.sourceEntity +
-                ", blocked=" + this.blocked +
-                ", type=" + this.type +
-                '}';
-    }
+    @Contract(pure = true)
+    EntityCondition sourceEntity();
 
-    public static final class Builder implements Condition.Builder<DamageCondition> {
+    @Contract(pure = true)
+    @Nullable Boolean blocked();
 
-        private DoubleRange dealtDamage = DoubleRange.conditionType().any();
-        private DoubleRange takenDamage = DoubleRange.conditionType().any();
-        private EntityCondition sourceEntity = EntityCondition.conditionType().any();
-        private @Nullable Boolean blocked;
-        private DamageSourceCondition type = DamageSourceCondition.ANY;
+    @Contract(pure = true)
+    DamageSourceCondition type();
 
-        private Builder() {
-        }
+    @ApiStatus.NonExtendable
+    interface Builder extends Condition.Builder<DamageCondition> {
 
-        public Builder(final DamageCondition condition) {
-            this.dealtDamage = condition.dealtDamage;
-            this.takenDamage = condition.takenDamage;
-            this.sourceEntity = condition.sourceEntity;
-            this.blocked = condition.blocked;
-            this.type = condition.type;
-        }
-
-        public DoubleRange dealtDamage() {
-            return this.dealtDamage;
-        }
+        @Contract(pure = true)
+        DoubleRange dealtDamage();
 
         @Contract(value = "_ -> this", mutates = "this")
-        public Builder dealtDamage(final DoubleRange dealtDamage) {
-            this.dealtDamage = dealtDamage;
-            return this;
-        }
+        Builder dealtDamage(final DoubleRange dealtDamage);
 
-        public DoubleRange takenDamage() {
-            return this.takenDamage;
-        }
+        @Contract(pure = true)
+        DoubleRange takenDamage();
 
         @Contract(value = "_ -> this", mutates = "this")
-        public Builder takenDamage(final DoubleRange takenDamage) {
-            this.takenDamage = takenDamage;
-            return this;
-        }
+        Builder takenDamage(final DoubleRange takenDamage);
 
-        public EntityCondition sourceEntity() {
-            return this.sourceEntity;
-        }
+        @Contract(pure = true)
+        EntityCondition sourceEntity();
 
         @Contract(value = "_ -> this", mutates = "this")
-        public Builder sourceEntity(final EntityCondition sourceEntity) {
-            this.sourceEntity = sourceEntity;
-            return this;
-        }
+        Builder sourceEntity(final EntityCondition sourceEntity);
 
-        public @Nullable Boolean blocked() {
-            return this.blocked;
-        }
+        @Contract(pure = true)
+        @Nullable Boolean blocked();
 
         @Contract(value = "_ -> this", mutates = "this")
-        public Builder blocked(final @Nullable Boolean blocked) {
-            this.blocked = blocked;
-            return this;
-        }
+        Builder blocked(final @Nullable Boolean blocked);
 
-        public DamageSourceCondition type() {
-            return this.type;
-        }
+        @Contract(pure = true)
+        DamageSourceCondition type();
 
         @Contract(value = "_ -> this", mutates = "this")
-        public Builder type(final DamageSourceCondition type) {
-            this.type = type;
-            return this;
-        }
-
-        @Override
-        public DamageCondition build() {
-            return new DamageCondition(this.dealtDamage, this.takenDamage, this.sourceEntity, this.blocked, this.type);
-        }
+        Builder type(final DamageSourceCondition type);
     }
 }

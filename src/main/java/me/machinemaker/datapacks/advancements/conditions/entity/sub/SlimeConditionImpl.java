@@ -9,7 +9,7 @@ record SlimeConditionImpl(
 ) implements EntitySubConditionImpl, SlimeCondition {
 
     static final String TYPE = "slime";
-    static final TypeAdapterFactory FACTORY = ConditionAdapterFactory.record(EntitySubCondition.conditionType(), SlimeCondition.class, SlimeConditionImpl.class);
+    static final TypeAdapterFactory FACTORY = ConditionAdapterFactory.record(SlimeCondition.class, false, null, null, SlimeConditionImpl.class);
 
     @Override
     public String serializedType() {

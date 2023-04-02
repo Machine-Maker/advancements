@@ -32,9 +32,9 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.Server;
 import org.bukkit.Tag;
-import org.bukkit.craftbukkit.v1_19_R2.inventory.CraftItemFactory;
-import org.bukkit.craftbukkit.v1_19_R2.inventory.RecipeIterator;
-import org.bukkit.craftbukkit.v1_19_R2.util.CraftMagicNumbers;
+import org.bukkit.craftbukkit.v1_19_R3.inventory.CraftItemFactory;
+import org.bukkit.craftbukkit.v1_19_R3.inventory.RecipeIterator;
+import org.bukkit.craftbukkit.v1_19_R3.util.CraftMagicNumbers;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ParameterContext;
@@ -53,6 +53,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class ServerBootstrap implements TestInstancePreConstructCallback, ParameterResolver {
+
+    public static RegistryAccess.@MonotonicNonNull Frozen REGISTRY_ACCESS;
 
     private static final MethodHandles.Lookup LOOKUP = MethodHandles.lookup();
     private static final MethodHandle PAPER_CONF_CREATE_FOR_TESTING;
@@ -139,12 +141,12 @@ public class ServerBootstrap implements TestInstancePreConstructCallback, Parame
             LayeredRegistryAccess<RegistryLayer> registryLayers = RegistryLayer.createRegistryAccess();
             registryLayers = WorldLoader.loadAndReplaceLayer(this.resourceManager, registryLayers, RegistryLayer.WORLDGEN, RegistryDataLoader.WORLDGEN_REGISTRIES);
             this.registryAccess = registryLayers.compositeAccess();
+            REGISTRY_ACCESS = this.registryAccess;
             this.serverResources = ReloadableServerResources.loadResources(this.resourceManager, this.registryAccess, FeatureFlags.DEFAULT_FLAGS, Commands.CommandSelection.DEDICATED, 2, MoreExecutors.directExecutor(), MoreExecutors.directExecutor()).join();
             this.serverResources.updateRegistryTags(this.registryAccess);
 
-            setupGlobalConfigForTest();
-
             Bukkit.setServer(this.createServer());
+            setupGlobalConfigForTest();
             System.setOut(Bootstrap.STDOUT);
         }
     }

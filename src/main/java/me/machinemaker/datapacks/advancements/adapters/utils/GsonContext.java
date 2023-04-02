@@ -1,4 +1,4 @@
-package me.machinemaker.datapacks.advancements.adapters.util;
+package me.machinemaker.datapacks.advancements.adapters.utils;
 
 import com.google.common.base.Suppliers;
 import com.google.gson.Gson;

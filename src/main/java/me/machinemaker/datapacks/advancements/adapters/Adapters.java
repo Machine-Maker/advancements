@@ -27,6 +27,7 @@ import org.bukkit.block.Biome;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.generator.structure.Structure;
+import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 
@@ -50,6 +51,7 @@ public final class Adapters {
         typeAdapter(registry(Registry.CUSTOM_STATISTICS, CustomStatistic.class));
         typeHierarchyAdapter(registry(Registry.ENCHANTMENT, Enchantment.class));
         typeHierarchyAdapter(registry(Registry.POTION, Potion.class));
+        typeHierarchyAdapter(registry(Registry.POTION_EFFECT_TYPE, PotionEffectType.class));
         // tags
         typeAdapter(tag(Tag.REGISTRY_BLOCKS, BlockTag::new, Material.class, BlockTag.class));
         typeAdapter(tag(Tag.REGISTRY_FLUIDS, FluidTag::new, Fluid.class, FluidTag.class));
