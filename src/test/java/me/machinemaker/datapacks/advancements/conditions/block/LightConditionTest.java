@@ -3,7 +3,7 @@ package me.machinemaker.datapacks.advancements.conditions.block;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import me.machinemaker.datapacks.advancements.conditions.ConditionTest;
-import me.machinemaker.datapacks.advancements.conditions.range.IntegerRange;
+import me.machinemaker.datapacks.common.range.IntegerRange;
 import me.machinemaker.datapacks.advancements.testing.RandomProviders;
 import me.machinemaker.datapacks.testing.sources.sources.RandomItemSource;
 import me.machinemaker.datapacks.testing.sources.sources.Sources;

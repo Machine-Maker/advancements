@@ -2,7 +2,7 @@ package me.machinemaker.datapacks.advancements.conditions.entity;
 
 import me.machinemaker.datapacks.advancements.conditions.Condition;
 import me.machinemaker.datapacks.advancements.conditions.ConditionType;
-import me.machinemaker.datapacks.advancements.conditions.range.DoubleRange;
+import me.machinemaker.datapacks.common.range.DoubleRange;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;

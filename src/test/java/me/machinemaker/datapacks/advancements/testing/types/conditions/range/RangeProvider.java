@@ -1,9 +1,9 @@
 package me.machinemaker.datapacks.advancements.testing.types.conditions.range;
 
 import java.util.concurrent.ThreadLocalRandom;
-import me.machinemaker.datapacks.advancements.conditions.range.DoubleRange;
-import me.machinemaker.datapacks.advancements.conditions.range.IntegerRange;
-import me.machinemaker.datapacks.advancements.conditions.range.NumberRange;
+import me.machinemaker.datapacks.common.range.DoubleRange;
+import me.machinemaker.datapacks.common.range.IntegerRange;
+import me.machinemaker.datapacks.common.range.NumberRange;
 import me.machinemaker.datapacks.advancements.testing.Provider;
 
 public abstract class RangeProvider<N extends Number, R extends NumberRange<N>> implements Provider<R> {

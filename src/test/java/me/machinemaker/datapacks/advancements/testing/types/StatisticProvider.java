@@ -6,7 +6,7 @@ import io.papermc.paper.statistic.Statistic;
 import io.papermc.paper.statistic.StatisticType;
 import java.util.LinkedHashMap;
 import java.util.List;
-import me.machinemaker.datapacks.advancements.conditions.range.IntegerRange;
+import me.machinemaker.datapacks.common.range.IntegerRange;
 import me.machinemaker.datapacks.advancements.testing.Provider;
 import me.machinemaker.datapacks.advancements.testing.RandomProviders;
 import org.bukkit.Material;

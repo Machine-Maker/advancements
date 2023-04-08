@@ -2,7 +2,7 @@ package me.machinemaker.datapacks.advancements.conditions.block;
 
 import me.machinemaker.datapacks.advancements.conditions.Condition;
 import me.machinemaker.datapacks.advancements.conditions.ConditionType;
-import me.machinemaker.datapacks.advancements.tags.FluidTag;
+import me.machinemaker.datapacks.toremove.tags.FluidTag;
 import org.bukkit.Fluid;
 import org.bukkit.Tag;
 import org.checkerframework.checker.nullness.qual.Nullable;

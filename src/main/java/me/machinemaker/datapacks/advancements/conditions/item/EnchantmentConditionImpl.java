@@ -10,7 +10,7 @@ import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
 import me.machinemaker.datapacks.advancements.conditions.ConditionType;
-import me.machinemaker.datapacks.advancements.conditions.range.IntegerRange;
+import me.machinemaker.datapacks.common.range.IntegerRange;
 import org.bukkit.enchantments.Enchantment;
 import org.checkerframework.checker.nullness.qual.Nullable;
 

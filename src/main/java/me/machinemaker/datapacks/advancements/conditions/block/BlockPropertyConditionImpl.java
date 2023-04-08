@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import me.machinemaker.datapacks.advancements.conditions.ConditionType;
-import me.machinemaker.datapacks.advancements.utils.GsonUtils;
+import me.machinemaker.datapacks.common.adapters.utils.GsonUtils;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.UnmodifiableView;

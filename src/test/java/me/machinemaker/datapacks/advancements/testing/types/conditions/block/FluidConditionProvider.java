@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
 import me.machinemaker.datapacks.advancements.conditions.block.FluidCondition;
-import me.machinemaker.datapacks.advancements.tags.FluidTag;
+import me.machinemaker.datapacks.toremove.tags.FluidTag;
 import me.machinemaker.datapacks.advancements.testing.types.conditions.ConditionProvider;
 import me.machinemaker.datapacks.advancements.testing.RandomProviders;
 import net.minecraft.core.registries.BuiltInRegistries;

@@ -1,6 +1,6 @@
 package me.machinemaker.datapacks.advancements.conditions.entity.sub;
 
-import me.machinemaker.datapacks.advancements.conditions.range.IntegerRange;
+import me.machinemaker.datapacks.common.range.IntegerRange;
 import org.jetbrains.annotations.Contract;
 
 public interface SlimeCondition extends EntitySubCondition {

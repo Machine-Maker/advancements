@@ -2,8 +2,8 @@ package me.machinemaker.datapacks.advancements.conditions.entity.sub;
 
 import me.machinemaker.datapacks.advancements.conditions.Condition;
 import me.machinemaker.datapacks.advancements.conditions.entity.EntityCondition;
-import me.machinemaker.datapacks.advancements.conditions.range.IntegerRange;
-import me.machinemaker.datapacks.advancements.utils.Buildable;
+import me.machinemaker.datapacks.common.range.IntegerRange;
+import me.machinemaker.datapacks.common.utils.Buildable;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 

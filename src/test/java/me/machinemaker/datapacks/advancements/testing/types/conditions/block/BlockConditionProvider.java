@@ -5,7 +5,7 @@ import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
 import me.machinemaker.datapacks.advancements.conditions.block.BlockCondition;
-import me.machinemaker.datapacks.advancements.tags.BlockTag;
+import me.machinemaker.datapacks.toremove.tags.BlockTag;
 import me.machinemaker.datapacks.advancements.testing.types.conditions.ConditionProvider;
 import me.machinemaker.datapacks.advancements.testing.RandomProviders;
 import net.minecraft.core.registries.BuiltInRegistries;

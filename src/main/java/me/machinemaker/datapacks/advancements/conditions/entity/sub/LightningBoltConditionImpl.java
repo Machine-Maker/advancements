@@ -1,9 +1,9 @@
 package me.machinemaker.datapacks.advancements.conditions.entity.sub;
 
 import com.google.gson.TypeAdapterFactory;
-import me.machinemaker.datapacks.advancements.adapters.factories.ConditionAdapterFactory;
+import me.machinemaker.datapacks.common.adapters.factories.InterfaceImplAdapterFactory;
 import me.machinemaker.datapacks.advancements.conditions.entity.EntityCondition;
-import me.machinemaker.datapacks.advancements.conditions.range.IntegerRange;
+import me.machinemaker.datapacks.common.range.IntegerRange;
 
 record LightningBoltConditionImpl(
     IntegerRange blocksSetOnFire,
@@ -11,7 +11,7 @@ record LightningBoltConditionImpl(
 ) implements EntitySubConditionImpl, LightningBoltCondition {
 
     static final String TYPE = "lightning";
-    static final TypeAdapterFactory FACTORY = ConditionAdapterFactory.record(LightningBoltCondition.class, false, null, null, LightningBoltConditionImpl.class);
+    static final TypeAdapterFactory FACTORY = InterfaceImplAdapterFactory.simple(LightningBoltCondition.class, LightningBoltConditionImpl.class);
 
     @Override
     public LightningBoltCondition.Builder toBuilder() {

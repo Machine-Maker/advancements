@@ -2,7 +2,7 @@ package me.machinemaker.datapacks.advancements.conditions;
 
 import com.google.gson.GsonBuilder;
 import java.util.function.Consumer;
-import me.machinemaker.datapacks.advancements.adapters.factories.ConditionAdapterFactory;
+import me.machinemaker.datapacks.common.adapters.factories.InterfaceImplAdapterFactory;
 
 final class ConditionTypeImpl<C extends Condition> implements ConditionType<C> {
 
@@ -22,11 +22,7 @@ final class ConditionTypeImpl<C extends Condition> implements ConditionType<C> {
         this.baseType = baseType;
         this.any = any;
         this.builderConsumer = builder -> {
-            if (implType.isRecord()) {
-                builder.registerTypeAdapterFactory(ConditionAdapterFactory.record(this, implType));
-            } else {
-                builder.registerTypeAdapterFactory(ConditionAdapterFactory.type(this, implType));
-            }
+            builder.registerTypeAdapterFactory(InterfaceImplAdapterFactory.condition(this, implType));
             builderConsumer.accept(builder);
         };
         this.anyIsNull = anyIsNull;

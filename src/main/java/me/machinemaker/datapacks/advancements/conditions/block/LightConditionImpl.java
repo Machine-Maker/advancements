@@ -1,7 +1,7 @@
 package me.machinemaker.datapacks.advancements.conditions.block;
 
 import me.machinemaker.datapacks.advancements.conditions.ConditionType;
-import me.machinemaker.datapacks.advancements.conditions.range.IntegerRange;
+import me.machinemaker.datapacks.common.range.IntegerRange;
 
 record LightConditionImpl(IntegerRange light) implements LightCondition {
 

@@ -8,9 +8,9 @@ import java.util.Objects;
 import java.util.Set;
 import me.machinemaker.datapacks.advancements.conditions.ConditionType;
 import me.machinemaker.datapacks.advancements.conditions.misc.NBTCondition;
-import me.machinemaker.datapacks.advancements.conditions.range.IntegerRange;
-import me.machinemaker.datapacks.advancements.tags.ItemTag;
-import me.machinemaker.datapacks.advancements.utils.Util;
+import me.machinemaker.datapacks.common.range.IntegerRange;
+import me.machinemaker.datapacks.toremove.tags.ItemTag;
+import me.machinemaker.datapacks.common.utils.Util;
 import org.bukkit.Material;
 import org.checkerframework.checker.nullness.qual.Nullable;
 

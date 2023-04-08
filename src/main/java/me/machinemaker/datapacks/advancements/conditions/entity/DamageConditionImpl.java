@@ -2,7 +2,7 @@ package me.machinemaker.datapacks.advancements.conditions.entity;
 
 import com.google.gson.annotations.SerializedName;
 import me.machinemaker.datapacks.advancements.conditions.ConditionType;
-import me.machinemaker.datapacks.advancements.conditions.range.DoubleRange;
+import me.machinemaker.datapacks.common.range.DoubleRange;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 record DamageConditionImpl(

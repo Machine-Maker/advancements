@@ -18,8 +18,8 @@ import me.machinemaker.datapacks.advancements.conditions.entity.sub.EntitySubCon
 import me.machinemaker.datapacks.advancements.conditions.item.EnchantmentCondition;
 import me.machinemaker.datapacks.advancements.conditions.item.ItemCondition;
 import me.machinemaker.datapacks.advancements.conditions.misc.NBTCondition;
-import me.machinemaker.datapacks.advancements.conditions.range.DoubleRange;
-import me.machinemaker.datapacks.advancements.conditions.range.IntegerRange;
+import me.machinemaker.datapacks.common.range.DoubleRange;
+import me.machinemaker.datapacks.common.range.IntegerRange;
 import me.machinemaker.datapacks.advancements.conditions.world.DistanceCondition;
 import me.machinemaker.datapacks.advancements.conditions.world.LocationCondition;
 import org.jetbrains.annotations.ApiStatus;

@@ -7,9 +7,9 @@ import it.unimi.dsi.fastutil.objects.Object2BooleanMaps;
 import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import me.machinemaker.datapacks.advancements.adapters.factories.ConditionAdapterFactory;
+import me.machinemaker.datapacks.common.adapters.factories.InterfaceImplAdapterFactory;
 import me.machinemaker.datapacks.advancements.conditions.entity.EntityCondition;
-import me.machinemaker.datapacks.advancements.conditions.range.IntegerRange;
+import me.machinemaker.datapacks.common.range.IntegerRange;
 import net.kyori.adventure.key.Key;
 import org.bukkit.GameMode;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -24,7 +24,7 @@ record PlayerConditionImpl(
 ) implements EntitySubConditionImpl, PlayerCondition {
 
     static final String TYPE = "player";
-    static final TypeAdapterFactory FACTORY = ConditionAdapterFactory.record(PlayerCondition.class, false, null, null, PlayerConditionImpl.class);
+    static final TypeAdapterFactory FACTORY = InterfaceImplAdapterFactory.simple(PlayerCondition.class, PlayerConditionImpl.class);
 
     PlayerConditionImpl {
         stats = Map.copyOf(stats);

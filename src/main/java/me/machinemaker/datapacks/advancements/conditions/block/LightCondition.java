@@ -2,7 +2,7 @@ package me.machinemaker.datapacks.advancements.conditions.block;
 
 import me.machinemaker.datapacks.advancements.conditions.Condition;
 import me.machinemaker.datapacks.advancements.conditions.ConditionType;
-import me.machinemaker.datapacks.advancements.conditions.range.IntegerRange;
+import me.machinemaker.datapacks.common.range.IntegerRange;
 import org.jetbrains.annotations.Contract;
 
 public interface LightCondition extends Condition {

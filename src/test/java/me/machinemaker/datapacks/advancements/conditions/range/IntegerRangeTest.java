@@ -10,6 +10,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.concurrent.ThreadLocalRandom;
 import me.machinemaker.datapacks.advancements.conditions.ConditionTest;
+import me.machinemaker.datapacks.common.range.IntegerRange;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 

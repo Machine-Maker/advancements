@@ -7,7 +7,7 @@ import io.papermc.paper.statistic.Statistic;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import java.util.Map;
 import me.machinemaker.datapacks.advancements.conditions.ConditionTest;
-import me.machinemaker.datapacks.advancements.conditions.range.IntegerRange;
+import me.machinemaker.datapacks.common.range.IntegerRange;
 import me.machinemaker.datapacks.advancements.testing.RandomProviders;
 import me.machinemaker.datapacks.testing.sources.sources.RandomItemSource;
 import me.machinemaker.datapacks.testing.sources.sources.Sources;

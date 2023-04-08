@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import java.lang.reflect.Type;
-import me.machinemaker.datapacks.advancements.adapters.Adapters;
+import me.machinemaker.datapacks.common.adapters.Adapters;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.jupiter.api.TestInstance;
 

@@ -2,7 +2,7 @@ package me.machinemaker.datapacks.advancements.conditions.effect;
 
 import me.machinemaker.datapacks.advancements.conditions.Condition;
 import me.machinemaker.datapacks.advancements.conditions.ConditionType;
-import me.machinemaker.datapacks.advancements.conditions.range.IntegerRange;
+import me.machinemaker.datapacks.common.range.IntegerRange;
 import org.bukkit.potion.PotionEffect;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.ApiStatus;

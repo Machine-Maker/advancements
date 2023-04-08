@@ -2,7 +2,7 @@ package me.machinemaker.datapacks.advancements.conditions.world;
 
 import me.machinemaker.datapacks.advancements.conditions.Condition;
 import me.machinemaker.datapacks.advancements.conditions.ConditionType;
-import me.machinemaker.datapacks.advancements.conditions.range.DoubleRange;
+import me.machinemaker.datapacks.common.range.DoubleRange;
 import org.jetbrains.annotations.Contract;
 
 public interface DistanceCondition extends Condition.Buildable<DistanceCondition, DistanceCondition.Builder> {

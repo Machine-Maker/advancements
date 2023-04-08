@@ -12,10 +12,10 @@ import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Map;
-import me.machinemaker.datapacks.advancements.adapters.factories.HierarchyAdapterFactory;
-import me.machinemaker.datapacks.advancements.adapters.maps.StatisticMapAdapter;
+import me.machinemaker.datapacks.common.adapters.factories.HierarchyAdapterFactory;
+import me.machinemaker.datapacks.advancements.adapters.types.StatisticMapAdapter;
 import me.machinemaker.datapacks.advancements.conditions.ConditionType;
-import me.machinemaker.datapacks.advancements.utils.GsonUtils;
+import me.machinemaker.datapacks.common.adapters.utils.GsonUtils;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 interface EntitySubConditionImpl extends EntitySubCondition {

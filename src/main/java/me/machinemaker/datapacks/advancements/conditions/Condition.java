@@ -14,11 +14,11 @@ public interface Condition {
     boolean isAny();
 
     @ApiStatus.NonExtendable
-    interface Buildable<C extends Condition, B extends Builder<C>> extends Condition, me.machinemaker.datapacks.advancements.utils.Buildable<C, B> {
+    interface Buildable<C extends Condition, B extends Builder<C>> extends Condition, me.machinemaker.datapacks.common.utils.Buildable<C, B> {
     }
 
     @ApiStatus.NonExtendable
-    interface Builder<C extends Condition> extends me.machinemaker.datapacks.advancements.utils.Buildable.Builder<C> {
+    interface Builder<C extends Condition> extends me.machinemaker.datapacks.common.utils.Buildable.Builder<C> {
 
         /**
          * Constructs a new condition.

@@ -1,7 +1,7 @@
 package me.machinemaker.datapacks.advancements.conditions.world;
 
 import me.machinemaker.datapacks.advancements.conditions.ConditionType;
-import me.machinemaker.datapacks.advancements.conditions.range.DoubleRange;
+import me.machinemaker.datapacks.common.range.DoubleRange;
 
 record DistanceConditionImpl(DoubleRange x, DoubleRange y, DoubleRange z, DoubleRange horizontal, DoubleRange absolute) implements DistanceCondition {
 

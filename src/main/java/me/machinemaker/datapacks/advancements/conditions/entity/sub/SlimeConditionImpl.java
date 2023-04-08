@@ -1,15 +1,15 @@
 package me.machinemaker.datapacks.advancements.conditions.entity.sub;
 
 import com.google.gson.TypeAdapterFactory;
-import me.machinemaker.datapacks.advancements.adapters.factories.ConditionAdapterFactory;
-import me.machinemaker.datapacks.advancements.conditions.range.IntegerRange;
+import me.machinemaker.datapacks.common.adapters.factories.InterfaceImplAdapterFactory;
+import me.machinemaker.datapacks.common.range.IntegerRange;
 
 record SlimeConditionImpl(
     IntegerRange size
 ) implements EntitySubConditionImpl, SlimeCondition {
 
     static final String TYPE = "slime";
-    static final TypeAdapterFactory FACTORY = ConditionAdapterFactory.record(SlimeCondition.class, false, null, null, SlimeConditionImpl.class);
+    static final TypeAdapterFactory FACTORY = InterfaceImplAdapterFactory.simple(SlimeCondition.class, SlimeConditionImpl.class);
 
     @Override
     public String serializedType() {

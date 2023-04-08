@@ -6,7 +6,7 @@ import me.machinemaker.datapacks.advancements.conditions.ConditionType;
 import me.machinemaker.datapacks.advancements.conditions.block.BlockCondition;
 import me.machinemaker.datapacks.advancements.conditions.block.FluidCondition;
 import me.machinemaker.datapacks.advancements.conditions.block.LightCondition;
-import me.machinemaker.datapacks.advancements.conditions.range.DoubleRange;
+import me.machinemaker.datapacks.common.range.DoubleRange;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Location;
 import org.bukkit.World;
