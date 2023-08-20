@@ -27,7 +27,7 @@ public class StatisticProvider implements Provider<Statistic<?>> {
         StatisticType.ENTITY_KILLED,
         StatisticType.ENTITY_KILLED_BY
     );
-    private static final List<CustomStatistic> CUSTOM_STATISTICS = Lists.newArrayList(Registry.CUSTOM_STATISTICS.iterator());
+    private static final List<CustomStatistic> CUSTOM_STATISTICS = Lists.newArrayList(Registry.CUSTOM_STATISTIC.iterator());
 
     @Override
     public Statistic<?> get() {

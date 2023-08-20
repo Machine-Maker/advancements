@@ -1,11 +1,15 @@
 package me.machinemaker.datapacks.advancements.testing;
 
+import com.google.common.collect.Multimap;
 import io.papermc.paper.potion.Potion;
 import io.papermc.paper.statistic.Statistic;
+import io.papermc.paper.world.data.BlockProperties;
 import io.papermc.paper.world.data.BlockProperty;
 import io.papermc.paper.world.data.EnumBlockProperty;
 import io.papermc.paper.world.data.IntegerBlockProperty;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -140,6 +144,18 @@ public final class RandomProviders {
 
     private static final class Lists {
 
+        static final Multimap<String, BlockProperty<?>> PROPERTIES;
+        static {
+            try {
+                final MethodHandles.Lookup lookup = MethodHandles.privateLookupIn(BlockProperties.class, MethodHandles.lookup());
+                final MethodHandle properties = lookup.findStaticGetter(BlockProperties.class, "PROPERTIES", Multimap.class);
+                //noinspection unchecked
+                PROPERTIES = (Multimap<String, BlockProperty<?>>) properties.invoke();
+            } catch (final Throwable e) {
+                throw new RuntimeException(e);
+            }
+        }
+
         private static final Predicate<Material> NOT_LEGACY = Predicate.not(Material::isLegacy);
         private static final List<Material> BLOCKS = Arrays.stream(Material.values()).filter(NOT_LEGACY.and(Material::isBlock)).toList();
         private static final List<Material> ITEMS = Arrays.stream(Material.values()).filter(NOT_LEGACY.and(Material::isItem)).toList();
@@ -154,7 +170,7 @@ public final class RandomProviders {
         private static final List<GameMode> GAME_MODES = newArrayList(GameMode.values());
 
         private static final Predicate<BlockProperty<?>> NOT_ENUM_PROPERTIES = Predicate.not(EnumBlockProperty.class::isInstance);
-        private static final List<BlockProperty<?>> VALID_PROPERTIES = BlockProperty.PROPERTIES.values().stream().filter(NOT_ENUM_PROPERTIES).toList();
+        private static final List<BlockProperty<?>> VALID_PROPERTIES = PROPERTIES.values().stream().filter(NOT_ENUM_PROPERTIES).toList();
         private static final Predicate<BlockProperty<?>> IS_INT_PROPERTY = IntegerBlockProperty.class::isInstance;
         private static final List<IntegerBlockProperty> INTEGER_BLOCK_PROPERTIES = VALID_PROPERTIES.stream().filter(IS_INT_PROPERTY).map(IntegerBlockProperty.class::cast).toList();
 

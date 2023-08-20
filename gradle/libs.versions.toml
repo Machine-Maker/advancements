@@ -2,13 +2,13 @@
 jb-annotations = "23.0.0" # for Contract and ApiStatus annotations
 checker = "3.22.1"
 
-machined-paper = "1.19.4-R0.1-SNAPSHOT"
+machined-paper = "1.20.1-R0.1-SNAPSHOT"
 paperweight = "1.5.3"
 
 junit = "5.9.2"
 mockito = "5.1.1"
 
-adventure = "4.13.0"
+adventure = "4.14.0"
 
 [libraries]
 jb-annotations = { module = "org.jetbrains:annotations", version.ref = "jb-annotations" }

@@ -15,10 +15,10 @@ import net.minecraft.world.level.material.Fluid;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Tag;
-import org.bukkit.craftbukkit.v1_19_R3.tag.CraftBlockTag;
-import org.bukkit.craftbukkit.v1_19_R3.tag.CraftEntityTag;
-import org.bukkit.craftbukkit.v1_19_R3.tag.CraftFluidTag;
-import org.bukkit.craftbukkit.v1_19_R3.tag.CraftItemTag;
+import org.bukkit.craftbukkit.v1_20_R1.tag.CraftBlockTag;
+import org.bukkit.craftbukkit.v1_20_R1.tag.CraftEntityTag;
+import org.bukkit.craftbukkit.v1_20_R1.tag.CraftFluidTag;
+import org.bukkit.craftbukkit.v1_20_R1.tag.CraftItemTag;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.mockito.invocation.InvocationOnMock;
 

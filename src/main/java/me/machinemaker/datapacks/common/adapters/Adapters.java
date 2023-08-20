@@ -48,8 +48,8 @@ public final class Adapters {
         typeAdapter(registry(Registry.FLUID, Fluid.class));
         typeAdapter(registry(Registry.BIOME, Biome.class));
         typeHierarchyAdapter(registry(Registry.STRUCTURE, Structure.class));
-        typeAdapter(registry(Registry.STATISTIC_TYPES, new TypeToken<StatisticType<?>>() {}));
-        typeAdapter(registry(Registry.CUSTOM_STATISTICS, CustomStatistic.class));
+        typeAdapter(registry(Registry.STATISTIC_TYPE, new TypeToken<StatisticType<?>>() {}));
+        typeAdapter(registry(Registry.CUSTOM_STATISTIC, CustomStatistic.class));
         typeHierarchyAdapter(registry(Registry.ENCHANTMENT, Enchantment.class));
         typeHierarchyAdapter(registry(Registry.POTION, Potion.class));
         typeHierarchyAdapter(registry(Registry.POTION_EFFECT_TYPE, PotionEffectType.class));
